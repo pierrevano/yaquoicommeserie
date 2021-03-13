@@ -1,0 +1,214 @@
+20 Minutes,de 20 Minutes Contre,202
+20 Minutes,de 20 Minutes,20
+Aden,d'Aden,Ad
+Africultures.com,de Africultures.com,Af
+Arte,d'Arte,Ar
+BIBA,de BIBA,BI
+Bande à part,de Bande à part,BA
+Blabla-Séries,de Blabla-Séries,BS
+Boston Globe,du Boston Globe,BG
+Boston Herald,de Boston Herald,BH
+Brain Damaged,de Brain Damaged,BD
+Brazil,de Brazil,Br
+CNN,de CNN,CN
+CNews,de CNews Contre,CN2
+CNews,de CNews,CN
+Cahiers du Cinéma,des Cahiers du Cinéma Contre,CC2
+Cahiers du Cinéma,des Cahiers du Cinéma,CC
+Charlie Hebdo,de Charlie Hebdo Contre,CH2
+Charlie Hebdo,de Charlie Hebdo,CH
+Chicago Sun-Times,du Chicago Sun-Times,CS
+Chronic&#039;art.com,de Chronic'art.com Contre,Ca2
+Chronic&#039;art.com,de Chronic'art.com,Ca
+Cine Libre,de Cine Libre,CLi
+Ciné Live,de Ciné Live,CL
+Cinéastes,de Cinéastes,Cin
+CinemaTeaser,de CinemaTeaser Contre,CT2
+CinemaTeaser,de CinemaTeaser,CT
+Cinopsis.com,de Cinopsis.com,Ci
+Closer,de Closer,Cl
+Collider,de Collider,Cr
+Colorado Springs Gazette,de Colorado Springs Gazette,CS
+Combat,de Combat,Co
+Cosmopolitan,du Cosmopolitan,Co
+Cplanet.com,de Cplanet.com,Cp
+Critictoo,de Critictoo,Co
+Critikat.com,de Critikat.com,Cr
+Culturebox - France Télévisions,de Culturebox - France Télévisions,FT
+Culturopoing.com,de Culturopoing.com Contre,Cu2
+Culturopoing.com,de Culturopoing.com,Cu
+DailyMars,de DailyMars,DM
+Denver Post,de Denver Post,DP
+Dernières Nouvelles d&#039;Alsace,des Dernières Nouvelles d'Alsace,DN
+Dvdrama,de Dvdrama,Dv
+Ecran Large,d'Ecran Large Contre,Ec2
+Ecran Large,d'Ecran Large,Ec
+Elle,d'Elle Contre,EL2
+Elle,d'Elle,EL
+Entertainment weekly,d'Entertainment weekly Contre,Ew2
+Entertainment weekly,d'Entertainment weekly,Ew
+Excessif,de Excessif,Ex
+FHM,de FHM,FHM
+Femme Actuelle,de Femme Actuelle,FA
+Filmsactu,de Filmsactu Contre,Fi2
+Filmsactu,de Filmsactu,Fi
+Fluctuat.net,de Fluctuat.net,Fl
+France Soir,de France Soir,FS
+France-Observateur,de France-Observateur,FO
+GQ,de GQ,GQ
+Gala,de Gala,Ga
+Hitfix,de Hitfix,Hi
+Hollywood Reporter,de Hollywood Reporter,HR
+Huffington Post,du Huffington Post,HP
+IGN France,de IGN France,IGN
+Impact,de Impact,Im
+Kansas City Star,de Kansas City Star,KC
+L&#039;Aurore,de L'Aurore,Au
+L&#039;Ecran Fantastique,de L'Ecran Fantastique Contre,EF2
+L&#039;Ecran Fantastique,de L'Ecran Fantastique,EF
+L&#039;Evènement du Jeudi,de L'Evènement du Jeudi,EJ
+L&#039;Evénement,de L'Evénement,Ev
+L&#039;Express,de L'Express Contre,Ex2
+L&#039;Express,de L'Express,Ex
+L&#039;Humanité,de L'Humanité Contre,LH2
+L&#039;Humanité,de L'Humanité,LH
+L&#039;Observateur d&#039;aujourd&#039;hui,L'Observateur d'aujourd'hui,Oa
+LCI,de LCI,LCI
+La Croix,de La Croix Contre,LC2
+La Croix,de La Croix,LC
+La Septième Obsession,de La Septième Obsession,LS
+La Voix du Nord,de La Voix du Nord,VN
+Las Vegas Weekly,de Las Vegas Weekly,LV
+Le Dauphiné Libéré,du Dauphiné Libéré,DL
+Le Figaro Magazine,du Figaro Magazine,FM
+Le Figaro,du Figaro Contre,LF2
+Le Figaro,du Figaro,LF
+Le Journal du Dimanche,du Journal du Dimanche Contre,JD2
+Le Journal du Dimanche,du Journal du Dimanche,JD
+Le Journal du Geek,du Journal du Geek,JG
+Le Monde,du Monde Contre,LM2
+Le Monde,du Monde,LM
+Le Nouvel Observateur,du Nouvel Observateur Contre,NO2
+Le Nouvel Observateur,du Nouvel Observateur,NO
+Le Parisien,du Parisien Contre,Pa2
+Le Parisien,du Parisien,Pa
+Le Point,du Point Contre,LP2
+Le Point,du Point,LP
+Le Quotidien de Paris,du Quotidien de Paris,QP
+Le Soir,du Soir,LS
+Lenouveaucinema.com,du nouveaucinema.com,Le
+Les Echos,des Echos Contre,LE2
+Les Echos,des Echos,LE
+Les Fiches du Cinéma,des Fiches du Cinéma Contre,FC2
+Les Fiches du Cinéma,des Fiches du Cinéma,FC
+Les Inrockuptibles,des Inrockuptibles Contre,In2
+Les Inrockuptibles,des Inrockuptibles,In
+Les Lettres Françaises,des Lettres Françaises,LF
+Libération,de Libération Contre,Li2
+Libération,de Libération,Li
+Los Angeles Times,du Los Angeles Times,LA
+MCinéma.com,de MCinéma.com Contre,MCi2
+MCinéma.com,de MCinéma.com,MCi
+Mad Movies,de Mad Movies Contre,MM2
+Mad Movies,de Mad Movies,MM
+Marianne,de Marianne,Ma
+Marie Claire,de Marie Claire Contre,MC2
+Marie Claire,de Marie Claire,MC
+Metro UK,de Metro UK,MU
+Metro,de Metro Contre,Me2
+Metro,de Metro,Me
+Miami Herald,de Miami Herald,MH
+New York Daily News,de New York Daily News,NY
+New York Post,du New York Post Contre,NY2
+New York Post,du New York Post,NY
+New York Times,du New York Times,NT
+New Yorker,du New Yorker,Nr
+Newsday,de Newsday,Ne
+Nice-Matin,de Nice-Matin,NM
+Novaplanet.com,de Novaplanet.com,No
+Obejctif-Cinema.com,d'Obejctif-Cinema.com Contre,OC2
+Obejctif-Cinema.com,d'Obejctif-Cinema.com,OC
+Ouest France,de Ouest France Contre,OF2
+Ouest France,de Ouest France,OF
+Ouirock.com,de Ouirock.com,Ou
+Paris Match,de Paris Match Contre,PM2
+Paris Match,de Paris Match,PM
+People Weekly,de People Weekly,PW
+Philadelphia Inquirer,du Philadelphia Inquirer,PI
+Pittsburg Post-Gazette,du Pittsburg Post-Gazette Contre,PP2
+Pittsburg Post-Gazette,du Pittsburg Post-Gazette,PP
+Planetcinema.com,de Planetcinema.com,Pl
+Pop Matters,de Pop Matters,PM
+PopMatters,de PopMatters,PM
+Positif,de Positif Contre,Po2
+Positif,de Positif,Po
+Première,de Première Contre,Pr2
+Première,de Première,Pr
+Public,de Public,Pu
+Red Eye,de Red Eye,RE
+Repérages,de Repérages,Re
+RogerEbert.com,de RogerEbert.com,RE
+Rolling Stone,de Rolling Stone Contre,RS2
+Rolling Stone,de Rolling Stone,RS
+Salon.com,de Salon.com,Sc
+San Francisco Chronicle,de San Francisco Chronicle,SF
+San Jose Mercury News,de San Jose Mercury News,SJ
+Score,de Score,Sc
+Slant Magazine,de Slant Magazine,SM
+Slate,de Slate,Sl
+So Film,de So Film,SF
+St. Louis Post-Dispatch,de St. Louis Post-Dispatch,SL
+Starfix,de Starfix Contre,Sx2
+Starfix,de Starfix,Sx
+Studio Ciné Live,de Studio Ciné Live Contre,St2
+Studio Ciné Live,de Studio Ciné Live,St
+Studio Magazine,de Studio Magazine Contre,SM2
+Studio Magazine,de Studio Magazine,SM
+Sud Ouest,de Sud Ouest Contre,SO2
+Sud Ouest,de Sud Ouest,SO
+Synopsis,de Synopsis,Sy
+TF1 News,de TF1 News,TN
+TV Guide,de TV Guide Contre,TG2
+TV Guide,de TV Guide,TG
+TVLine,de TVLine,TV
+Technikart,de Technikart,Te
+Télé 2 semaines,de Télé 2 semaines,TS
+Télé 7 Jours,de Télé 7 Jours,TJ
+Télé Câble Sat,de Télé Câble Sat,TC
+Télé Loisirs,de Télé Loisirs,TL
+Télé Z,de Télé Z,TZ
+TéléCinéObs,de TéléCinéObs Contre,TC2
+TéléCinéObs,de TéléCinéObs,TC
+Télérama,de Télérama Contre,Té2
+Télérama,de Télérama,Té
+Téléstar,de Téléstar,Té
+The A.V. Club,de The A.V. Club,AV
+The Daily Beast,de The Daily Beast,TD
+The Detroit News,de The Detroit News,DN
+The Guardian,de The Guardian,TG
+The Hollywood Reporter,de The Hollywood Reporter Contre,HR2
+The Hollywood Reporter,de The Hollywood Reporter,HR
+The Independent,de The Independent,TI
+The Telegraph,du Telegraph,Te
+Time Out Paris,de Time Out Paris,TO
+Time,du Time,Ti
+Transfuge,de Transfuge,Tr
+USA Today,de USA Today,UT
+Uncle Barky,de Uncle Barky,UB
+Urbuz,de Urbuz,Ur
+VSD,de VSD Contre,VSD2
+VSD,de VSD,VSD
+Vanity Fair,de Vanity Fair,VF
+Variety,de Variety Contre,Va2
+Variety,de Variety,Va
+Voici,de Voici,Vo
+Vulture,de Vulture,Vu
+Wall Street Journal,du Wall Street Journal,WS
+Washington Post,du Washington Post,WP
+We Got This Covered,de We Got This Covered,WG
+Yahoo TV,de Yahoo TV,YT
+Zap2It,de Zap2It,ZI
+Zurban,de Zurban Contre,Zu2
+Zurban,de Zurban,Zu
+aVoir-aLire.com,d'aVoir-aLire.com,VL
+indieWIRE,de indieWIRE,In

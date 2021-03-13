@@ -1,0 +1,5 @@
+node_modules/
+.jshintrc
+deploy.sh
+deploytogithub.sh
+package*.json

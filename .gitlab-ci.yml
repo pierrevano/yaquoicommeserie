@@ -1,0 +1,16 @@
+image: node
+
+before_script:
+  - npm install get-json
+  - npm install shelljs
+  - npm install surge
+
+main:
+  stage: deploy
+  variables:
+    API_KEY: $API_KEY
+    DOMAIN_KEY: $DOMAIN_KEY
+    FROM_KEY: $FROM_KEY
+    TO_KEY: $TO_KEY
+  script:
+    - node node_script.js

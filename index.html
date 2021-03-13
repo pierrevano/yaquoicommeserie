@@ -1,0 +1,326 @@
+<html>
+
+<head>
+    <title>Y'a quoi comme série ?</title>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/manifest.json">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />
+    <meta name="title" content="Y'a quoi comme série ?" />
+    <meta name="description" content="Y'a quoi comme série ? vous aidera à choisir parmi les séries les mieux notées actuellement." />
+    <meta property="og:url" content="https://yaquoicommeserie.fr" />
+    <meta property="og:title" content="Y'a quoi comme série ?" />
+    <meta property="og:description" content="Y'a quoi comme série ? vous aidera à choisir parmi les séries les mieux notées actuellement." />
+
+    <link rel="stylesheet" href="assets/css/hc-offcanvas-nav.carbon.min-20210313.css">
+    <link rel="stylesheet" href="assets/css/shuffle-style.min-20210313.css">
+    <link rel="stylesheet" href="assets/css/style.min-20210313.css">
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/shufflejs@latest/dist/shuffle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typewriter-effect@latest/dist/core.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/darkmode-js@latest/lib/darkmode-js.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/hc-offcanvas-nav@latest/dist/hc-offcanvas-nav.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@latest/dist/sweetalert2.all.min.js"></script>
+    <script type="text/javascript" src="https://kit.fontawesome.com/a73a8689c0.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="assets/js/script.min-20210313.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css">
+</head>
+
+<body>
+    <nav id="main-nav">
+        <ul class="first-nav">
+            <li class="criticRatings">
+                <a href="#"><i class="fas fa-newspaper fa-lg"></i> Presse AlloCiné</a>
+                <ul>
+                    <li class="criticAllocine criticButton mainToggle">
+                        <a href="#">Tout désélectionner<span><input id="criticToggle0" type="checkbox" checked="checked"><label for="criticToggle0"></label></span></a>
+                    </li>
+                    <li class="criticButton"><a href="#">20 Minutes<span><input id="criticToggle1" type="checkbox" checked="checked"><label for="criticToggle1"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Arte<span><input id="criticToggle2" type="checkbox" checked="checked"><label for="criticToggle2"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Blabla-Séries<span><input id="criticToggle3" type="checkbox" checked="checked"><label for="criticToggle3"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Boston Globe<span><input id="criticToggle4" type="checkbox" checked="checked"><label for="criticToggle4"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Boston Herald<span><input id="criticToggle5" type="checkbox" checked="checked"><label for="criticToggle5"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Brain Damaged<span><input id="criticToggle6" type="checkbox" checked="checked"><label for="criticToggle6"></label></span></a></li>
+                    <li class="criticButton"><a href="#">CNN<span><input id="criticToggle7" type="checkbox" checked="checked"><label for="criticToggle7"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Chicago Sun-Times<span><input id="criticToggle8" type="checkbox" checked="checked"><label for="criticToggle8"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Chicago Sun-Times Contre<span><input id="criticToggle9" type="checkbox" checked="checked"><label for="criticToggle9"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Collider<span><input id="criticToggle10" type="checkbox" checked="checked"><label for="criticToggle10"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Colorado Springs Gazette<span><input id="criticToggle11" type="checkbox" checked="checked"><label for="criticToggle11"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Cosmopolitan<span><input id="criticToggle12" type="checkbox" checked="checked"><label for="criticToggle12"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Critictoo<span><input id="criticToggle13" type="checkbox" checked="checked"><label for="criticToggle13"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Critikat.com<span><input id="criticToggle14" type="checkbox" checked="checked"><label for="criticToggle14"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Culturebox - France Télévisions<span><input id="criticToggle15" type="checkbox" checked="checked"><label for="criticToggle15"></label></span></a></li>
+                    <li class="criticButton"><a href="#">DailyMars<span><input id="criticToggle16" type="checkbox" checked="checked"><label for="criticToggle16"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Denver Post<span><input id="criticToggle17" type="checkbox" checked="checked"><label for="criticToggle17"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Ecran Large<span><input id="criticToggle18" type="checkbox" checked="checked"><label for="criticToggle18"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Elle<span><input id="criticToggle19" type="checkbox" checked="checked"><label for="criticToggle19"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Entertainment weekly<span><input id="criticToggle20" type="checkbox" checked="checked"><label for="criticToggle20"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Entertainment weekly Contre<span><input id="criticToggle21" type="checkbox" checked="checked"><label for="criticToggle21"></label></span></a></li>
+                    <li class="criticButton"><a href="#">GQ<span><input id="criticToggle22" type="checkbox" checked="checked"><label for="criticToggle22"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Gala<span><input id="criticToggle23" type="checkbox" checked="checked"><label for="criticToggle23"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Hitfix<span><input id="criticToggle24" type="checkbox" checked="checked"><label for="criticToggle24"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Hollywood Reporter<span><input id="criticToggle25" type="checkbox" checked="checked"><label for="criticToggle25"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Huffington Post<span><input id="criticToggle26" type="checkbox" checked="checked"><label for="criticToggle26"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Kansas City Star<span><input id="criticToggle27" type="checkbox" checked="checked"><label for="criticToggle27"></label></span></a></li>
+                    <li class="criticButton"><a href="#">L&#039;Express<span><input id="criticToggle28" type="checkbox" checked="checked"><label for="criticToggle28"></label></span></a></li>
+                    <li class="criticButton"><a href="#">L&#039;Humanité<span><input id="criticToggle29" type="checkbox" checked="checked"><label for="criticToggle29"></label></span></a></li>
+                    <li class="criticButton"><a href="#">LCI<span><input id="criticToggle30" type="checkbox" checked="checked"><label for="criticToggle30"></label></span></a></li>
+                    <li class="criticButton"><a href="#">La Croix<span><input id="criticToggle31" type="checkbox" checked="checked"><label for="criticToggle31"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Las Vegas Weekly<span><input id="criticToggle32" type="checkbox" checked="checked"><label for="criticToggle32"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Le Figaro<span><input id="criticToggle33" type="checkbox" checked="checked"><label for="criticToggle33"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Le Figaro Magazine<span><input id="criticToggle34" type="checkbox" checked="checked"><label for="criticToggle34"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Le Journal du Geek<span><input id="criticToggle35" type="checkbox" checked="checked"><label for="criticToggle35"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Le Monde<span><input id="criticToggle36" type="checkbox" checked="checked"><label for="criticToggle36"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Le Nouvel Observateur<span><input id="criticToggle37" type="checkbox" checked="checked"><label for="criticToggle37"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Le Parisien<span><input id="criticToggle38" type="checkbox" checked="checked"><label for="criticToggle38"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Le Point<span><input id="criticToggle39" type="checkbox" checked="checked"><label for="criticToggle39"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Les Echos<span><input id="criticToggle40" type="checkbox" checked="checked"><label for="criticToggle40"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Les Inrockuptibles<span><input id="criticToggle41" type="checkbox" checked="checked"><label for="criticToggle41"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Les Inrockuptibles Contre<span><input id="criticToggle42" type="checkbox" checked="checked"><label for="criticToggle42"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Libération<span><input id="criticToggle43" type="checkbox" checked="checked"><label for="criticToggle43"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Los Angeles Times<span><input id="criticToggle44" type="checkbox" checked="checked"><label for="criticToggle44"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Mad Movies<span><input id="criticToggle45" type="checkbox" checked="checked"><label for="criticToggle45"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Marianne<span><input id="criticToggle46" type="checkbox" checked="checked"><label for="criticToggle46"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Metro<span><input id="criticToggle47" type="checkbox" checked="checked"><label for="criticToggle47"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Metro UK<span><input id="criticToggle48" type="checkbox" checked="checked"><label for="criticToggle48"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Miami Herald<span><input id="criticToggle49" type="checkbox" checked="checked"><label for="criticToggle49"></label></span></a></li>
+                    <li class="criticButton"><a href="#">New York Daily News<span><input id="criticToggle50" type="checkbox" checked="checked"><label for="criticToggle50"></label></span></a></li>
+                    <li class="criticButton"><a href="#">New York Post<span><input id="criticToggle51" type="checkbox" checked="checked"><label for="criticToggle51"></label></span></a></li>
+                    <li class="criticButton"><a href="#">New York Post Contre<span><input id="criticToggle52" type="checkbox" checked="checked"><label for="criticToggle52"></label></span></a></li>
+                    <li class="criticButton"><a href="#">New York Times<span><input id="criticToggle53" type="checkbox" checked="checked"><label for="criticToggle53"></label></span></a></li>
+                    <li class="criticButton"><a href="#">New Yorker<span><input id="criticToggle54" type="checkbox" checked="checked"><label for="criticToggle54"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Newsday<span><input id="criticToggle55" type="checkbox" checked="checked"><label for="criticToggle55"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Ouest France<span><input id="criticToggle56" type="checkbox" checked="checked"><label for="criticToggle56"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Paris Match<span><input id="criticToggle57" type="checkbox" checked="checked"><label for="criticToggle57"></label></span></a></li>
+                    <li class="criticButton"><a href="#">People Weekly<span><input id="criticToggle58" type="checkbox" checked="checked"><label for="criticToggle58"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Philadelphia Inquirer<span><input id="criticToggle59" type="checkbox" checked="checked"><label for="criticToggle59"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Pittsburg Post-Gazette<span><input id="criticToggle60" type="checkbox" checked="checked"><label for="criticToggle60"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Pittsburg Post-Gazette Contre<span><input id="criticToggle61" type="checkbox" checked="checked"><label for="criticToggle61"></label></span></a></li>
+                    <li class="criticButton"><a href="#">PopMatters<span><input id="criticToggle62" type="checkbox" checked="checked"><label for="criticToggle62"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Première<span><input id="criticToggle63" type="checkbox" checked="checked"><label for="criticToggle63"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Public<span><input id="criticToggle64" type="checkbox" checked="checked"><label for="criticToggle64"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Red Eye<span><input id="criticToggle65" type="checkbox" checked="checked"><label for="criticToggle65"></label></span></a></li>
+                    <li class="criticButton"><a href="#">RogerEbert.com<span><input id="criticToggle66" type="checkbox" checked="checked"><label for="criticToggle66"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Rolling Stone<span><input id="criticToggle67" type="checkbox" checked="checked"><label for="criticToggle67"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Salon.com<span><input id="criticToggle68" type="checkbox" checked="checked"><label for="criticToggle68"></label></span></a></li>
+                    <li class="criticButton"><a href="#">San Francisco Chronicle<span><input id="criticToggle69" type="checkbox" checked="checked"><label for="criticToggle69"></label></span></a></li>
+                    <li class="criticButton"><a href="#">San Jose Mercury News<span><input id="criticToggle70" type="checkbox" checked="checked"><label for="criticToggle70"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Slant Magazine<span><input id="criticToggle71" type="checkbox" checked="checked"><label for="criticToggle71"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Slate<span><input id="criticToggle72" type="checkbox" checked="checked"><label for="criticToggle72"></label></span></a></li>
+                    <li class="criticButton"><a href="#">St. Louis Post-Dispatch<span><input id="criticToggle73" type="checkbox" checked="checked"><label for="criticToggle73"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Sud Ouest<span><input id="criticToggle74" type="checkbox" checked="checked"><label for="criticToggle74"></label></span></a></li>
+                    <li class="criticButton"><a href="#">TV Guide<span><input id="criticToggle75" type="checkbox" checked="checked"><label for="criticToggle75"></label></span></a></li>
+                    <li class="criticButton"><a href="#">TV Guide Contre<span><input id="criticToggle76" type="checkbox" checked="checked"><label for="criticToggle76"></label></span></a></li>
+                    <li class="criticButton"><a href="#">TVLine<span><input id="criticToggle77" type="checkbox" checked="checked"><label for="criticToggle77"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Télé 2 semaines<span><input id="criticToggle78" type="checkbox" checked="checked"><label for="criticToggle78"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Télé 7 Jours<span><input id="criticToggle79" type="checkbox" checked="checked"><label for="criticToggle79"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Télé Câble Sat<span><input id="criticToggle80" type="checkbox" checked="checked"><label for="criticToggle80"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Télé Loisirs<span><input id="criticToggle81" type="checkbox" checked="checked"><label for="criticToggle81"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Télé Z<span><input id="criticToggle82" type="checkbox" checked="checked"><label for="criticToggle82"></label></span></a></li>
+                    <li class="criticButton"><a href="#">TéléCinéObs<span><input id="criticToggle83" type="checkbox" checked="checked"><label for="criticToggle83"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Télérama<span><input id="criticToggle84" type="checkbox" checked="checked"><label for="criticToggle84"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Téléstar<span><input id="criticToggle85" type="checkbox" checked="checked"><label for="criticToggle85"></label></span></a></li>
+                    <li class="criticButton"><a href="#">The A.V. Club<span><input id="criticToggle86" type="checkbox" checked="checked"><label for="criticToggle86"></label></span></a></li>
+                    <li class="criticButton"><a href="#">The Daily Beast<span><input id="criticToggle87" type="checkbox" checked="checked"><label for="criticToggle87"></label></span></a></li>
+                    <li class="criticButton"><a href="#">The Detroit News<span><input id="criticToggle88" type="checkbox" checked="checked"><label for="criticToggle88"></label></span></a></li>
+                    <li class="criticButton"><a href="#">The Guardian<span><input id="criticToggle89" type="checkbox" checked="checked"><label for="criticToggle89"></label></span></a></li>
+                    <li class="criticButton"><a href="#">The Hollywood Reporter<span><input id="criticToggle90" type="checkbox" checked="checked"><label for="criticToggle90"></label></span></a></li>
+                    <li class="criticButton"><a href="#">The Hollywood Reporter Contre<span><input id="criticToggle91" type="checkbox" checked="checked"><label for="criticToggle91"></label></span></a></li>
+                    <li class="criticButton"><a href="#">The Independent<span><input id="criticToggle92" type="checkbox" checked="checked"><label for="criticToggle92"></label></span></a></li>
+                    <li class="criticButton"><a href="#">The Telegraph<span><input id="criticToggle93" type="checkbox" checked="checked"><label for="criticToggle93"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Time<span><input id="criticToggle94" type="checkbox" checked="checked"><label for="criticToggle94"></label></span></a></li>
+                    <li class="criticButton"><a href="#">USA Today<span><input id="criticToggle95" type="checkbox" checked="checked"><label for="criticToggle95"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Uncle Barky<span><input id="criticToggle96" type="checkbox" checked="checked"><label for="criticToggle96"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Vanity Fair<span><input id="criticToggle97" type="checkbox" checked="checked"><label for="criticToggle97"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Variety<span><input id="criticToggle98" type="checkbox" checked="checked"><label for="criticToggle98"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Variety Contre<span><input id="criticToggle99" type="checkbox" checked="checked"><label for="criticToggle99"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Voici<span><input id="criticToggle100" type="checkbox" checked="checked"><label for="criticToggle100"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Vulture<span><input id="criticToggle101" type="checkbox" checked="checked"><label for="criticToggle101"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Wall Street Journal<span><input id="criticToggle102" type="checkbox" checked="checked"><label for="criticToggle102"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Washington Post<span><input id="criticToggle103" type="checkbox" checked="checked"><label for="criticToggle103"></label></span></a></li>
+                    <li class="criticButton"><a href="#">We Got This Covered<span><input id="criticToggle104" type="checkbox" checked="checked"><label for="criticToggle104"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Yahoo TV<span><input id="criticToggle105" type="checkbox" checked="checked"><label for="criticToggle105"></label></span></a></li>
+                    <li class="criticButton"><a href="#">Zap2It<span><input id="criticToggle106" type="checkbox" checked="checked"><label for="criticToggle106"></label></span></a></li>
+                    <li class="criticButton"><a href="#">aVoir-aLire.com<span><input id="criticToggle107" type="checkbox" checked="checked"><label for="criticToggle107"></label></span></a></li>
+                    <li class="criticButton"><a href="#">indieWIRE<span><input id="criticToggle108" type="checkbox" checked="checked"><label for="criticToggle108"></label></span></a></li>
+                </ul>
+            </li>
+            <li class="userRating">
+                <a href="#"><i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné</a>
+                <ul>
+                    <li class="usersAllocine mainToggle">
+                        <a href="#">Activer<span><input id="userToggle0" type="checkbox" checked="checked"><label for="userToggle0"></label></span></a>
+                    </li>
+                </ul>
+            </li>
+            <li class="imdbUserRating">
+                <a href="#"><i class="fab fa-imdb fa-lg"></i></i> Spectateurs IMDb</a>
+                <ul>
+                    <li class="usersImdb mainToggle">
+                        <a href="#">Activer<span><input id="imdbUserToggle0" type="checkbox" checked="checked"><label for="imdbUserToggle0"></label></span></a>
+                    </li>
+                </ul>
+            </li>
+            <li class="networkPreferences">
+                <a href="#"><i class="fas fa-tv fa-lg"></i></i> Plateformes</a>
+                <ul>
+                    <li class="mainToggleNetwork networkButton">
+                        <a href="#">Tout désélectionner<span><input id="networkButton0" type="checkbox" checked="checked"><label for="networkButton0"></label></span></a>
+                    </li>
+                    <li class="networkButtonTitle"><a href="#">Streaming<span><input id="networkButtonTitle1" type="checkbox" checked="checked"><label for="networkButtonTitle1"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Amazon Prime Video<span><input id="networkButton1" type="checkbox" checked="checked"><label for="networkButton1"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Apple TV+<span><input id="networkButton2" type="checkbox" checked="checked"><label for="networkButton2"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Canal+<span><input id="networkButton3" type="checkbox" checked="checked"><label for="networkButton3"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Disney+<span><input id="networkButton4" type="checkbox" checked="checked"><label for="networkButton4"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Netflix<span><input id="networkButton5" type="checkbox" checked="checked"><label for="networkButton5"></label></span></a></li>
+                    <li class="networkButton"><a href="#">OCS<span><input id="networkButton6" type="checkbox" checked="checked"><label for="networkButton6"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Salto<span><input id="networkButton7" type="checkbox" checked="checked"><label for="networkButton7"></label></span></a></li>
+                    <li class="networkButtonTitle"><a href="#">Chaînes TV<span><input id="networkButtonTitle2" type="checkbox" checked="checked"><label for="networkButtonTitle2"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Arte<span><input id="networkButton8" type="checkbox" checked="checked"><label for="networkButton8"></label></span></a></li>
+                    <li class="networkButton"><a href="#">CBS<span><input id="networkButton9" type="checkbox" checked="checked"><label for="networkButton9"></label></span></a></li>
+                    <li class="networkButton"><a href="#">CW<span><input id="networkButton10" type="checkbox" checked="checked"><label for="networkButton10"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Chérie 25<span><input id="networkButton11" type="checkbox" checked="checked"><label for="networkButton11"></label></span></a></li>
+                    <li class="networkButton"><a href="#">NBC<span><input id="networkButton12" type="checkbox" checked="checked"><label for="networkButton12"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Syfy France<span><input id="networkButton13" type="checkbox" checked="checked"><label for="networkButton13"></label></span></a></li>
+                    <li class="networkButton"><a href="#">serieclub<span><input id="networkButton14" type="checkbox" checked="checked"><label for="networkButton14"></label></span></a></li>
+                    <li class="networkButton"><a href="#">Non renseignée<span><input id="networkButton15" type="checkbox" checked="checked"><label for="networkButton15"></label></span></a></li>
+                </ul>
+            </li>
+            <li class="nationalityPreferences">
+                <a href="#"><i class="fas fa-flag fa-lg"></i></i> Nationalités</a>
+                <ul>
+                    <li class="mainToggleNationality nationalityButton">
+                        <a href="#">Tout désélectionner<span><input id="nationalityButton0" type="checkbox" checked="checked"><label for="nationalityButton0"></label></span></a>
+                    </li>
+                    <li class="nationalityButton"><a href="#">Allemagne<span><input id="nationalityButton1" type="checkbox" checked="checked"><label for="nationalityButton1"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Australie<span><input id="nationalityButton2" type="checkbox" checked="checked"><label for="nationalityButton2"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Belgique<span><input id="nationalityButton3" type="checkbox" checked="checked"><label for="nationalityButton3"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Brésil<span><input id="nationalityButton4" type="checkbox" checked="checked"><label for="nationalityButton4"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Canada<span><input id="nationalityButton5" type="checkbox" checked="checked"><label for="nationalityButton5"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Corée du Sud<span><input id="nationalityButton6" type="checkbox" checked="checked"><label for="nationalityButton6"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Danemark<span><input id="nationalityButton7" type="checkbox" checked="checked"><label for="nationalityButton7"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Espagne<span><input id="nationalityButton8" type="checkbox" checked="checked"><label for="nationalityButton8"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">France<span><input id="nationalityButton9" type="checkbox" checked="checked"><label for="nationalityButton9"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Grande-Bretagne<span><input id="nationalityButton10" type="checkbox" checked="checked"><label for="nationalityButton10"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Irlande<span><input id="nationalityButton11" type="checkbox" checked="checked"><label for="nationalityButton11"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Israël<span><input id="nationalityButton12" type="checkbox" checked="checked"><label for="nationalityButton12"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Italie<span><input id="nationalityButton13" type="checkbox" checked="checked"><label for="nationalityButton13"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Japon<span><input id="nationalityButton14" type="checkbox" checked="checked"><label for="nationalityButton14"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Luxembourg<span><input id="nationalityButton15" type="checkbox" checked="checked"><label for="nationalityButton15"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Pologne<span><input id="nationalityButton16" type="checkbox" checked="checked"><label for="nationalityButton16"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Suède<span><input id="nationalityButton17" type="checkbox" checked="checked"><label for="nationalityButton17"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">U.S.A.<span><input id="nationalityButton18" type="checkbox" checked="checked"><label for="nationalityButton18"></label></span></a></li>
+                    <li class="nationalityButton"><a href="#">Non renseignée<span><input id="nationalityButton19" type="checkbox" checked="checked"><label for="nationalityButton19"></label></span></a></li>
+                </ul>
+            </li>
+            <li class="durationPreferences">
+                <a href="#"><i class="fas fa-clock fa-lg"></i></i> Durées</a>
+                <ul>
+                    <li class="mainToggleDuration durationButton">
+                        <a href="#">Tout désélectionner<span><input id="durationButton0" type="checkbox" checked="checked"><label for="durationButton0"></label></span></a>
+                    </li>
+                    <li class="durationButton"><a href="#">20 minutes et moins<span><input id="durationButton1" type="checkbox" checked="checked"><label for="durationButton1"></label></span></a></li>
+                    <li class="durationButton"><a href="#">De 20 à 30 minutes<span><input id="durationButton2" type="checkbox" checked="checked"><label for="durationButton2"></label></span></a></li>
+                    <li class="durationButton"><a href="#">De 30 à 40 minutes<span><input id="durationButton3" type="checkbox" checked="checked"><label for="durationButton3"></label></span></a></li>
+                    <li class="durationButton"><a href="#">De 40 à 50 minutes<span><input id="durationButton4" type="checkbox" checked="checked"><label for="durationButton4"></label></span></a></li>
+                    <li class="durationButton"><a href="#">De 50 à 60 minutes<span><input id="durationButton5" type="checkbox" checked="checked"><label for="durationButton5"></label></span></a></li>
+                    <li class="durationButton"><a href="#">Plus de 60 minutes<span><input id="durationButton6" type="checkbox" checked="checked"><label for="durationButton6"></label></span></a></li>
+                    <li class="durationButton"><a href="#">Non renseignée<span><input id="durationButton7" type="checkbox" checked="checked"><label for="durationButton7"></label></span></a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="bottom-nav">
+            <li><a class="twitter-share-button" id="twitterLink" target="_blank" href="https://twitter.com/intent/tweet?text=Y'a quoi comme série ? : https://yaquoicommeserie.fr&hashtags=yaquoicommeserie,yqcs,séries,sérieactuellement"><i class="fab fa-twitter fa-lg"></i></a></li>
+            <li><a href="https://toucheradiostation.com/recent" target="_blank"><i class="fab fa-youtube fa-lg"></i></a></li>
+            <li><a href="https://github.com/pierrevano/yaquoicommeserie" target="_blank"><i class="fab fa-github fa-lg"></i></a></li>
+            <li><a href="https://www.buymeacoffee.com/touche" target="_blank"><i class="fas fa-coffee"></i></a></li>
+            <li><i class="tgl-darkmode fa-lightbulb fa-lg"></i></li>
+            <li><i class="fas fa-trash-alt"></i></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-6@sm">
+                <ul>
+                    <li><i class="fas fa-bars"></i></li>
+                    <li id="mainTitle"><a href="https://yaquoicommeserie.fr"><strong>Y'a quoi comme série ?</strong></a></li>
+                    <li><i><span id="typewriter"></span></i></li>
+                </ul>
+            </div>
+            <div class="col-6@sm">
+                <ul>
+                    <li><input class="textfield filter__search js-shuffle-search" type="search" id="filters-search-input" placeholder="Rechercher un titre de série" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Rechercher un titre de série'"></li>
+                    <li id="shortcut" class="displayNone">raccourci : CMD/CTRL + F</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12@sm filters-group-wrap">
+                <div class="filters-group">
+                    <p class="filter-label">Genre (cumuler <input id="inputToggle" type="checkbox"><label for="inputToggle">)</label></p>
+                    <div class="btn-group filter-options genreFilter">
+                        <button class="btn btn--primary" data-group="Action">Action</button><button class="btn btn--primary" data-group="Animation">Animation</button><button class="btn btn--primary" data-group="Arts Martiaux">Arts Martiaux</button><button class="btn btn--primary" data-group="Aventure">Aventure</button><button class="btn btn--primary" data-group="Biopic">Biopic</button><button class="btn btn--primary" data-group="Comédie">Comédie</button><button class="btn btn--primary" data-group="Comédie dramatique">Comédie dramatique</button><button class="btn btn--primary" data-group="Documentaire">Documentaire</button><button class="btn btn--primary" data-group="Drame">Drame</button><button class="btn btn--primary" data-group="Epouvante-horreur">Epouvante-horreur</button><button class="btn btn--primary" data-group="Erotique">Erotique</button><button class="btn btn--primary" data-group="Espionnage">Espionnage</button><button class="btn btn--primary" data-group="Famille">Famille</button><button class="btn btn--primary" data-group="Fantastique">Fantastique</button><button class="btn btn--primary" data-group="Guerre">Guerre</button><button class="btn btn--primary" data-group="Historique">Historique</button><button class="btn btn--primary" data-group="Judiciaire">Judiciaire</button><button class="btn btn--primary" data-group="Médical">Médical</button><button class="btn btn--primary" data-group="Policier">Policier</button><button class="btn btn--primary" data-group="Romance">Romance</button><button class="btn btn--primary" data-group="Science fiction">Science fiction</button><button class="btn btn--primary" data-group="Soap">Soap</button><button class="btn btn--primary" data-group="Thriller">Thriller</button><button class="btn btn--primary" data-group="Western">Western</button><button class="btn btn--primary" data-group="Non renseigné">Non renseigné</button>
+                    </div>
+                </div>
+
+                <div class="filters-group periodFilter">
+                    <p class="filter-label"><label for="status">Date de diffusion ou statut</label></p>
+                    <div class="btn-group">
+                        <select class="btn period-options" name="date">
+                            <option value="Default" data-group="">Choisissez un filtre</option>
+                            <option value="Les 7 derniers jours" data-group="Les 7 derniers jours">Les 7 derniers jours</option>
+                            <option value="Les 2 dernières semaines" data-group="Les 2 dernières semaines">Les 2 dernières semaines</option>
+                            <option value="Les 3 dernières semaines" data-group="Les 3 dernières semaines">Les 3 dernières semaines</option>
+                            <option value="En cours" data-group="En cours">En cours</option>
+                            <option value="Terminée" data-group="Terminée">Terminée</option>
+                            <option value="À venir" data-group="À venir">À venir</option>
+                            <option value="Annulée" data-group="Annulée">Annulée</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filters-group sortFilter">
+                    <p class="filter-label">Trier par</p>
+                    <div class="btn-group sort-options">
+                        <label class="btn active"><input id="defaultInput" type="radio" name="sort-value" value="critic"> Note</label><label class="btn"><input type="radio" name="sort-value" value="title"> Titre</label><label class="btn"><input type="radio" name="sort-value" value="date-created"> Date de diffusion</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container gridContainer">
+        <div id="grid" class="row my-shuffle-container shuffle"></div>
+    </div>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SCJ2VZ8S47"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-SCJ2VZ8S47');
+    </script>
+</body>
+
+</html>
