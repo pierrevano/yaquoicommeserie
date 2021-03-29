@@ -5,6 +5,7 @@
     --dark-gray-border-color: #565656;
     --dark-gray-color: #333333;
     --dark-rgba-color: 24, 24, 24;
+    --gray-disabled-button-color: #696969;
     --green-color: #28A745;
     --green-rgba-color: 40, 167, 69;
     --light-gray-bg-color: #EDEDED;
@@ -42,6 +43,90 @@ li {
 li a,
 li a:visited {
     color: var(--dark-color);
+}
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--dark-bg-color);
+    z-index: 2;
+    text-align: center;
+}
+
+.tns-outer {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    transform: translate(0%, -50%);
+}
+
+.slide-unavailable {
+    display: none;
+}
+
+#slider p {
+    font-size: 1.7em;
+}
+
+.first-slide p {
+    margin: 0.6em 0;
+}
+
+.first-slide p.slide-unavailable,
+.second-slide p.second-slide-unavailable {
+    margin: 0.6em 22%;
+}
+
+.first-slide div {
+    position: relative;
+    margin: -10px auto 20px;
+    padding-top: 41.1%;
+    width: 73%;
+}
+
+iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    max-width: 1013.97px;
+    max-height: 570.88px;
+    border: 1px solid rgba(var(--green-rgba-color), .25);
+}
+
+.tns-horizontal.tns-subpixel>.tns-item {
+    justify-content: center !important;
+    vertical-align: middle !important;
+}
+
+.second-slide div {
+    width: 180px;
+    border: 1px solid var(--white-color);
+    border-radius: 7px;
+    margin-bottom: 10px;
+}
+
+.second-slide img {
+    height: 45px;
+    padding: 10px;
+}
+
+.tns-controls:focus {
+    outline: 0;
+}
+
+.period-options {
+    text-align: left;
 }
 
 .period-options:hover {
@@ -160,18 +245,23 @@ li.networkButtonTitle a:hover {
     background: transparent !important;
 }
 
-div[role=menu] {
-    margin: 0 7em;
+#overlay>button {
+    position: absolute;
+    margin-top: 10px !important;
+    right: 5px;
+    font-size: 1em !important;
+    z-index: 2;
 }
 
-div[role=menu]>button {
+.tns-controls button,
+#overlay>button {
     padding: 6px;
     border-radius: 4px;
     text-decoration: none;
     cursor: pointer;
     white-space: nowrap;
     text-align: center;
-    font-size: 13px;
+    font-size: 1.25em;
     margin: 0 5px 5px 0;
     border: 1px solid var(--green-color);
     color: var(--white-color);
@@ -180,30 +270,37 @@ div[role=menu]>button {
 
 @media (-moz-touch-enabled:0),
 (pointer:fine) {
-    div[role=menu]>button:hover {
+
+    .tns-controls button:hover,
+    #overlay>button:hover {
         color: var(--white-color);
-        background-color: rgba(var(--green-rgba-color), .25);
+        background-color: var(--green-color)
     }
 }
 
-div[role=menu]>button:focus {
+.tns-controls button:focus,
+#overlay>button:focus {
     box-shadow: 0;
 }
 
-div[role=menu]>button.active,
-div[role=menu]>button:active {
+.tns-controls button.active,
+#overlay>button:active {
     box-shadow: 0;
     color: var(--white-color);
     background-color: var(--green-color)
 }
 
-div[role=menu]>button:focus.active {
+.tns-controls button:focus.active,
+#overlay>button:focus.active {
     box-shadow: 0;
 }
 
-div[role=menu]>button:disabled {
-    color: var(--white-color);
-    background-color: var(--dark-color);
+.tns-controls button:disabled,
+#overlay>button:disabled {
+    color: var(--gray-disabled-button-color);
+    background-color: var(--dark-bg-color);
+    border: 1px solid var(--dark-gray-border-color);
+    cursor: not-allowed !important;
 }
 
 .fa-twitter:hover,
@@ -215,6 +312,11 @@ div[role=menu]>button:disabled {
 .fa-bars:hover {
     cursor: pointer;
     color: var(--green-color);
+}
+
+.fa-thumbs-up,
+.fa-thumbs-down {
+    margin-right: 5px;
 }
 
 .bottom-nav li a:hover {
@@ -395,19 +497,32 @@ strong {
     }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1002px) {
+@media screen and (min-width: 768px) and (max-width: 1139px) {
     .genreFilter {
-        max-width: 299px;
+        max-width: 336px;
     }
 }
 
-@media screen and (min-width: 1003px) {
+@media screen and (orientation: portrait) and (max-width: 1013.97px) {
+    .first-slide div {
+        padding-top: 56.3%;
+        width: 100%;
+    }
+
+    iframe {
+        border: none;
+        border-top: 1px solid rgba(var(--green-rgba-color), .25);
+        border-bottom: 1px solid rgba(var(--green-rgba-color), .25);
+    }
+}
+
+@media screen and (min-width: 1140px) {
     .periodFilter {
         min-width: 228px;
     }
 
     .sortFilter {
-        min-width: 299px;
+        min-width: 336px;
     }
 }
 

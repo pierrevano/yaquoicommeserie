@@ -189,6 +189,7 @@ The Guardian,de The Guardian,TG
 The Hollywood Reporter,de The Hollywood Reporter Contre,HR2
 The Hollywood Reporter,de The Hollywood Reporter,HR
 The Independent,de The Independent,TI
+The Salt Lake Tribune,de The Salt Lake Tribune,TS
 The Telegraph,du Telegraph,Te
 Time Out Paris,de Time Out Paris,TO
 Time,du Time,Ti

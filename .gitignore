@@ -2,4 +2,6 @@ node_modules/
 .jshintrc
 deploy.sh
 deploytogithub.sh
+deploytogitlab2.sh
 package*.json
+commit.sh

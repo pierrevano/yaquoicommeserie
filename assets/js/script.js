@@ -98,6 +98,7 @@ var DOMLoaded = function() {
             clickToggleMode();
             darkmodePref();
             defaultInputClick();
+            displayOverlay();
             focusSearchInput();
             getDarkmodeStatus();
             getTglButtons();
@@ -179,15 +180,18 @@ var DOMLoaded = function() {
 
     // Get selected data from data object
     function getMarkupFromData(dataForSingleItem) {
-        var titleTemp = dataForSingleItem.allocineData.title,
-            picture = dataForSingleItem.allocineData.picture,
-            status = dataForSingleItem.allocineData.status,
+        var serieId = dataForSingleItem.id,
             url = dataForSingleItem.allocineData.url,
-            date = dataForSingleItem.imdbData.date,
+            titleTemp = dataForSingleItem.allocineData.title,
+            creationDate = dataForSingleItem.allocineData.creationDate,
             duration = dataForSingleItem.imdbData.duration,
-            criticFix = dataForSingleItem.allocineData.critic,
+            picture = dataForSingleItem.allocineData.picture,
+            status = dataForSingleItem.betaseriesData.betaseriesStatus,
+            serieTrailerId = dataForSingleItem.allocineData.serieTrailerId,
             criticNames = dataForSingleItem.allocineData.criticNames,
+            criticFix = dataForSingleItem.allocineData.critic,
             user = dataForSingleItem.allocineData.user,
+            date = dataForSingleItem.imdbData.date,
             imdbId = dataForSingleItem.imdbData.imdbId,
             imdbRating = dataForSingleItem.imdbData.imdbRating,
             divisionNumber = 0,
@@ -209,22 +213,40 @@ var DOMLoaded = function() {
             genre = 'Non renseigné';
         }
 
-        if (dataForSingleItem.allocineData.network !== undefined) {
-            if (dataForSingleItem.allocineData.network.id5 !== undefined) {
-                network = dataForSingleItem.allocineData.network.id1 + ',' + dataForSingleItem.allocineData.network.id2 + ',' + dataForSingleItem.allocineData.network.id3 + ',' + dataForSingleItem.allocineData.network.id4 + ',' + dataForSingleItem.allocineData.network.id5;
-            } else if (dataForSingleItem.allocineData.network.id4 !== undefined) {
-                network = dataForSingleItem.allocineData.network.id1 + ',' + dataForSingleItem.allocineData.network.id2 + ',' + dataForSingleItem.allocineData.network.id3 + ',' + dataForSingleItem.allocineData.network.id4;
-            } else if (dataForSingleItem.allocineData.network.id3 !== undefined) {
-                network = dataForSingleItem.allocineData.network.id1 + ',' + dataForSingleItem.allocineData.network.id2 + ',' + dataForSingleItem.allocineData.network.id3;
-            } else if (dataForSingleItem.allocineData.network.id2 !== undefined) {
-                network = dataForSingleItem.allocineData.network.id1 + ',' + dataForSingleItem.allocineData.network.id2;
-            } else if (dataForSingleItem.allocineData.network.id1 !== undefined) {
-                network = dataForSingleItem.allocineData.network.id1;
+        if (dataForSingleItem.betaseriesData.network !== undefined) {
+            if (dataForSingleItem.betaseriesData.network.id5 !== undefined) {
+                network = dataForSingleItem.betaseriesData.network.id1 + ',' + dataForSingleItem.betaseriesData.network.id2 + ',' + dataForSingleItem.betaseriesData.network.id3 + ',' + dataForSingleItem.betaseriesData.network.id4 + ',' + dataForSingleItem.betaseriesData.network.id5;
+            } else if (dataForSingleItem.betaseriesData.network.id4 !== undefined) {
+                network = dataForSingleItem.betaseriesData.network.id1 + ',' + dataForSingleItem.betaseriesData.network.id2 + ',' + dataForSingleItem.betaseriesData.network.id3 + ',' + dataForSingleItem.betaseriesData.network.id4;
+            } else if (dataForSingleItem.betaseriesData.network.id3 !== undefined) {
+                network = dataForSingleItem.betaseriesData.network.id1 + ',' + dataForSingleItem.betaseriesData.network.id2 + ',' + dataForSingleItem.betaseriesData.network.id3;
+            } else if (dataForSingleItem.betaseriesData.network.id2 !== undefined) {
+                network = dataForSingleItem.betaseriesData.network.id1 + ',' + dataForSingleItem.betaseriesData.network.id2;
+            } else if (dataForSingleItem.betaseriesData.network.id1 !== undefined) {
+                network = dataForSingleItem.betaseriesData.network.id1;
             } else {
                 network = 'Non renseignée';
             }
         } else {
             network = 'Non renseignée';
+        }
+
+        if (dataForSingleItem.betaseriesData.networkUrl !== undefined) {
+            if (dataForSingleItem.betaseriesData.networkUrl.id5 !== undefined) {
+                networkUrl = dataForSingleItem.betaseriesData.networkUrl.id1 + ',' + dataForSingleItem.betaseriesData.networkUrl.id2 + ',' + dataForSingleItem.betaseriesData.networkUrl.id3 + ',' + dataForSingleItem.betaseriesData.networkUrl.id4 + ',' + dataForSingleItem.betaseriesData.networkUrl.id5;
+            } else if (dataForSingleItem.betaseriesData.networkUrl.id4 !== undefined) {
+                networkUrl = dataForSingleItem.betaseriesData.networkUrl.id1 + ',' + dataForSingleItem.betaseriesData.networkUrl.id2 + ',' + dataForSingleItem.betaseriesData.networkUrl.id3 + ',' + dataForSingleItem.betaseriesData.networkUrl.id4;
+            } else if (dataForSingleItem.betaseriesData.networkUrl.id3 !== undefined) {
+                networkUrl = dataForSingleItem.betaseriesData.networkUrl.id1 + ',' + dataForSingleItem.betaseriesData.networkUrl.id2 + ',' + dataForSingleItem.betaseriesData.networkUrl.id3;
+            } else if (dataForSingleItem.betaseriesData.networkUrl.id2 !== undefined) {
+                networkUrl = dataForSingleItem.betaseriesData.networkUrl.id1 + ',' + dataForSingleItem.betaseriesData.networkUrl.id2;
+            } else if (dataForSingleItem.betaseriesData.networkUrl.id1 !== undefined) {
+                networkUrl = dataForSingleItem.betaseriesData.networkUrl.id1;
+            } else {
+                networkUrl = 'Non renseignée';
+            }
+        } else {
+            networkUrl = 'Non renseignée';
         }
 
         if (dataForSingleItem.allocineData.nationality !== undefined) {
@@ -290,10 +312,17 @@ var DOMLoaded = function() {
         var last21Days = ((today3.getMonth() + 1) + '/' + today3.getDate() + '/' + today3.getFullYear());
         var isDateIncludedlast21Days = dateCheck(last21Days, todayNew3, dateFormatted);
 
+        var isDateIncluded2019 = dateCheck('01/01/2019', '12/31/2019', dateFormatted);
+        var isDateIncluded2020 = dateCheck('01/01/2020', '12/31/2020', dateFormatted);
+        var isDateIncluded2021 = dateCheck('01/01/2021', '12/31/2021', dateFormatted);
+
         dateFormattedFilter = statusFilter(
             isDateIncludedlast7Days,
             isDateIncludedlast14Days,
             isDateIncludedlast21Days,
+            isDateIncluded2019,
+            isDateIncluded2020,
+            isDateIncluded2021,
             status);
 
         critic = getActiveCritics(criticFix, criticNames);
@@ -482,6 +511,35 @@ var DOMLoaded = function() {
             title = dataForSingleItem.allocineData.title;
         }
 
+        var titleTwitter = titleTemp.replace('&amp;', '%26');
+        var ratingTwitter = rating
+            .replace('<span>/5</span>', '')
+            .replace('.', ',');
+        if (parseInt(serieId) == 1) {
+            localStorage.setItem('title1', titleTwitter);
+            localStorage.setItem('rating1', ratingTwitter);
+        }
+
+        if (parseInt(serieId) == 2) {
+            localStorage.setItem('title2', titleTwitter);
+            localStorage.setItem('rating2', ratingTwitter);
+        }
+
+        if (parseInt(serieId) == 3) {
+            localStorage.setItem('title3', titleTwitter);
+            localStorage.setItem('rating3', ratingTwitter);
+        }
+
+        if (parseInt(serieId) == 4) {
+            var title1 = localStorage.getItem('title1');
+            var rating1 = localStorage.getItem('rating1');
+            var title2 = localStorage.getItem('title2');
+            var rating2 = localStorage.getItem('rating2');
+            var title3 = localStorage.getItem('title3');
+            var rating3 = localStorage.getItem('rating3');
+            twitterTops(title1, rating1, title2, rating2, title3, rating3);
+        }
+
         var criticDetailsUrl = '';
         if (criticDetails == '/') {
             criticDetailsUrl = '<a href="javascript:void(0)"><i class="fas fa-newspaper"></i>' + criticDetails + '</a>';
@@ -505,11 +563,11 @@ var DOMLoaded = function() {
 
         /* beautify ignore:start */
         return [
-            '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-critic="' + ratingToFixed + '" data-date-created="' + dateFormatted + '" data-title="' + normalizeStr(title) + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
+            '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-network-url="' + networkUrl + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-critic="' + ratingToFixed + '" data-popularity="' + serieId + '" data-creationdate="' + creationDate + '" data-serieTrailerId="' + serieTrailerId + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
                 '<div class="picture-item__inner">',
                     '<div class="aspect aspect--16x9">',
                         '<div class="aspect__inner">',
-                            '<a href="' + url + '" target="_blank" rel="noopener" title="' + dataForSingleItem.allocineData.title + '">',
+                            '<a href="javascript:void(0)" title="' + dataForSingleItem.allocineData.title + '">',
                                 '<img src="' + picture + '" srcset="' + picture + '" alt="' + title + '">',
                             '</a>',
                             '<img class="picture-item__blur" src="' + picture + '" srcset="' + picture + '" alt="">',
@@ -636,9 +694,13 @@ var DOMLoaded = function() {
         isDateIncludedlast7Days,
         isDateIncludedlast14Days,
         isDateIncludedlast21Days,
+        isDateIncluded2019,
+        isDateIncluded2020,
+        isDateIncluded2021,
         status) {
         var text = '',
-            text2 = '';
+            text2 = '',
+            text3 = '';
 
         if (isDateIncludedlast7Days) {
             text = 'Les 7 derniers jours,Les 2 dernières semaines,Les 3 dernières semaines';
@@ -646,24 +708,46 @@ var DOMLoaded = function() {
             text = 'Les 7 derniers jours,Les 2 dernières semaines';
         } else if (isDateIncludedlast21Days) {
             text = 'Les 3 dernières semaines';
+        } else {
+            text = '';
+        }
+
+        if (isDateIncluded2021) {
+            text2 = 'En 2021';
+        } else if (isDateIncluded2020) {
+            text2 = 'En 2020';
+        } else if (isDateIncluded2019) {
+            text2 = 'En 2019';
+        } else {
+            text2 = '';
         }
 
         if (status == 'En cours') {
-            text2 = 'En cours';
+            text3 = 'En cours';
         } else if (status == 'Terminée') {
-            text2 = 'Terminée';
+            text3 = 'Terminée';
         } else if (status == 'À venir') {
-            text2 = 'À venir';
+            text3 = 'À venir';
         } else if (status == 'Annulée') {
-            text2 = 'Annulée';
+            text3 = 'Annulée';
+        } else {
+            text3 = '';
         }
 
         if (text == '') {
-            return text2;
+            return text2 + ',' + text3;
         } else if (text2 == '') {
-            return text;
-        } else {
+            return text + ',' + text3;
+        } else if (text3 == '') {
             return text + ',' + text2;
+        } else if (text == '' && text2 == '') {
+            return text3;
+        } else if (text2 == '' && text3 == '') {
+            return text;
+        } else if (text3 == '' && text == '') {
+            return text2;
+        } else {
+            return text + ',' + text2 + ',' + text3;
         }
     }
 
@@ -723,6 +807,39 @@ var DOMLoaded = function() {
         }
     }
 
+    // Send top titles and ratings to Twitter new tweet
+    function twitterTops(title1, rating1, title2, rating2, title3, rating3) {
+        var date = new Date();
+        var weekdate = date.getDay();
+        var day = date.getDate();
+        var month = date.getMonth();
+        var year = date.getFullYear();
+        var monthNames = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+        var weekdateNames = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+
+        var text = '';
+        text += '🏆 Top 3 des séries les plus vues sur 🎬 %23AlloCiné le ' + weekdateNames[weekdate] + ' ' + day + ' ' + monthNames[month] + ' ' + year + ' !';
+        text += '%0a%0a🥇 %23' + hashtagFormatted(title1) + ' avec ' + rating1 + '⭐️ /5';
+        text += '%0a🥈 %23' + hashtagFormatted(title2) + ' avec ' + rating2 + '⭐️ /5';
+        text += '%0a🥉 %23' + hashtagFormatted(title3) + ' avec ' + rating3 + '⭐️ /5';
+        text += '%0a%0aEt vous, quelle est votre série du moment ?';
+        text += '%0a%0ahttps://yaquoicommeserie.fr';
+        text += '%0a%0a%23YQCS';
+
+        var twitterButton = document.querySelector('.fa-twitter');
+        var twitterButtonParent = document.querySelector('.fa-twitter').parentNode;
+        twitterButton.addEventListener('click', function() {
+            twitterButtonParent.href = 'https://twitter.com/intent/tweet?text=' + text;
+        }, false);
+    }
+
+    // Remove characters for hashtags
+    function hashtagFormatted(string) {
+        return string
+            .replace(/\s+/g, '')
+            .replace('\'', '');
+    }
+
     // Display retrieved data in grid div
     function appendMarkupToGrid(markup) {
         gridContainerElement.insertAdjacentHTML('beforeend', markup);
@@ -731,8 +848,8 @@ var DOMLoaded = function() {
     // Remove localStorage items
     function removeItems() {
         localStorage.removeItem('critic');
-        localStorage.removeItem('title');
-        localStorage.removeItem('dateCreated');
+        localStorage.removeItem('creationdate');
+        localStorage.removeItem('popularity');
     }
 
     // Search function
@@ -807,57 +924,61 @@ var DOMLoaded = function() {
         var value = evt.target.value;
         var options = {};
 
-        function sortByDate(element) {
-            return Date.parse(element.getAttribute('data-date-created'));
+        function sortByPopularity(element) {
+            return parseInt(element.getAttribute('data-popularity'));
         }
 
-        function sortByTitle(element) {
-            return element.getAttribute('data-title').toLowerCase();
+        function sortByCreationDate(element) {
+            return parseInt(element.getAttribute('data-creationdate')) + parseFloat(element.getAttribute('data-critic'));
         }
 
         function sortCritic(element) {
             return element.getAttribute('data-critic');
         }
 
-        if (value === 'date-created') {
-            var dateCreated = localStorage.getItem('dateCreated');
+        if (value === 'popularity') {
+            var popularity = localStorage.getItem('popularity');
 
-            if (dateCreated === 'true') {
-                options = {
-                    reverse: false,
-                    by: sortByDate,
-                };
-
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="date-created"> Date de diffusion <i class="fas fa-arrow-up"></i>';
-                localStorage.setItem('dateCreated', 'false');
-            } else {
+            if (popularity === 'true') {
                 options = {
                     reverse: true,
-                    by: sortByDate,
+                    by: sortByPopularity,
                 };
 
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="date-created"> Date de diffusion <i class="fas fa-arrow-down"></i>';
-                localStorage.setItem('dateCreated', 'true');
+                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="popularity"> Popularité <i class="fas fa-arrow-up"></i>';
+                localStorage.setItem('popularity', 'false');
+                localStorage.setItem('defaultInput', 'popularity');
+            } else {
+                options = {
+                    reverse: false,
+                    by: sortByPopularity,
+                };
+
+                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="popularity"> Popularité <i class="fas fa-arrow-down"></i>';
+                localStorage.setItem('popularity', 'true');
+                localStorage.setItem('defaultInput', 'popularity');
             }
-        } else if (value === 'title') {
-            var title = localStorage.getItem('title');
+        } else if (value === 'creationdate') {
+            var creationdate = localStorage.getItem('creationdate');
 
-            if (title === 'true') {
-                options = {
-                    reverse: true,
-                    by: sortByTitle,
-                };
-
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="title"> Titre <i class="fas fa-arrow-up"></i>';
-                localStorage.setItem('title', 'false');
-            } else {
+            if (creationdate === 'true') {
                 options = {
                     reverse: false,
-                    by: sortByTitle,
+                    by: sortByCreationDate,
                 };
 
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="title"> Titre <i class="fas fa-arrow-down"></i>';
-                localStorage.setItem('title', 'true');
+                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="creationdate"> Date de création <i class="fas fa-arrow-up"></i>';
+                localStorage.setItem('creationdate', 'false');
+                localStorage.setItem('defaultInput', 'creationdate');
+            } else {
+                options = {
+                    reverse: true,
+                    by: sortByCreationDate,
+                };
+
+                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="creationdate"> Date de création <i class="fas fa-arrow-down"></i>';
+                localStorage.setItem('creationdate', 'true');
+                localStorage.setItem('defaultInput', 'creationdate');
             }
         } else if (value === 'critic') {
             var critic = localStorage.getItem('critic');
@@ -870,6 +991,7 @@ var DOMLoaded = function() {
 
                 evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="critic"> Note <i class="fas fa-arrow-up"></i>';
                 localStorage.setItem('critic', 'false');
+                localStorage.setItem('defaultInput', 'critic');
             } else {
                 options = {
                     reverse: true,
@@ -878,6 +1000,7 @@ var DOMLoaded = function() {
 
                 evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="critic"> Note <i class="fas fa-arrow-down"></i>';
                 localStorage.setItem('critic', 'true');
+                localStorage.setItem('defaultInput', 'critic');
             }
         }
 
@@ -894,14 +1017,16 @@ var DOMLoaded = function() {
             activePeriod = 'Les 2 dernières semaines';
         } else if (activePeriod == 'les_3_dernieres_semaines') {
             activePeriod = 'Les 3 dernières semaines';
+        } else if (activePeriod == 'en_2021' || activePeriod == '2021') {
+            activePeriod = 'En 2021';
+        } else if (activePeriod == 'en_2020' || activePeriod == '2020') {
+            activePeriod = 'En 2020';
+        } else if (activePeriod == 'en_2019' || activePeriod == '2019') {
+            activePeriod = 'En 2019';
         } else if (activePeriod == 'en_cours') {
             activePeriod = 'En cours';
         } else if (activePeriod == 'terminee') {
             activePeriod = 'Terminée';
-        } else if (activePeriod == 'a_venir') {
-            activePeriod = 'À venir';
-        } else if (activePeriod == 'annulee') {
-            activePeriod = 'Annulée';
         } else {
             activePeriod = localStorage.getItem('activePeriod');
             if (activePeriod == null) {
@@ -1089,6 +1214,81 @@ var DOMLoaded = function() {
         getDarkmodeStatus();
     }
 
+    // Display overlay with trailer
+    function displayOverlay() {
+        var imgs = document.querySelectorAll('.aspect__inner img:not(.picture-item__blur)');
+
+        var slider = tns({
+            'container': '#slider',
+            'items': 1,
+            'loop': false,
+            'swipeAngle': false,
+            'speed': 400,
+            'controls': true,
+            'controlsPosition': 'bottom',
+            'controlsText': ['Précédent', 'Suivant'],
+            'nav': false,
+            'mouseDrag': true,
+            'arrowKeys': true
+        });
+
+        imgs.forEach(function(img) {
+            img.parentNode.addEventListener('click', function() {
+                document.querySelector('#overlay').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+
+                slider.goTo(0);
+
+                var serietrailerid = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-serietrailerid');
+                var network = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-network').toLowerCase();
+                var networkNew = network.split(',');
+                var networkUrl = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-network-url');
+                var networkUrlNew = networkUrl.split(',');
+
+                document.querySelector('iframe').src = 'https://player.allocine.fr/' + serietrailerid + '.html';
+
+                if (serietrailerid == '') {
+                    document.querySelector('.slide-unavailable').style.display = 'block';
+                    document.querySelector('p.slide-available').style.display = 'none';
+                    document.querySelector('div.slide-available').style.display = 'none';
+                } else {
+                    document.querySelector('.slide-unavailable').style.display = 'none';
+                    document.querySelector('p.slide-available').style.display = 'block';
+                    document.querySelector('div.slide-available').style.display = 'block';
+                }
+
+                var htmlTag = '';
+                if (networkNew.length > 0) {
+                    htmlTag = '<p>Disponible sur</p>';
+                    for (var htmlTagIndex = 0; htmlTagIndex < networkNew.length; htmlTagIndex++) {
+                        if (networkUrlNew[htmlTagIndex] == 'Non renseignée') {
+                            document.querySelector('.second-slide').style.display = '';
+                            htmlTag = '<p class="second-slide-unavailable">Plateforme non renseignée <i>(pour l\'instant)</i></p>';
+                        } else {
+                            document.querySelector('.second-slide').style.display = 'inline-grid';
+                            htmlTag += '<div><a href="' + networkUrlNew[htmlTagIndex] + '" target="_blank"><img src="assets/logo/' + normalizeStr(networkNew[htmlTagIndex]) + '.png" alt="' + normalizeStr(networkNew[htmlTagIndex]) + '"></a></div>';
+                        }
+                    }
+                } else {
+                    document.querySelector('.second-slide').style.display = '';
+                    htmlTag = '<p class="second-slide-unavailable">Plateforme non renseignée <i>(pour l\'instant)</i></p>';
+                }
+
+                document.querySelector('.second-slide').innerHTML = htmlTag;
+            }, false);
+        });
+
+        var overlay = document.querySelector('#overlay');
+        overlay.addEventListener('click', function(e) {
+            if (e.target.localName == 'div' ||
+                e.target.id == 'close-button') {
+                document.querySelector('#overlay').style.display = 'none';
+                document.querySelector('iframe').src = '';
+                document.body.style.overflow = 'scroll';
+            }
+        });
+    }
+
     // Get darkmode status and set icon
     function getDarkmodeStatus() {
         var body = document.body;
@@ -1106,8 +1306,26 @@ var DOMLoaded = function() {
     // Set on load default sort on critic
     function defaultInputClick() {
         removeItems();
-        var defaultInput = document.getElementById('defaultInput');
-        defaultInput.click();
+
+        var activeSort = normalizeStr(paramsURL('trier_par'));
+        if (activeSort == 'note') {
+            localStorage.setItem('defaultInput', 'critic');
+        } else if (activeSort == 'popularite') {
+            localStorage.setItem('defaultInput', 'popularity');
+        } else if (activeSort == 'date_de_creation' ||
+            activeSort == 'date_creation' ||
+            activeSort == 'creation') {
+            localStorage.setItem('defaultInput', 'creationdate');
+        } else {
+            activeSort = localStorage.getItem('defaultInput');
+            if (activeSort == null) {
+                localStorage.setItem('defaultInput', 'critic');
+            }
+        }
+
+        var defaultInput = localStorage.getItem('defaultInput');
+        var defaultInputValue = document.getElementById('defaultInput' + defaultInput);
+        defaultInputValue.click();
     }
 
     // Display shortcut on search input focus
@@ -1433,6 +1651,7 @@ var DOMLoaded = function() {
         });
     }
 
+    // Clear localStorage on click trash icon
     function reset() {
         var trashIcon = document.querySelector('.fa-trash-alt');
 
@@ -1441,10 +1660,10 @@ var DOMLoaded = function() {
                 title: 'Êtes-vous sûr de vouloir remettre à zéro vos préférences ?',
                 icon: 'warning',
                 showCancelButton: true,
-                cancelButtonText: 'Annuler',
-                confirmButtonColor: '#3085d6',
+                confirmButtonColor: 'var(--green-color)',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'OK'
+                confirmButtonText: '<i class="fas fa-thumbs-up"></i> OK',
+                cancelButtonText: '<i class="fas fa-thumbs-down"></i> Annuler'
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
@@ -1454,11 +1673,10 @@ var DOMLoaded = function() {
                         timerProgressBar: true,
                         showConfirmButton: false,
                         icon: 'success'
+                    }).then((_result) => {
+                        localStorage.clear();
+                        window.location = 'https://yaquoicommeserie.fr';
                     });
-                    localStorage.clear();
-                    setTimeout(function() {
-                        document.location.reload();
-                    }, 5000);
                 }
             });
         }, false);
@@ -1474,6 +1692,9 @@ var DOMLoaded = function() {
             } else if (e.key == 'Escape') {
                 e.preventDefault();
                 document.getElementById('filters-search-input').blur();
+                document.querySelector('#overlay').style.display = 'none';
+                document.querySelector('iframe').src = '';
+                document.body.style.overflow = 'scroll';
             }
         };
     }
