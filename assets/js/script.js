@@ -1,6 +1,7 @@
 var DOMLoaded = function() {
     var Shuffle = window.Shuffle;
     var shuffleInstance;
+    var chart;
 
     var genreArray = Array.from(document.querySelectorAll('.filter-options button'));
     var periodArray = Array.from(document.querySelectorAll('.period-options option'));
@@ -54,7 +55,7 @@ var DOMLoaded = function() {
     const url = new URL(window.location);
     const params = new URLSearchParams(url.search);
 
-    localStorage.setItem('menuBool', false);
+    localStorage.setItem('yqcs_menu.' + 'menuBool', false);
 
     fetch('https://yaquoicommeserie.fr/assets/js/data.json')
         .then(function(response) {
@@ -81,7 +82,7 @@ var DOMLoaded = function() {
                 durationArray: ['No duration']
             };
 
-            var mode = localStorage.getItem('mode');
+            var mode = localStorage.getItem('yqcs_mode.' + 'mode');
             var filterLabel = document.querySelector('.filter-label');
 
             if (mode === 'additive') {
@@ -119,13 +120,13 @@ var DOMLoaded = function() {
             button.children[0].children[0].addEventListener('click', setLocalStorageCritics.bind(this), false);
 
             var buttonCriticName = button.children[0].children[0].textContent;
-            var localbuttonCriticName = localStorage.getItem(buttonCriticName);
+            var localbuttonCriticName = localStorage.getItem('yqcs_critic.' + buttonCriticName);
 
             if (localbuttonCriticName == 'true' || localbuttonCriticName == null) {
                 criticNumberBool = true;
                 localbuttonCriticNameNumber++;
                 if (localbuttonCriticName == null) {
-                    localStorage.setItem(buttonCriticName, 'true');
+                    localStorage.setItem('yqcs_critic.' + buttonCriticName, 'true');
                 }
             } else if (localbuttonCriticName == 'false') {
                 button.children[0].children[0].children[0].children[0].removeAttribute('checked');
@@ -139,28 +140,28 @@ var DOMLoaded = function() {
         }
 
         if (criticNumberBool) {
-            localStorage.setItem('criticAllocine', 'true');
+            localStorage.setItem('yqcs_critic.' + 'criticAllocine', 'true');
             criticInput.children[0].children[0].innerHTML = 'Tout désélectionner<span><input id="criticToggle0" type="checkbox" checked="checked"><label for="criticToggle0"></label></span>';
         } else {
-            localStorage.setItem('criticAllocine', 'false');
+            localStorage.setItem('yqcs_critic.' + 'criticAllocine', 'false');
             criticInput.children[0].children[0].innerHTML = 'Tout sélectionner<span><input id="criticToggle0" type="checkbox"><label for="criticToggle0"></label></span>';
         }
     }
 
-    // Set localStorage for each critics button
+    // Set yqcs_localStorage for each critics button
     function setLocalStorageCritics(item) {
-        localStorage.setItem('menuBool', true);
+        localStorage.setItem('yqcs_menu.' + 'menuBool', true);
 
         var buttonCriticName = item.currentTarget.innerText;
-        var localbuttonCriticName = localStorage.getItem(buttonCriticName);
+        var localbuttonCriticName = localStorage.getItem('yqcs_critic.' + buttonCriticName);
 
         if (localbuttonCriticName == 'true') {
             item.currentTarget.children[0].children[0].removeAttribute('checked');
-            localStorage.setItem(buttonCriticName, 'false');
+            localStorage.setItem('yqcs_critic.' + buttonCriticName, 'false');
             localbuttonCriticNameNumber--;
         } else {
             item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-            localStorage.setItem(buttonCriticName, 'true');
+            localStorage.setItem('yqcs_critic.' + buttonCriticName, 'true');
             localbuttonCriticNameNumber++;
         }
 
@@ -191,11 +192,21 @@ var DOMLoaded = function() {
             criticNames = dataForSingleItem.allocineData.criticNames,
             criticFix = dataForSingleItem.allocineData.critic,
             user = dataForSingleItem.allocineData.user,
+            seasonsCritic = dataForSingleItem.allocineData.seasonsCritic,
             date = dataForSingleItem.imdbData.date,
             imdbId = dataForSingleItem.imdbData.imdbId,
             imdbRating = dataForSingleItem.imdbData.imdbRating,
             divisionNumber = 0,
             genre, title, rating;
+
+        var seasonsCriticValue = '';
+        var seasonsCriticDetails = '';
+        if (seasonsCritic !== undefined) {
+            seasonsCriticValue = dataForSingleItem.allocineData.seasonsCritic.seasonsCriticValue;
+            seasonsCriticDetails = dataForSingleItem.allocineData.seasonsCritic.seasonsCriticDetails;
+        }
+        var seasonsCriticDetailsArray = getseasonsCritic(seasonsCriticDetails);
+        var seasonsCriticArray = getseasonsCritic(seasonsCriticValue);
 
         var urlId = dataForSingleItem.allocineData.url.match(/=(.*)\./).pop();
 
@@ -329,9 +340,9 @@ var DOMLoaded = function() {
         if (user == '') user = 0;
         if (imdbRating == '') imdbRating = 0;
 
-        var criticActive = localStorage.getItem('criticAllocine');
-        var userActive = localStorage.getItem('usersAllocine');
-        var usersImdbActive = localStorage.getItem('usersImdb');
+        var criticActive = localStorage.getItem('yqcs_critic.' + 'criticAllocine');
+        var userActive = localStorage.getItem('yqcs_critic.' + 'usersAllocine');
+        var usersImdbActive = localStorage.getItem('yqcs_critic.' + 'usersImdb');
         var userInput = document.querySelector('.nav-item.usersAllocine');
         var userImdbInput = document.querySelector('.nav-item.usersImdb');
 
@@ -516,27 +527,27 @@ var DOMLoaded = function() {
             .replace('<span>/5</span>', '')
             .replace('.', ',');
         if (parseInt(serieId) == 1) {
-            localStorage.setItem('title1', titleTwitter);
-            localStorage.setItem('rating1', ratingTwitter);
+            localStorage.setItem('yqcs_twitter.' + 'title1', titleTwitter);
+            localStorage.setItem('yqcs_twitter.' + 'rating1', ratingTwitter);
         }
 
         if (parseInt(serieId) == 2) {
-            localStorage.setItem('title2', titleTwitter);
-            localStorage.setItem('rating2', ratingTwitter);
+            localStorage.setItem('yqcs_twitter.' + 'title2', titleTwitter);
+            localStorage.setItem('yqcs_twitter.' + 'rating2', ratingTwitter);
         }
 
         if (parseInt(serieId) == 3) {
-            localStorage.setItem('title3', titleTwitter);
-            localStorage.setItem('rating3', ratingTwitter);
+            localStorage.setItem('yqcs_twitter.' + 'title3', titleTwitter);
+            localStorage.setItem('yqcs_twitter.' + 'rating3', ratingTwitter);
         }
 
         if (parseInt(serieId) == 4) {
-            var title1 = localStorage.getItem('title1');
-            var rating1 = localStorage.getItem('rating1');
-            var title2 = localStorage.getItem('title2');
-            var rating2 = localStorage.getItem('rating2');
-            var title3 = localStorage.getItem('title3');
-            var rating3 = localStorage.getItem('rating3');
+            var title1 = localStorage.getItem('yqcs_twitter.' + 'title1');
+            var rating1 = localStorage.getItem('yqcs_twitter.' + 'rating1');
+            var title2 = localStorage.getItem('yqcs_twitter.' + 'title2');
+            var rating2 = localStorage.getItem('yqcs_twitter.' + 'rating2');
+            var title3 = localStorage.getItem('yqcs_twitter.' + 'title3');
+            var rating3 = localStorage.getItem('yqcs_twitter.' + 'rating3');
             twitterTops(title1, rating1, title2, rating2, title3, rating3);
         }
 
@@ -563,7 +574,7 @@ var DOMLoaded = function() {
 
         /* beautify ignore:start */
         return [
-            '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-network-url="' + networkUrl + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-critic="' + ratingToFixed + '" data-popularity="' + serieId + '" data-creationdate="' + creationDate + '" data-serieTrailerId="' + serieTrailerId + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
+            '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-network-url="' + networkUrl + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-critic="' + ratingToFixed + '" data-seasons-critic="' + seasonsCriticArray +  '" data-seasons-critic-details="' + seasonsCriticDetailsArray + '" data-popularity="' + serieId + '" data-creationdate="' + creationDate + '" data-serieTrailerId="' + serieTrailerId + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
                 '<div class="picture-item__inner">',
                     '<div class="aspect aspect--16x9">',
                         '<div class="aspect__inner">',
@@ -590,6 +601,20 @@ var DOMLoaded = function() {
             '</figure>'
         ].join('');
         /* beautify ignore:end */
+    }
+
+    // Return seasons critic values
+    function getseasonsCritic(seasonsCritic) {
+        if (seasonsCritic != undefined) {
+            var seasonsCriticLength = Object.keys(seasonsCritic).length;
+            var seasonsCriticArrayTemp = [];
+            for (var seasonsCriticIndex = 1; seasonsCriticIndex <= seasonsCriticLength; seasonsCriticIndex++) {
+                var seasonsCriticValue = seasonsCritic['id' + seasonsCriticIndex];
+                seasonsCriticArrayTemp.push(seasonsCriticValue);
+            }
+
+            return seasonsCriticArrayTemp;
+        }
     }
 
     // Remove accents from characters
@@ -761,7 +786,7 @@ var DOMLoaded = function() {
         if (Object.keys(criticNames).length > 0) {
             criticArray.forEach(function(button) {
                 var buttonCriticName = button.children[0].children[0].textContent;
-                var localbuttonCriticName = localStorage.getItem(buttonCriticName);
+                var localbuttonCriticName = localStorage.getItem('yqcs_critic.' + buttonCriticName);
                 var last7Char = buttonCriticName.substr(buttonCriticName.length - 7);
 
                 if (last7Char == ' Contre') {
@@ -793,16 +818,16 @@ var DOMLoaded = function() {
         return critic;
     }
 
-    // Set localStorage for critic and user main buttons
+    // Set yqcs_localStorage for critic and user main buttons
     function retrieveLocalData(item) {
         if (item == 'true') {
             return true;
         } else if (item == 'false') {
             return false;
         } else {
-            localStorage.setItem('criticAllocine', 'true');
-            localStorage.setItem('usersAllocine', 'true');
-            localStorage.setItem('usersImdb', 'true');
+            localStorage.setItem('yqcs_critic.' + 'criticAllocine', 'true');
+            localStorage.setItem('yqcs_critic.' + 'usersAllocine', 'true');
+            localStorage.setItem('yqcs_critic.' + 'usersImdb', 'true');
             return true;
         }
     }
@@ -845,11 +870,11 @@ var DOMLoaded = function() {
         gridContainerElement.insertAdjacentHTML('beforeend', markup);
     }
 
-    // Remove localStorage items
+    // Remove yqcs_localStorage items
     function removeItems() {
-        localStorage.removeItem('critic');
-        localStorage.removeItem('creationdate');
-        localStorage.removeItem('popularity');
+        localStorage.removeItem('yqcs_sort.' + 'critic');
+        localStorage.removeItem('yqcs_sort.' + 'creationdate');
+        localStorage.removeItem('yqcs_sort.' + 'popularity');
     }
 
     // Search function
@@ -937,7 +962,7 @@ var DOMLoaded = function() {
         }
 
         if (value === 'popularity') {
-            var popularity = localStorage.getItem('popularity');
+            var popularity = localStorage.getItem('yqcs_sort.' + 'popularity');
 
             if (popularity === 'true') {
                 options = {
@@ -946,8 +971,10 @@ var DOMLoaded = function() {
                 };
 
                 evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="popularity"> Popularité <i class="fas fa-arrow-up"></i>';
-                localStorage.setItem('popularity', 'false');
-                localStorage.setItem('defaultInput', 'popularity');
+                localStorage.setItem('yqcs_sort.' + 'popularity', 'false');
+                localStorage.removeItem('yqcs_sort.' + 'creationdate');
+                localStorage.removeItem('yqcs_sort.' + 'critic');
+                localStorage.setItem('yqcs_sort.' + 'defaultInput', 'popularity');
             } else {
                 options = {
                     reverse: false,
@@ -955,11 +982,13 @@ var DOMLoaded = function() {
                 };
 
                 evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="popularity"> Popularité <i class="fas fa-arrow-down"></i>';
-                localStorage.setItem('popularity', 'true');
-                localStorage.setItem('defaultInput', 'popularity');
+                localStorage.setItem('yqcs_sort.' + 'popularity', 'true');
+                localStorage.removeItem('yqcs_sort.' + 'creationdate');
+                localStorage.removeItem('yqcs_sort.' + 'critic');
+                localStorage.setItem('yqcs_sort.' + 'defaultInput', 'popularity');
             }
         } else if (value === 'creationdate') {
-            var creationdate = localStorage.getItem('creationdate');
+            var creationdate = localStorage.getItem('yqcs_sort.' + 'creationdate');
 
             if (creationdate === 'true') {
                 options = {
@@ -968,8 +997,10 @@ var DOMLoaded = function() {
                 };
 
                 evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="creationdate"> Date de création <i class="fas fa-arrow-up"></i>';
-                localStorage.setItem('creationdate', 'false');
-                localStorage.setItem('defaultInput', 'creationdate');
+                localStorage.setItem('yqcs_sort.' + 'creationdate', 'false');
+                localStorage.removeItem('yqcs_sort.' + 'popularity');
+                localStorage.removeItem('yqcs_sort.' + 'critic');
+                localStorage.setItem('yqcs_sort.' + 'defaultInput', 'creationdate');
             } else {
                 options = {
                     reverse: true,
@@ -977,11 +1008,13 @@ var DOMLoaded = function() {
                 };
 
                 evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="creationdate"> Date de création <i class="fas fa-arrow-down"></i>';
-                localStorage.setItem('creationdate', 'true');
-                localStorage.setItem('defaultInput', 'creationdate');
+                localStorage.setItem('yqcs_sort.' + 'creationdate', 'true');
+                localStorage.removeItem('yqcs_sort.' + 'popularity');
+                localStorage.removeItem('yqcs_sort.' + 'critic');
+                localStorage.setItem('yqcs_sort.' + 'defaultInput', 'creationdate');
             }
         } else if (value === 'critic') {
-            var critic = localStorage.getItem('critic');
+            var critic = localStorage.getItem('yqcs_sort.' + 'critic');
 
             if (critic === 'true') {
                 options = {
@@ -990,8 +1023,10 @@ var DOMLoaded = function() {
                 };
 
                 evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="critic"> Note <i class="fas fa-arrow-up"></i>';
-                localStorage.setItem('critic', 'false');
-                localStorage.setItem('defaultInput', 'critic');
+                localStorage.setItem('yqcs_sort.' + 'critic', 'false');
+                localStorage.removeItem('yqcs_sort.' + 'popularity');
+                localStorage.removeItem('yqcs_sort.' + 'creationdate');
+                localStorage.setItem('yqcs_sort.' + 'defaultInput', 'critic');
             } else {
                 options = {
                     reverse: true,
@@ -999,8 +1034,10 @@ var DOMLoaded = function() {
                 };
 
                 evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="critic"> Note <i class="fas fa-arrow-down"></i>';
-                localStorage.setItem('critic', 'true');
-                localStorage.setItem('defaultInput', 'critic');
+                localStorage.setItem('yqcs_sort.' + 'critic', 'true');
+                localStorage.removeItem('yqcs_sort.' + 'popularity');
+                localStorage.removeItem('yqcs_sort.' + 'creationdate');
+                localStorage.setItem('yqcs_sort.' + 'defaultInput', 'critic');
             }
         }
 
@@ -1028,16 +1065,16 @@ var DOMLoaded = function() {
         } else if (activePeriod == 'terminee') {
             activePeriod = 'Terminée';
         } else {
-            activePeriod = localStorage.getItem('activePeriod');
+            activePeriod = localStorage.getItem('yqcs_period.' + 'activePeriod');
             if (activePeriod == null) {
-                activePeriod = 'Les 7 derniers jours';
+                activePeriod = 'En 2021';
             }
         }
 
         setTimeout(function() {
             periodOption.value = activePeriod;
             periodOption.options[periodOption.selectedIndex].setAttribute('selected', 'selected');
-            localStorage.setItem('activePeriod', activePeriod);
+            localStorage.setItem('yqcs_period.' + 'activePeriod', activePeriod);
             handleOptionChange();
         }, 100);
     }
@@ -1066,7 +1103,7 @@ var DOMLoaded = function() {
             periodOption.options[periodOption.selectedIndex].setAttribute('selected', 'selected');
             handleOptionChange();
             activePeriod = periodOption.options[periodOption.selectedIndex].value;
-            localStorage.setItem('activePeriod', activePeriod);
+            localStorage.setItem('yqcs_period.' + 'activePeriod', activePeriod);
         });
 
         genreArray.forEach(function(button) {
@@ -1076,10 +1113,10 @@ var DOMLoaded = function() {
 
     // Handle button change with additive and exclusive mode
     function handleButtonChange(evt) {
-        var mode = localStorage.getItem('mode');
+        var mode = localStorage.getItem('yqcs_mode.' + 'mode');
 
         if (mode == undefined) {
-            localStorage.setItem('mode', 'exclusive');
+            localStorage.setItem('yqcs_mode.' + 'mode', 'exclusive');
         }
 
         var btn = evt.currentTarget;
@@ -1194,12 +1231,12 @@ var DOMLoaded = function() {
 
     // Set additive/exclusive toggle
     function toggleMode() {
-        var mode = localStorage.getItem('mode');
+        var mode = localStorage.getItem('yqcs_mode.' + 'mode');
 
         if (mode === 'additive') {
-            localStorage.setItem('mode', 'exclusive');
+            localStorage.setItem('yqcs_mode.' + 'mode', 'exclusive');
         } else {
-            localStorage.setItem('mode', 'additive');
+            localStorage.setItem('yqcs_mode.' + 'mode', 'additive');
         }
     }
 
@@ -1238,6 +1275,29 @@ var DOMLoaded = function() {
                 document.body.style.overflow = 'hidden';
 
                 slider.goTo(0);
+
+                var seasonsCriticAttr = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-seasons-critic');
+                var seasonsCriticDetailsAttr = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-seasons-critic-details');
+                if (seasonsCriticAttr != '') {
+                    document.querySelector('.third-slide .slide-unavailable').style.display = 'none';
+                    document.querySelector('.third-slide .slide-available').style.display = 'block';
+
+                    var seasonsCriticData = seasonsCriticAttr.split(',');
+                    var seasonsCriticDataDetails = seasonsCriticDetailsAttr.split(',');
+                    var seasonsCriticLabels = [];
+                    for (var seasonsCriticAttrNewIndex = 1; seasonsCriticAttrNewIndex <= seasonsCriticData.length; seasonsCriticAttrNewIndex++) {
+                        if (seasonsCriticAttrNewIndex == 1) {
+                            seasonsCriticLabelsText = '1ère saison';
+                        } else {
+                            seasonsCriticLabelsText = seasonsCriticAttrNewIndex + 'ème';
+                        }
+                        seasonsCriticLabels.push(seasonsCriticLabelsText);
+                    }
+                    chartJSGraph(seasonsCriticData, seasonsCriticDataDetails, seasonsCriticLabels);
+                } else {
+                    document.querySelector('.third-slide .slide-unavailable').style.display = 'block';
+                    document.querySelector('.third-slide .slide-available').style.display = 'none';
+                }
 
                 var serietrailerid = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-serietrailerid');
                 var network = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-network').toLowerCase();
@@ -1289,10 +1349,87 @@ var DOMLoaded = function() {
         });
     }
 
+    // Draw seasons critic graph
+    function chartJSGraph(seasonsCriticData, seasonsCriticDataDetails, seasonsCriticLabels) {
+        var paddingTopAndBottom = 0;
+        var paddingLeftAndRight = 30;
+        var width = window.innerWidth;
+        if (width > 1100) {
+            paddingTopAndBottom = 70;
+            paddingLeftAndRight = 70;
+        }
+        var ctx = document.getElementById('myChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: seasonsCriticLabels,
+                datasets: [{
+                    label: 'Notes des saisons',
+                    backgroundColor: '#121212',
+                    borderColor: '#28A745',
+                    data: seasonsCriticData
+                }]
+            },
+
+            options: {
+                legend: {
+                    labels: {
+                        fontColor: '#FFF',
+                        fontSize: 20
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            max: 5,
+                            min: 0,
+                            fontColor: '#FFF',
+                            fontSize: 15
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#FFF',
+                            fontSize: 15
+                        }
+                    }]
+                },
+                layout: {
+                    padding: {
+                        left: paddingLeftAndRight,
+                        right: paddingLeftAndRight,
+                        top: paddingTopAndBottom,
+                        bottom: paddingTopAndBottom
+                    }
+                },
+                tooltips: {
+                    titleFontSize: 18,
+                    bodyFontSize: 13,
+                    displayColors: false,
+                    borderColor: '#28A745',
+                    borderWidth: 1,
+                    callbacks: {
+                        mode: 'index',
+                        intersect: true,
+                        title: function(tooltipItem, _data) {
+                            for (var seasonsCriticDataIndex = 0; seasonsCriticDataIndex < seasonsCriticData.length; seasonsCriticDataIndex++) {
+                                seasonsCriticData[seasonsCriticDataIndex] = seasonsCriticData[seasonsCriticDataIndex].replace('.', ',');
+                            }
+                            return seasonsCriticLabels[tooltipItem[0].index] + ' : ' + seasonsCriticData[tooltipItem[0].index] + '/5';
+                        },
+                        label: function(tooltipItem, _data) {
+                            return seasonsCriticDataDetails[tooltipItem.index];
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     // Get darkmode status and set icon
     function getDarkmodeStatus() {
         var body = document.body;
-        var darkmodeActive = localStorage.getItem('darkmode');
+        var darkmodeActive = localStorage.getItem('yqcs_darkmode.' + 'darkmode');
 
         if (darkmodeActive == 'true' || body.classList.contains('darkmode--activated')) {
             tglDarkmode.classList.add('far');
@@ -1309,21 +1446,21 @@ var DOMLoaded = function() {
 
         var activeSort = normalizeStr(paramsURL('trier_par'));
         if (activeSort == 'note') {
-            localStorage.setItem('defaultInput', 'critic');
+            localStorage.setItem('yqcs_sort.' + 'defaultInput', 'critic');
         } else if (activeSort == 'popularite') {
-            localStorage.setItem('defaultInput', 'popularity');
+            localStorage.setItem('yqcs_sort.' + 'defaultInput', 'popularity');
         } else if (activeSort == 'date_de_creation' ||
             activeSort == 'date_creation' ||
             activeSort == 'creation') {
-            localStorage.setItem('defaultInput', 'creationdate');
+            localStorage.setItem('yqcs_sort.' + 'defaultInput', 'creationdate');
         } else {
-            activeSort = localStorage.getItem('defaultInput');
+            activeSort = localStorage.getItem('yqcs_sort.' + 'defaultInput');
             if (activeSort == null) {
-                localStorage.setItem('defaultInput', 'critic');
+                localStorage.setItem('yqcs_sort.' + 'defaultInput', 'critic');
             }
         }
 
-        var defaultInput = localStorage.getItem('defaultInput');
+        var defaultInput = localStorage.getItem('yqcs_sort.' + 'defaultInput');
         var defaultInputValue = document.getElementById('defaultInput' + defaultInput);
         defaultInputValue.click();
     }
@@ -1366,13 +1503,13 @@ var DOMLoaded = function() {
         });
     }
 
-    // Set localStorage toggles
+    // Set yqcs_localStorage toggles
     function toggleLocalData(item) {
         var classListName = item.currentTarget.parentNode.parentNode.classList[1];
-        var classListNameActive = localStorage.getItem(classListName);
+        var classListNameActive = localStorage.getItem('yqcs_critic.' + classListName);
 
         if (classListName == 'criticAllocine' || classListName == 'usersAllocine' || classListName == 'usersImdb') {
-            localStorage.setItem('menuBool', true);
+            localStorage.setItem('yqcs_menu.' + 'menuBool', true);
         }
 
         if (classListNameActive == 'true') {
@@ -1390,7 +1527,7 @@ var DOMLoaded = function() {
                 imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber criticNumberZero">0</span>';
             }
             item.currentTarget.children[0].children[0].removeAttribute('checked');
-            localStorage.setItem(classListName, 'false');
+            localStorage.setItem('yqcs_critic.' + classListName, 'false');
         } else {
             if (classListName == 'criticAllocine') {
                 item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="criticToggle0" type="checkbox"><label for="criticToggle0"></label></span>';
@@ -1406,7 +1543,7 @@ var DOMLoaded = function() {
                 imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
             }
             item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-            localStorage.setItem(classListName, 'true');
+            localStorage.setItem('yqcs_critic.' + classListName, 'true');
         }
     }
 
@@ -1418,7 +1555,7 @@ var DOMLoaded = function() {
 
         menuAllCheckedArray.forEach(function(button) {
             var buttonCriticName = button.children[0].children[0].textContent;
-            var localbuttonCriticName = localStorage.getItem(buttonCriticName);
+            var localbuttonCriticName = localStorage.getItem('yqcs_critic.' + buttonCriticName);
 
             button.children[0].children[0].addEventListener('click', function() {
                 var ulList = this.parentNode.parentNode.parentNode;
@@ -1444,13 +1581,13 @@ var DOMLoaded = function() {
             network.children[0].children[0].addEventListener('click', setLocalStorageNetwork.bind(this), false);
 
             var buttonNetworkName = network.children[0].children[0].textContent;
-            var localbuttonNetworkName = localStorage.getItem(buttonNetworkName);
+            var localbuttonNetworkName = localStorage.getItem('yqcs_network.' + buttonNetworkName);
 
             if (localbuttonNetworkName == 'true' || localbuttonNetworkName == null) {
                 networkNumberBool = true;
                 localbuttonNetworkNameNumber++;
                 if (localbuttonNetworkName == null) {
-                    localStorage.setItem(buttonNetworkName, 'true');
+                    localStorage.setItem('yqcs_network.' + buttonNetworkName, 'true');
                 }
 
                 filters.networkArray.push(buttonNetworkName);
@@ -1468,15 +1605,15 @@ var DOMLoaded = function() {
         }
 
         if (networkNumberBool) {
-            localStorage.setItem('mainToggleNetwork', 'true');
+            localStorage.setItem('yqcs_network.' + 'mainToggleNetwork', 'true');
             networkInput.children[0].children[0].innerHTML = 'Tout désélectionner<span><input id="networkButton0" type="checkbox" checked="checked"><label for="networkButton0"></label></span>';
         } else {
-            localStorage.setItem('mainToggleNetwork', 'false');
+            localStorage.setItem('yqcs_network.' + 'mainToggleNetwork', 'false');
             networkInput.children[0].children[0].innerHTML = 'Tout sélectionner<span><input id="networkButton0" type="checkbox"><label for="networkButton0"></label></span>';
         }
     }
 
-    // Set localStorage for each network button
+    // Set yqcs_localStorage for each network button
     function setLocalStorageNetwork(evt) {
         var buttonNetworkName = evt.currentTarget.textContent;
         var isActive = evt.currentTarget.children[0].children[0].getAttribute('checked');
@@ -1484,12 +1621,12 @@ var DOMLoaded = function() {
         if (isActive == 'checked') {
             filters.networkArray.splice(filters.networkArray.indexOf(buttonNetworkName), 1);
             evt.currentTarget.children[0].children[0].removeAttribute('checked');
-            localStorage.setItem(buttonNetworkName, 'false');
+            localStorage.setItem('yqcs_network.' + buttonNetworkName, 'false');
             localbuttonNetworkNameNumber--;
         } else {
             filters.networkArray.push(buttonNetworkName);
             evt.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-            localStorage.setItem(buttonNetworkName, 'true');
+            localStorage.setItem('yqcs_network.' + buttonNetworkName, 'true');
             localbuttonNetworkNameNumber++;
         }
 
@@ -1508,13 +1645,13 @@ var DOMLoaded = function() {
             nationality.children[0].children[0].addEventListener('click', setLocalStorageNationality.bind(this), false);
 
             var buttonNationalityName = nationality.children[0].children[0].textContent;
-            var localbuttonNationalityName = localStorage.getItem(buttonNationalityName);
+            var localbuttonNationalityName = localStorage.getItem('yqcs_nationality.' + buttonNationalityName);
 
             if (localbuttonNationalityName == 'true' || localbuttonNationalityName == null) {
                 nationalityNumberBool = true;
                 localbuttonNationalityNameNumber++;
                 if (localbuttonNationalityName == null) {
-                    localStorage.setItem(buttonNationalityName, 'true');
+                    localStorage.setItem('yqcs_nationality.' + buttonNationalityName, 'true');
                 }
 
                 filters.nationalityArray.push(buttonNationalityName);
@@ -1532,15 +1669,15 @@ var DOMLoaded = function() {
         }
 
         if (nationalityNumberBool) {
-            localStorage.setItem('mainToggleNationality', 'true');
+            localStorage.setItem('yqcs_nationality.' + 'mainToggleNationality', 'true');
             nationalityInput.children[0].children[0].innerHTML = 'Tout désélectionner<span><input id="nationalityButton0" type="checkbox" checked="checked"><label for="nationalityButton0"></label></span>';
         } else {
-            localStorage.setItem('mainToggleNationality', 'false');
+            localStorage.setItem('yqcs_nationality.' + 'mainToggleNationality', 'false');
             nationalityInput.children[0].children[0].innerHTML = 'Tout sélectionner<span><input id="nationalityButton0" type="checkbox"><label for="nationalityButton0"></label></span>';
         }
     }
 
-    // Set localStorage for each nationality button
+    // Set yqcs_localStorage for each nationality button
     function setLocalStorageNationality(evt) {
         var buttonNationalityName = evt.currentTarget.textContent;
         var isActive = evt.currentTarget.children[0].children[0].getAttribute('checked');
@@ -1548,12 +1685,12 @@ var DOMLoaded = function() {
         if (isActive == 'checked') {
             filters.nationalityArray.splice(filters.nationalityArray.indexOf(buttonNationalityName), 1);
             evt.currentTarget.children[0].children[0].removeAttribute('checked');
-            localStorage.setItem(buttonNationalityName, 'false');
+            localStorage.setItem('yqcs_nationality.' + buttonNationalityName, 'false');
             localbuttonNationalityNameNumber--;
         } else {
             filters.nationalityArray.push(buttonNationalityName);
             evt.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-            localStorage.setItem(buttonNationalityName, 'true');
+            localStorage.setItem('yqcs_nationality.' + buttonNationalityName, 'true');
             localbuttonNationalityNameNumber++;
         }
 
@@ -1572,13 +1709,13 @@ var DOMLoaded = function() {
             duration.children[0].children[0].addEventListener('click', setLocalStorageDuration.bind(this), false);
 
             var buttonDurationName = duration.children[0].children[0].textContent;
-            var localbuttonDurationName = localStorage.getItem(buttonDurationName);
+            var localbuttonDurationName = localStorage.getItem('yqcs_duration.' + buttonDurationName);
 
             if (localbuttonDurationName == 'true' || localbuttonDurationName == null) {
                 durationNumberBool = true;
                 localbuttonDurationNameNumber++;
                 if (localbuttonDurationName == null) {
-                    localStorage.setItem(buttonDurationName, 'true');
+                    localStorage.setItem('yqcs_duration.' + buttonDurationName, 'true');
                 }
 
                 filters.durationArray.push(buttonDurationName);
@@ -1596,15 +1733,15 @@ var DOMLoaded = function() {
         }
 
         if (durationNumberBool) {
-            localStorage.setItem('mainToggleDuration', 'true');
+            localStorage.setItem('yqcs_duration.' + 'mainToggleDuration', 'true');
             durationInput.children[0].children[0].innerHTML = 'Tout désélectionner<span><input id="durationButton0" type="checkbox" checked="checked"><label for="durationButton0"></label></span>';
         } else {
-            localStorage.setItem('mainToggleDuration', 'false');
+            localStorage.setItem('yqcs_duration.' + 'mainToggleDuration', 'false');
             durationInput.children[0].children[0].innerHTML = 'Tout sélectionner<span><input id="durationButton0" type="checkbox"><label for="durationButton0"></label></span>';
         }
     }
 
-    // Set localStorage for each duration button
+    // Set yqcs_localStorage for each duration button
     function setLocalStorageDuration(evt) {
         var buttonDurationName = evt.currentTarget.textContent;
         var isActive = evt.currentTarget.children[0].children[0].getAttribute('checked');
@@ -1612,12 +1749,12 @@ var DOMLoaded = function() {
         if (isActive == 'checked') {
             filters.durationArray.splice(filters.durationArray.indexOf(buttonDurationName), 1);
             evt.currentTarget.children[0].children[0].removeAttribute('checked');
-            localStorage.setItem(buttonDurationName, 'false');
+            localStorage.setItem('yqcs_duration.' + buttonDurationName, 'false');
             localbuttonDurationNameNumber--;
         } else {
             filters.durationArray.push(buttonDurationName);
             evt.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-            localStorage.setItem(buttonDurationName, 'true');
+            localStorage.setItem('yqcs_duration.' + buttonDurationName, 'true');
             localbuttonDurationNameNumber++;
         }
 
@@ -1651,7 +1788,7 @@ var DOMLoaded = function() {
         });
     }
 
-    // Clear localStorage on click trash icon
+    // Clear yqcs_localStorage on click trash icon
     function reset() {
         var trashIcon = document.querySelector('.fa-trash-alt');
 
@@ -1695,6 +1832,7 @@ var DOMLoaded = function() {
                 document.querySelector('#overlay').style.display = 'none';
                 document.querySelector('iframe').src = '';
                 document.body.style.overflow = 'scroll';
+                chart.destroy();
             }
         };
     }
@@ -1707,19 +1845,19 @@ var DOMLoaded = function() {
         var durationNumber = document.querySelectorAll('.nav-item.durationButton:not(.mainToggleDuration)').length;
 
         criticToggle0.addEventListener('click', function() {
-            localStorage.setItem('menuBool', true);
+            localStorage.setItem('yqcs_menu.' + 'menuBool', true);
 
             criticArray.forEach(function(button) {
                 var buttonCriticName = button.children[0].children[0].textContent;
 
                 if (criticNumberBool) {
                     button.children[0].children[0].children[0].children[0].removeAttribute('checked');
-                    localStorage.setItem(buttonCriticName, 'false');
+                    localStorage.setItem('yqcs_critic.' + buttonCriticName, 'false');
                     localbuttonCriticNameNumber = 0;
                     criticLi.children[1].children[0].innerHTML = '<i class="fas fa-newspaper fa-lg"></i> Presse AlloCiné<span class="criticNumber criticNumberZero">0</span>';
                 } else {
                     button.children[0].children[0].children[0].children[0].setAttribute('checked', 'checked');
-                    localStorage.setItem(buttonCriticName, 'true');
+                    localStorage.setItem('yqcs_critic.' + buttonCriticName, 'true');
                     localbuttonCriticNameNumber = criticButtonNumber;
                     criticLi.children[1].children[0].innerHTML = '<i class="fas fa-newspaper fa-lg"></i> Presse AlloCiné<span class="criticNumber">' + localbuttonCriticNameNumber + '</span>';
                 }
@@ -1738,13 +1876,13 @@ var DOMLoaded = function() {
 
                 if (networkNumberBool) {
                     network.children[0].children[0].children[0].children[0].removeAttribute('checked');
-                    localStorage.setItem(networkButtonName, 'false');
+                    localStorage.setItem('yqcs_network.' + networkButtonName, 'false');
                     localbuttonNetworkNameNumber = 0;
                     networkLi.children[1].children[0].innerHTML = '<i class="fas fa-tv fa-lg"></i> Plateformes<span class="criticNumber criticNumberZero">0</span>';
                     filters.networkArray = ['No network'];
                 } else {
                     network.children[0].children[0].children[0].children[0].setAttribute('checked', 'checked');
-                    localStorage.setItem(networkButtonName, 'true');
+                    localStorage.setItem('yqcs_network.' + networkButtonName, 'true');
                     localbuttonNetworkNameNumber = networkNumber;
                     networkLi.children[1].children[0].innerHTML = '<i class="fas fa-tv fa-lg"></i> Plateformes<span class="criticNumber">' + localbuttonNetworkNameNumber + '</span>';
                     filters.networkArray.push(networkButtonName);
@@ -1766,13 +1904,13 @@ var DOMLoaded = function() {
 
                 if (nationalityNumberBool) {
                     nationality.children[0].children[0].children[0].children[0].removeAttribute('checked');
-                    localStorage.setItem(nationalityButtonName, 'false');
+                    localStorage.setItem('yqcs_nationality.' + nationalityButtonName, 'false');
                     localbuttonNationalityNameNumber = 0;
                     nationalityLi.children[1].children[0].innerHTML = '<i class="fas fa-flag fa-lg"></i> Nationalités<span class="criticNumber criticNumberZero">0</span>';
                     filters.nationalityArray = ['No nationality'];
                 } else {
                     nationality.children[0].children[0].children[0].children[0].setAttribute('checked', 'checked');
-                    localStorage.setItem(nationalityButtonName, 'true');
+                    localStorage.setItem('yqcs_nationality.' + nationalityButtonName, 'true');
                     localbuttonNationalityNameNumber = nationalityNumber;
                     nationalityLi.children[1].children[0].innerHTML = '<i class="fas fa-flag fa-lg"></i> Nationalités<span class="criticNumber">' + localbuttonNationalityNameNumber + '</span>';
                     filters.nationalityArray.push(nationalityButtonName);
@@ -1794,13 +1932,13 @@ var DOMLoaded = function() {
 
                 if (durationNumberBool) {
                     duration.children[0].children[0].children[0].children[0].removeAttribute('checked');
-                    localStorage.setItem(durationButtonName, 'false');
+                    localStorage.setItem('yqcs_duration.' + durationButtonName, 'false');
                     localbuttonDurationNameNumber = 0;
                     durationLi.children[1].children[0].innerHTML = '<i class="fas fa-clock fa-lg"></i> Durées<span class="criticNumber criticNumberZero">0</span>';
                     filters.durationArray = ['No duration'];
                 } else {
                     duration.children[0].children[0].children[0].children[0].setAttribute('checked', 'checked');
-                    localStorage.setItem(durationButtonName, 'true');
+                    localStorage.setItem('yqcs_duration.' + durationButtonName, 'true');
                     localbuttonDurationNameNumber = durationNumber;
                     durationLi.children[1].children[0].innerHTML = '<i class="fas fa-clock fa-lg"></i> Durées<span class="criticNumber">' + localbuttonDurationNameNumber + '</span>';
                     filters.durationArray.push(durationButtonName);
@@ -1844,11 +1982,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     Nav.on('close', function() {
-        var menuBool = localStorage.getItem('menuBool');
+        var menuBool = localStorage.getItem('yqcs_menu.' + 'menuBool');
 
         if (menuBool == 'true') {
             document.location.reload();
-            menuBool = localStorage.setItem('menuBool', false);
+            menuBool = localStorage.setItem('yqcs_menu.' + 'menuBool', false);
         }
     });
 

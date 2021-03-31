@@ -281,6 +281,30 @@ do
       user=$(cat temp2 | grep -Eo "<span class=\"stareval-note\">[0-9],[0-9]</span><span class=\"stareval-review light\"> [0-9]+ note*" | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/,/./')
       echo "\"user\": \"$user\"," >> ./assets/js/data.json
 
+      curl -s https://www.allocine.fr/series/ficheserie-$serieId/saisons/ > temp10
+      seasonsCriticNumber=$(cat temp10 | grep -A70 "/\">Saison " | grep -Eo "\"stareval-note\">[0-9],[0-9]" | cut -d'>' -f2 | sed 's/,/./g' | wc -l | awk '{print $1}')
+      if [[ $seasonsCriticNumber -gt 1 ]]; then
+        echo "\"seasonsCritic\":{" >> ./assets/js/data.json
+
+        echo "\"seasonsCriticValue\":{" >> ./assets/js/data.json
+        for seasonsCriticNumberIndex in $( eval echo {1..$seasonsCriticNumber} )
+        do
+          seasonsCritic=$(cat temp10 | grep -A70 "/\">Saison " | grep -Eo "\"stareval-note\">[0-9],[0-9]" | cut -d'>' -f2 | sed 's/,/./g' | tail -$seasonsCriticNumberIndex | head -1)
+          echo "\"id$seasonsCriticNumberIndex\": \"$seasonsCritic\"," >> ./assets/js/data.json
+        done
+        echo "}," >> ./assets/js/data.json
+
+        echo "\"seasonsCriticDetails\":{" >> ./assets/js/data.json
+        for seasonsCriticNumberIndex in $( eval echo {1..$seasonsCriticNumber} )
+        do
+          seasonsCriticDetails=$(cat temp10 | grep -A70 "/\">Saison " | grep "\"stareval-review light\"" | sed 's/.*"stareval-review light">\(.*\)<\/span><\/div>/\1/' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//' | tail -$seasonsCriticNumberIndex | head -1)
+          echo "\"id$seasonsCriticNumberIndex\": \"$seasonsCriticDetails\"," >> ./assets/js/data.json
+        done
+        echo "}," >> ./assets/js/data.json
+
+        echo "}," >> ./assets/js/data.json
+      fi
+
       # Add ending bracket
       echo "}," >> ./assets/js/data.json
 
@@ -792,7 +816,7 @@ lastCriticNameNationalityButtonsNumber=$[$criticNameNationalityButtonsNumber+1]
 echo "<li class=\"nationalityButton\"><a href=\"#\">Non renseignée<span><input id=\"nationalityButton$lastCriticNameNationalityButtonsNumber\" type=\"checkbox\" checked=\"checked\"><label for=\"nationalityButton$lastCriticNameNationalityButtonsNumber\"></label></span></a></li>" >> ./assets/sh/criticNameNationalityButtons.txt
 
 # Remove lines break and extra commas
-cat ./assets/js/data.json | sed '$s/,{/]}/' | tr '\n' ' ' | sed 's/}, ]/}]/g' | sed 's/, },/},/g' | sed 's/......$/ }]}/' | sed 's/, },/},/g' | sed 's/,{ "id": "[0-9][0-9]", "allocineData":{ }}//g' | sed 's/,{ "id": "[0-9][0-9][0-9]", "allocineData":{ }}//g' | sed 's/,{ "id": "[0-9][0-9][0-9]", "allocineData":{ } }//g' > temp
+cat ./assets/js/data.json | sed '$s/,{/]}/' | tr '\n' ' ' | sed 's/}, ]/}]/g' | sed 's/, },/},/g' | sed 's/......$/ }]}/' | sed 's/, },/},/g' | sed 's/}, }}/}}}/g' | sed 's/,{ "id": "[0-9][0-9]", "allocineData":{ }}//g' | sed 's/,{ "id": "[0-9][0-9][0-9]", "allocineData":{ }}//g' | sed 's/,{ "id": "[0-9][0-9][0-9]", "allocineData":{ } }//g' > temp
 cat temp > ./assets/js/data.json
 
 # Delete temp file

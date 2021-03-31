@@ -1,5 +1,5 @@
 /series/ficheserie_gen_cserie=26086.html,tt13511622,un-homme-dhonneur
-/series/ficheserie_gen_cserie=26034.html,noImdbId,gloria-2020
+/series/ficheserie_gen_cserie=26034.html,tt14271432,gloria-2020
 /series/ficheserie_gen_cserie=23940.html,tt8690776,sky-rojo
 /series/ficheserie_gen_cserie=24465.html,tt13879466,the-one
 /series/ficheserie_gen_cserie=24397.html,tt9208876,marvels-falcon-winter-soldier
@@ -150,3 +150,13 @@
 /series/ficheserie_gen_cserie=23751.html,tt6741278,invincible-2020
 /series/ficheserie_gen_cserie=18843.html,tt3069894,shtisel
 /series/ficheserie_gen_cserie=28403.html,tt14069590,dota-dragons-blood
+/series/ficheserie_gen_cserie=23197.html,tt7939768,the-mighty-ducks-game-changers
+/series/ficheserie_gen_cserie=74.html,tt0203259,laworderspecialvictimsunit
+/series/ficheserie_gen_cserie=56.html,tt0286486,theshield
+/series/ficheserie_gen_cserie=23405.html,tt8134470,the-undoing-2020
+/series/ficheserie_gen_cserie=440.html,tt0460681,supernatural
+/series/ficheserie_gen_cserie=23382.html,tt6342474,boruto-naruto-next-generations
+/series/ficheserie_gen_cserie=22444.html,tt7187044,city-on-a-hill
+/series/ficheserie_gen_cserie=24205.html,tt9054904,why-women-kill
+/series/ficheserie_gen_cserie=24806.html,tt10681240,la-templanza
+/series/ficheserie_gen_cserie=24602.html,tt9460858,la-valla
