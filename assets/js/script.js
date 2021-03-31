@@ -1359,13 +1359,17 @@ var DOMLoaded = function() {
             paddingLeftAndRight = 70;
         }
         var ctx = document.getElementById('myChart').getContext('2d');
+        gradient = ctx.createLinearGradient(0, 0, 0, 450);
+        gradient.addColorStop(0, 'rgba(40, 167, 69, 0.5)');
+        gradient.addColorStop(0.5, 'rgba(40, 167, 69, 0.25)');
+        gradient.addColorStop(1, 'rgba(40, 167, 69, 0)');
         chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: seasonsCriticLabels,
                 datasets: [{
                     label: 'Notes des saisons',
-                    backgroundColor: '#121212',
+                    backgroundColor: gradient,
                     borderColor: '#28A745',
                     data: seasonsCriticData
                 }]
