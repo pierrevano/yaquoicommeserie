@@ -160,3 +160,7 @@
 /series/ficheserie_gen_cserie=24205.html,tt9054904,why-women-kill
 /series/ficheserie_gen_cserie=24806.html,tt10681240,la-templanza
 /series/ficheserie_gen_cserie=24602.html,tt9460858,la-valla
+/series/ficheserie_gen_cserie=8209.html,tt1595859,bluebloods
+/series/ficheserie_gen_cserie=18890.html,tt4655480,chicago-med
+/series/ficheserie_gen_cserie=8724.html,tt1600746,clem
+/series/ficheserie_gen_cserie=12275.html,tt3281796,power

@@ -1,7 +1,6 @@
 var DOMLoaded = function() {
     var Shuffle = window.Shuffle;
     var shuffleInstance;
-    var chart;
 
     var genreArray = Array.from(document.querySelectorAll('.filter-options button'));
     var periodArray = Array.from(document.querySelectorAll('.period-options option'));
@@ -586,6 +585,9 @@ var DOMLoaded = function() {
                                 criticDetailsUrl,
                                 userDetailsUrl,
                                 imdbDetailsUrl,
+                            '</div>',
+                            '<div class="aspect__inner overlayMoreInfos displayNone">',
+                                '<a href="#" class="read-more">Plus d\'infos</a>',
                             '</div>',
                         '</div>',
                     '</div>',
@@ -1253,7 +1255,7 @@ var DOMLoaded = function() {
 
     // Display overlay with trailer
     function displayOverlay() {
-        var imgs = document.querySelectorAll('.aspect__inner img:not(.picture-item__blur)');
+        var imgsLink = document.querySelectorAll('.overlayMoreInfos');
 
         var slider = tns({
             'container': '#slider',
@@ -1269,15 +1271,15 @@ var DOMLoaded = function() {
             'arrowKeys': true
         });
 
-        imgs.forEach(function(img) {
-            img.parentNode.addEventListener('click', function() {
+        imgsLink.forEach(function(link) {
+            link.addEventListener('click', function() {
                 document.querySelector('#overlay').style.display = 'block';
                 document.body.style.overflow = 'hidden';
 
                 slider.goTo(0);
 
-                var seasonsCriticAttr = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-seasons-critic');
-                var seasonsCriticDetailsAttr = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-seasons-critic-details');
+                var seasonsCriticAttr = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-seasons-critic');
+                var seasonsCriticDetailsAttr = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-seasons-critic-details');
                 if (seasonsCriticAttr != '') {
                     document.querySelector('.third-slide .slide-unavailable').style.display = 'none';
                     document.querySelector('.third-slide .slide-available').style.display = 'block';
@@ -1299,10 +1301,10 @@ var DOMLoaded = function() {
                     document.querySelector('.third-slide .slide-available').style.display = 'none';
                 }
 
-                var serietrailerid = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-serietrailerid');
-                var network = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-network').toLowerCase();
+                var serietrailerid = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-serietrailerid');
+                var network = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-network').toLowerCase();
                 var networkNew = network.split(',');
-                var networkUrl = img.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('data-network-url');
+                var networkUrl = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-network-url');
                 var networkUrlNew = networkUrl.split(',');
 
                 document.querySelector('iframe').src = 'https://player.allocine.fr/' + serietrailerid + '.html';
@@ -1358,12 +1360,17 @@ var DOMLoaded = function() {
             paddingTopAndBottom = 70;
             paddingLeftAndRight = 70;
         }
-        var ctx = document.getElementById('myChart').getContext('2d');
-        gradient = ctx.createLinearGradient(0, 0, 0, 450);
+
+        if (window.chart instanceof Chart) {
+            window.chart.destroy();
+        }
+
+        var ctx = document.getElementById('chart').getContext('2d');
+        var gradient = ctx.createLinearGradient(0, 0, 0, 450);
         gradient.addColorStop(0, 'rgba(40, 167, 69, 0.5)');
         gradient.addColorStop(0.5, 'rgba(40, 167, 69, 0.25)');
         gradient.addColorStop(1, 'rgba(40, 167, 69, 0)');
-        chart = new Chart(ctx, {
+        var config = {
             type: 'line',
             data: {
                 labels: seasonsCriticLabels,
@@ -1383,20 +1390,21 @@ var DOMLoaded = function() {
                     }
                 },
                 scales: {
-                    yAxes: [{
+                    y: {
+                        max: 5,
+                        min: 0,
                         ticks: {
-                            max: 5,
-                            min: 0,
+                            fontColor: '#FFF',
+                            fontSize: 15,
+                            stepSize: 1
+                        }
+                    },
+                    x: {
+                        ticks: {
                             fontColor: '#FFF',
                             fontSize: 15
                         }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            fontColor: '#FFF',
-                            fontSize: 15
-                        }
-                    }]
+                    }
                 },
                 layout: {
                     padding: {
@@ -1427,7 +1435,8 @@ var DOMLoaded = function() {
                     }
                 }
             }
-        });
+        };
+        chart = new Chart(ctx, config);
     }
 
     // Get darkmode status and set icon
@@ -1784,10 +1793,23 @@ var DOMLoaded = function() {
     // Add ratings info details
     function ratingInfoDetails() {
         var tags = document.querySelectorAll('.picture-item__tags');
+        var imgParent = document.querySelectorAll('.picture-item__inner');
 
         tags.forEach(function(tag) {
             tag.addEventListener('click', function() {
                 tag.parentNode.parentNode.parentNode.children[0].children[0].children[2].classList.toggle('displayNone');
+            }, false);
+        });
+
+        imgParent.forEach(function(tag) {
+            tag.addEventListener('mouseenter', function() {
+                tag.children[0].children[0].children[3].classList.remove('displayNone');
+            }, false);
+        });
+
+        imgParent.forEach(function(tag) {
+            tag.addEventListener('mouseleave', function() {
+                tag.children[0].children[0].children[3].classList.add('displayNone');
             }, false);
         });
     }
@@ -1836,7 +1858,6 @@ var DOMLoaded = function() {
                 document.querySelector('#overlay').style.display = 'none';
                 document.querySelector('iframe').src = '';
                 document.body.style.overflow = 'scroll';
-                chart.destroy();
             }
         };
     }

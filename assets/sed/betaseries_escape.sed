@@ -1,5 +1,5 @@
 # Replace title characters for betaseries URLs
-y/āáǎàäēéěèëīíǐìïōóǒòöūúǔùüǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ/aaaaaeeeeeiiiiiooooouuuuuüüüüAAAAEEEEIIIIOOOOUUUUÜÜÜÜ/
+y/āáǎàäēéěèëīíǐìïōóǒòöūúǔùü/aaaaaeeeeeiiiiiooooouuuuu/
 s/ ([0-9][0-9][0-9][0-9])//g
 s/[[:blank:]]/-/g
 s/-&amp;//g

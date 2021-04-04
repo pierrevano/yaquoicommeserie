@@ -1,13 +1,29 @@
-# Delete temp file
-rm -f ./temp*
-rm -f ./assets/sh/criticNameBis.txt
-rm -f ./assets/sh/criticNameBisSorted.txt
-rm -f ./assets/sh/criticNameGenreButtonsTemp.txt
-rm -f ./assets/sh/criticNameNetworkButtonsTemp.txt
-rm -f ./assets/sh/criticNameNetworkButtonsTemp2.txt
-rm -f ./assets/sh/criticNameNationalityButtonsTemp.txt
-rm -f ./assets/sh/criticNameTemp.txt
-rm -f ./assets/sh/urlTemp.txt
+# Remove temp files function
+remove_files () {
+  # Delete temp file
+  rm -f ./temp*
+  rm -f ./assets/sh/criticNameBis.txt
+  rm -f ./assets/sh/criticNameBisSorted.txt
+  rm -f ./assets/sh/criticNameGenreButtonsTemp.txt
+  rm -f ./assets/sh/criticNameNetworkButtonsTemp.txt
+  rm -f ./assets/sh/criticNameNetworkButtonsTemp2.txt
+  rm -f ./assets/sh/criticNameNationalityButtonsTemp.txt
+  rm -f ./assets/sh/criticNameTemp.txt
+  rm -f ./assets/sh/urlTemp.txt
+}
+
+# Abord script function
+abord_script () {
+  # Download previous JSON
+  curl -s https://yaquoicommeserie.fr/assets/js/data.json > ./assets/js/data.json
+
+  remove_files
+
+  # Exit script
+  exit 1
+}
+
+remove_files
 
 # Main variables
 baseUrl=https://www.allocine.fr/series/top/
@@ -398,22 +414,7 @@ do
                         echo "Betaseries id KO"
                         echo $id / "https://www.allocine.fr$url" ❌
 
-                        # Download previous JSON
-                        curl -s https://yaquoicommeserie.fr/assets/js/data.json > ./assets/js/data.json
-
-                        # Delete temp file
-                        rm -f ./temp*
-                        rm -f ./assets/sh/criticNameBis.txt
-                        rm -f ./assets/sh/criticNameBisSorted.txt
-                        rm -f ./assets/sh/criticNameGenreButtonsTemp.txt
-                        rm -f ./assets/sh/criticNameNetworkButtonsTemp.txt
-                        rm -f ./assets/sh/criticNameNetworkButtonsTemp2.txt
-                        rm -f ./assets/sh/criticNameNationalityButtonsTemp.txt
-                        rm -f ./assets/sh/criticNameTemp.txt
-                        rm -f ./assets/sh/urlTemp.txt
-
-                        # Exit script
-                        exit 1
+                        abord_script
                       fi
                     fi
                   fi
@@ -699,22 +700,7 @@ do
           echo "IMDb id KO"
           echo $id / "https://www.allocine.fr$url" ❌
 
-          # Download previous JSON
-          curl -s https://yaquoicommeserie.fr/assets/js/data.json > ./assets/js/data.json
-
-          # Delete temp file
-          rm -f ./temp*
-          rm -f ./assets/sh/criticNameBis.txt
-          rm -f ./assets/sh/criticNameBisSorted.txt
-          rm -f ./assets/sh/criticNameGenreButtonsTemp.txt
-          rm -f ./assets/sh/criticNameNetworkButtonsTemp.txt
-          rm -f ./assets/sh/criticNameNetworkButtonsTemp2.txt
-          rm -f ./assets/sh/criticNameNationalityButtonsTemp.txt
-          rm -f ./assets/sh/criticNameTemp.txt
-          rm -f ./assets/sh/urlTemp.txt
-
-          # Exit script
-          exit 1
+          abord_script
         fi
 
         echo "$url,$imdbId,$betaseriesId" >> assets/sh/seriesIds.txt
@@ -819,16 +805,7 @@ echo "<li class=\"nationalityButton\"><a href=\"#\">Non renseignée<span><input 
 cat ./assets/js/data.json | sed '$s/,{/]}/' | tr '\n' ' ' | sed 's/}, ]/}]/g' | sed 's/, },/},/g' | sed 's/......$/ }]}/' | sed 's/, },/},/g' | sed 's/}, }}/}}}/g' | sed 's/,{ "id": "[0-9][0-9]", "allocineData":{ }}//g' | sed 's/,{ "id": "[0-9][0-9][0-9]", "allocineData":{ }}//g' | sed 's/,{ "id": "[0-9][0-9][0-9]", "allocineData":{ } }//g' > temp
 cat temp > ./assets/js/data.json
 
-# Delete temp file
-rm -f ./temp*
-rm -f ./assets/sh/criticNameBis.txt
-rm -f ./assets/sh/criticNameBisSorted.txt
-rm -f ./assets/sh/criticNameGenreButtonsTemp.txt
-rm -f ./assets/sh/criticNameNetworkButtonsTemp.txt
-rm -f ./assets/sh/criticNameNetworkButtonsTemp2.txt
-rm -f ./assets/sh/criticNameNationalityButtonsTemp.txt
-rm -f ./assets/sh/criticNameTemp.txt
-rm -f ./assets/sh/urlTemp.txt
+remove_files
 
 # Add ending message with duration
 dataDuration=$SECONDS
