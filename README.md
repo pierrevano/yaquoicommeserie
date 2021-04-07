@@ -1,5 +1,5 @@
 # Y'a quoi comme série ?
 
-![homepagepreview](https://user-images.githubusercontent.com/1529169/108870449-68788480-75f8-11eb-9716-7093337d5aa5.png)
+![homepagepreview](https://user-images.githubusercontent.com/1529169/113882872-f762ea00-97bd-11eb-8835-60553f8ae416.png)
 
 https://yaquoicommeserie.fr

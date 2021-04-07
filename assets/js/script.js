@@ -23,6 +23,7 @@ var DOMLoaded = function() {
 
     var userRatingLi = document.querySelector('.nav-item.userRating');
     var imdbUserRatingLi = document.querySelector('.nav-item.imdbUserRating');
+    var betaseriesUserRatingLi = document.querySelector('.nav-item.betaseriesUserRating');
     var periodOption = document.querySelector('.period-options');
     var criticLi = document.querySelector('.criticRatings');
     var networkLi = document.querySelector('.networkPreferences');
@@ -192,6 +193,8 @@ var DOMLoaded = function() {
             criticFix = dataForSingleItem.allocineData.critic,
             user = dataForSingleItem.allocineData.user,
             seasonsCritic = dataForSingleItem.allocineData.seasonsCritic,
+            betaseriesRatingTemp = dataForSingleItem.betaseriesData.betaseriesRating,
+            betaseriesId = dataForSingleItem.betaseriesData.betaseriesId,
             date = dataForSingleItem.imdbData.date,
             imdbId = dataForSingleItem.imdbData.imdbId,
             imdbRating = dataForSingleItem.imdbData.imdbRating,
@@ -338,16 +341,23 @@ var DOMLoaded = function() {
         critic = getActiveCritics(criticFix, criticNames);
         if (user == '') user = 0;
         if (imdbRating == '') imdbRating = 0;
+        var betaseriesRating = betaseriesRatingTemp.replace(',', '.');
+        if (betaseriesRating == '') betaseriesRating = 0;
 
         var criticActive = localStorage.getItem('yqcs_critic.' + 'criticAllocine');
         var userActive = localStorage.getItem('yqcs_critic.' + 'usersAllocine');
         var usersImdbActive = localStorage.getItem('yqcs_critic.' + 'usersImdb');
+        var usersBetaseriesActive = localStorage.getItem('yqcs_critic.' + 'usersBetaseries');
+
         var userInput = document.querySelector('.nav-item.usersAllocine');
         var userImdbInput = document.querySelector('.nav-item.usersImdb');
+        var userBetaseriesInput = document.querySelector('.nav-item.usersBetaseries');
 
-        if (retrieveLocalData(criticActive) && retrieveLocalData(userActive) && retrieveLocalData(usersImdbActive)) {
-            divisionNumber = 3;
+        ratingTempTotal = 0;
+        divisionNumber = 0;
 
+        if (retrieveLocalData(criticActive)) {
+            divisionNumber++;
             if (critic == 0) {
                 divisionNumber--;
                 criticDetails = '/';
@@ -355,82 +365,14 @@ var DOMLoaded = function() {
                 criticDetails = parseFloat(critic).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') + '<span>/5</span>';
             }
 
-            if (user == 0) {
-                divisionNumber--;
-                userDetails = '/';
-            } else {
-                userDetails = user + '<span>/5</span>';
-            }
-
-            if (imdbRating == 0) {
-                divisionNumber--;
-                imdbDetails = '/';
-            } else {
-                imdbDetails = imdbRating + '<span>/10</span>';
-            }
-
-            ratingTemp = (parseFloat(critic) + parseFloat(user) + parseFloat(imdbRating / 2)) / divisionNumber;
-
-            userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber">1</span>';
-            imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
-        } else if (retrieveLocalData(criticActive) && retrieveLocalData(usersImdbActive)) {
-            divisionNumber = 2;
-
-            if (critic == 0) {
-                divisionNumber--;
-                criticDetails = '/';
-            } else {
-                criticDetails = parseFloat(critic).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') + '<span>/5</span>';
-            }
-
-            if (imdbRating == 0) {
-                divisionNumber--;
-                imdbDetails = '/';
-            } else {
-                imdbDetails = imdbRating + '<span>/10</span>';
-            }
-
-            ratingTemp = (parseFloat(critic) + parseFloat(imdbRating / 2)) / divisionNumber;
-
-            userDetails = '/';
-
-            userInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber criticNumberZero">0</span>';
-            imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
-        } else if (retrieveLocalData(userActive) && retrieveLocalData(usersImdbActive)) {
-            divisionNumber = 2;
-
-            if (user == 0) {
-                divisionNumber--;
-                userDetails = '/';
-            } else {
-                userDetails = user + '<span>/5</span>';
-            }
-
-            if (imdbRating == 0) {
-                divisionNumber--;
-                imdbDetails = '/';
-            } else {
-                imdbDetails = imdbRating + '<span>/10</span>';
-            }
-
-            ratingTemp = (parseFloat(user) + parseFloat(imdbRating / 2)) / divisionNumber;
-
+            ratingTempTotal += parseFloat(critic);
+        } else {
             criticDetails = '/';
-
             criticInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber">1</span>';
-            imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
-        } else if (retrieveLocalData(criticActive) && retrieveLocalData(userActive)) {
-            divisionNumber = 2;
+        }
 
-            if (critic == 0) {
-                divisionNumber--;
-                criticDetails = '/';
-            } else {
-                criticDetails = parseFloat(critic).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') + '<span>/5</span>';
-            }
-
+        if (retrieveLocalData(userActive)) {
+            divisionNumber++;
             if (user == 0) {
                 divisionNumber--;
                 userDetails = '/';
@@ -438,78 +380,52 @@ var DOMLoaded = function() {
                 userDetails = user + '<span>/5</span>';
             }
 
-            ratingTemp = (parseFloat(critic) + parseFloat(user)) / divisionNumber;
+            ratingTempTotal += parseFloat(user);
 
-            imdbDetails = '/';
-
-            userImdbInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
             userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber">1</span>';
-            imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber criticNumberZero">0</span>';
-        } else if (retrieveLocalData(criticActive)) {
-            divisionNumber = 1;
-
-            if (critic == 0) {
-                divisionNumber--;
-                criticDetails = '/';
-            } else {
-                criticDetails = parseFloat(critic).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') + '<span>/5</span>';
-            }
-
-            ratingTemp = parseFloat(critic) / divisionNumber;
-
-            userDetails = imdbDetails = '/';
-
+        } else {
+            userDetails = '/';
             userInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userImdbInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
             userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber criticNumberZero">0</span>';
-            imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber criticNumberZero">0</span>';
-        } else if (retrieveLocalData(userActive)) {
-            divisionNumber = 1;
+        }
 
-            if (user == 0) {
-                divisionNumber--;
-                userDetails = '/';
-            } else {
-                userDetails = parseFloat(user).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') + '<span>/5</span>';
-            }
-
-            ratingTemp = parseFloat(user) / divisionNumber;
-
-            criticDetails = imdbDetails = '/';
-
-            criticInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userImdbInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber">1</span>';
-            imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber criticNumberZero">0</span>';
-        } else if (retrieveLocalData(usersImdbActive)) {
-            divisionNumber = 1;
-
+        if (retrieveLocalData(usersImdbActive)) {
+            divisionNumber++;
             if (imdbRating == 0) {
                 divisionNumber--;
                 imdbDetails = '/';
             } else {
-                imdbDetails = parseFloat(imdbRating).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') + '<span>/10</span>';
+                imdbDetails = imdbRating + '<span>/10</span>';
             }
 
-            ratingTemp = parseFloat(imdbRating / 2) / divisionNumber;
+            ratingTempTotal += parseFloat(imdbRating / 2);
 
-            criticDetails = userDetails = '/';
-
-            criticInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber criticNumberZero">0</span>';
             imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
         } else {
-            ratingTemp = 0;
-
-            criticDetails = userDetails = imdbDetails = '/';
-
-            criticInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
+            imdbDetails = '/';
             userImdbInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
-            userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber criticNumberZero">0</span>';
             imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber criticNumberZero">0</span>';
         }
+
+        if (retrieveLocalData(usersBetaseriesActive)) {
+            divisionNumber++;
+            if (betaseriesRating == 0) {
+                divisionNumber--;
+                betaseriesDetails = '/';
+            } else {
+                betaseriesDetails = betaseriesRating + '<span>/5</span>';
+            }
+
+            ratingTempTotal += parseFloat(betaseriesRating);
+
+            betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber">1</span>';
+        } else {
+            betaseriesDetails = '/';
+            userBetaseriesInput.children[0].children[0].children[0].children[0].removeAttribute('checked');
+            betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber criticNumberZero">0</span>';
+        }
+
+        ratingTemp = ratingTempTotal / divisionNumber;
 
         ratingTemp = ratingTemp || 0;
         ratingToFixed = ratingTemp.toFixed(2);
@@ -571,6 +487,13 @@ var DOMLoaded = function() {
             imdbDetailsUrl = '<a href="https://www.imdb.com/title/' + imdbId + '/" target="_blank"><i class="fab fa-imdb"></i>' + imdbDetails + '</a>';
         }
 
+        var betaseriesDetailsUrl = '';
+        if (betaseriesDetails == '/') {
+            betaseriesDetailsUrl = '<a href="javascript:void(0)"><i class="icon-betaseries"></i>' + betaseriesDetails + '</a>';
+        } else {
+            betaseriesDetailsUrl = '<a href="https://www.betaseries.com/serie/' + betaseriesId + '/" target="_blank"><i class="icon-betaseries"></i>' + betaseriesDetails + '</a>';
+        }
+
         /* beautify ignore:start */
         return [
             '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-network-url="' + networkUrl + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-critic="' + ratingToFixed + '" data-seasons-critic="' + seasonsCriticArray +  '" data-seasons-critic-details="' + seasonsCriticDetailsArray + '" data-popularity="' + serieId + '" data-creationdate="' + creationDate + '" data-serieTrailerId="' + serieTrailerId + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
@@ -585,9 +508,10 @@ var DOMLoaded = function() {
                                 criticDetailsUrl,
                                 userDetailsUrl,
                                 imdbDetailsUrl,
+                                betaseriesDetailsUrl,
                             '</div>',
                             '<div class="aspect__inner overlayMoreInfos displayNone">',
-                                '<a href="#" class="read-more">Plus d\'infos</a>',
+                                '<a href="javascript:void(0)" class="read-more">Plus d\'infos</a>',
                             '</div>',
                         '</div>',
                     '</div>',
@@ -830,6 +754,7 @@ var DOMLoaded = function() {
             localStorage.setItem('yqcs_critic.' + 'criticAllocine', 'true');
             localStorage.setItem('yqcs_critic.' + 'usersAllocine', 'true');
             localStorage.setItem('yqcs_critic.' + 'usersImdb', 'true');
+            localStorage.setItem('yqcs_critic.' + 'usersBetaseries', 'true');
             return true;
         }
     }
@@ -864,7 +789,8 @@ var DOMLoaded = function() {
     function hashtagFormatted(string) {
         return string
             .replace(/\s+/g, '')
-            .replace('\'', '');
+            .replace('\'', '')
+            .replace('?', '');
     }
 
     // Display retrieved data in grid div
@@ -1360,6 +1286,10 @@ var DOMLoaded = function() {
             paddingTopAndBottom = 70;
             paddingLeftAndRight = 70;
         }
+        var color = '#000';
+        if (darkmode.isActivated()) {
+            color = '#fff';
+        }
 
         if (window.chart instanceof Chart) {
             window.chart.destroy();
@@ -1385,7 +1315,7 @@ var DOMLoaded = function() {
             options: {
                 legend: {
                     labels: {
-                        fontColor: '#FFF',
+                        fontColor: color,
                         fontSize: 20
                     }
                 },
@@ -1394,14 +1324,14 @@ var DOMLoaded = function() {
                         max: 5,
                         min: 0,
                         ticks: {
-                            fontColor: '#FFF',
+                            fontColor: color,
                             fontSize: 15,
                             stepSize: 1
                         }
                     },
                     x: {
                         ticks: {
-                            fontColor: '#FFF',
+                            fontColor: color,
                             fontSize: 15
                         }
                     }
@@ -1521,7 +1451,10 @@ var DOMLoaded = function() {
         var classListName = item.currentTarget.parentNode.parentNode.classList[1];
         var classListNameActive = localStorage.getItem('yqcs_critic.' + classListName);
 
-        if (classListName == 'criticAllocine' || classListName == 'usersAllocine' || classListName == 'usersImdb') {
+        if (classListName == 'criticAllocine' ||
+            classListName == 'usersAllocine' ||
+            classListName == 'usersImdb' ||
+            classListName == 'usersBetaseries') {
             localStorage.setItem('yqcs_menu.' + 'menuBool', true);
         }
 
@@ -1538,6 +1471,8 @@ var DOMLoaded = function() {
                 userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber criticNumberZero">0</span>';
             } else if (classListName == 'usersImdb') {
                 imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber criticNumberZero">0</span>';
+            } else if (classListName == 'usersBetaseries') {
+                betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber criticNumberZero">0</span>';
             }
             item.currentTarget.children[0].children[0].removeAttribute('checked');
             localStorage.setItem('yqcs_critic.' + classListName, 'false');
@@ -1554,6 +1489,8 @@ var DOMLoaded = function() {
                 userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber">1</span>';
             } else if (classListName == 'usersImdb') {
                 imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
+            } else if (classListName == 'usersBetaseries') {
+                betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber">1</span>';
             }
             item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
             localStorage.setItem('yqcs_critic.' + classListName, 'true');
@@ -1793,7 +1730,7 @@ var DOMLoaded = function() {
     // Add ratings info details
     function ratingInfoDetails() {
         var tags = document.querySelectorAll('.picture-item__tags');
-        var imgParent = document.querySelectorAll('.picture-item__inner');
+        var imgParent = document.querySelectorAll('.aspect--16x9');
 
         tags.forEach(function(tag) {
             tag.addEventListener('click', function() {
@@ -1803,13 +1740,17 @@ var DOMLoaded = function() {
 
         imgParent.forEach(function(tag) {
             tag.addEventListener('mouseenter', function() {
-                tag.children[0].children[0].children[3].classList.remove('displayNone');
+                if (tag.children[0].children[2].classList.contains('displayNone')) {
+                    tag.children[0].children[3].classList.remove('displayNone');
+                }
             }, false);
         });
 
         imgParent.forEach(function(tag) {
             tag.addEventListener('mouseleave', function() {
-                tag.children[0].children[0].children[3].classList.add('displayNone');
+                if (tag.children[0].children[2].classList.contains('displayNone')) {
+                    tag.children[0].children[3].classList.add('displayNone');
+                }
             }, false);
         });
     }
@@ -1995,6 +1936,7 @@ var DOMLoaded = function() {
 document.addEventListener('DOMContentLoaded', function() {
     var Nav = new hcOffcanvasNav('#main-nav', {
         customToggle: '.fa-bars',
+        width: 290,
         closeOnClick: false,
         levelSpacing: 0,
         navTitle: 'Préférences',

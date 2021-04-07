@@ -108,6 +108,9 @@ do
     curl -s $baseUrl\?page\=$pagesNumberIndex > temp
 
     seriesNumber=$(cat temp | grep "<a class=\"meta-title-link\" href=\"/series/ficheserie_gen_cserie=" | wc -l | awk '{print $1}')
+    if [[ $seriesNumber -gt 15 ]]; then
+      seriesNumber=$seriesNumberMax
+    fi
   fi
 
   seriesNumberIndex=$seriesNumberIndexFirst
@@ -340,6 +343,7 @@ do
             betaseriesFound=2
             break
           fi
+          echo "\"betaseriesId\": \"$betaseriesTitle\"," >> ./assets/js/data.json
           curl -s https://www.betaseries.com/serie/$betaseriesTitle > temp9
           betaseriesFound=1
           break

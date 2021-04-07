@@ -122,6 +122,7 @@ body.hc-nav-open {
     float: right;
     background: var(--green-color);
     border-radius: 2px;
+    color: var(--white-color);
 }
 
 .criticNumberZero {
@@ -331,12 +332,12 @@ body.hc-nav-open {
 .hc-offcanvas-nav .nav-container,
 .hc-offcanvas-nav .nav-wrapper,
 .hc-offcanvas-nav ul {
-    background: var(--dark-color);
+    background: var(--white-color);
 }
 
 .hc-offcanvas-nav::after,
 .hc-offcanvas-nav .nav-wrapper::after {
-    background: rgba(0, 0, 0, 0.3)
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .hc-offcanvas-nav .nav-content {
@@ -351,7 +352,7 @@ body.hc-nav-open {
     font-size: 19px;
     font-weight: normal;
     padding: 25px 15px 30px;
-    color: #fff
+    color: var(--dark-color);
 }
 
 .hc-offcanvas-nav .nav-content>h2:first-child,
@@ -370,7 +371,7 @@ body.hc-nav-open {
     font-size: 16px;
     padding: 15px 12px;
     text-transform: uppercase;
-    color: #b3b3b3
+    color: var(--dark-rgba-color)
 }
 
 .hc-offcanvas-nav .nav-item-link,
@@ -378,9 +379,9 @@ body.hc-nav-open {
 .hc-offcanvas-nav .nav-back a {
     padding: 12px;
     font-size: 14px;
-    color: #fff;
+    color: var(--dark-color);
     z-index: 1;
-    background: rgba(0, 0, 0, 0);
+    background: rgba(255, 255, 255, 0);
     border-radius: 5px;
     transition: .05s background ease
 }
@@ -397,11 +398,12 @@ body.hc-nav-open {
 .hc-offcanvas-nav .nav-item-link[disabled],
 .hc-offcanvas-nav li.nav-close a[disabled],
 .hc-offcanvas-nav .nav-back a[disabled] {
-    color: rgba(255, 255, 255, 0.5)
+    color: rgba(255, 255, 255, 0.5);
 }
 
-.hc-offcanvas-nav:not(.touch-device) li:not(.nav-item-custom) a:not([disabled]):hover {
-    background: #272a2d
+.hc-offcanvas-nav:not(.touch-device) li:not(.nav-item-custom) a:not([disabled]):hover,
+.hc-offcanvas-nav:not(.touch-device) li:not(.nav-item-custom) span.nav-item-link:hover {
+    background: var(--light-gray-bg-color);
 }
 
 .hc-offcanvas-nav .nav-custom-content {
@@ -411,7 +413,7 @@ body.hc-nav-open {
 
 .hc-offcanvas-nav .nav-highlight>.nav-item-wrapper .nav-item-link {
     border-radius: 5px;
-    background: #292c30
+    background: var(--white-color);
 }
 
 .hc-offcanvas-nav .nav-wrapper-0>.nav-content>ul:first-child {
@@ -423,12 +425,12 @@ body.hc-nav-open {
 }
 
 .hc-offcanvas-nav li {
-    color: #fff
+    color: var(--dark-color);
 }
 
 .hc-offcanvas-nav li.nav-close a:hover,
 .hc-offcanvas-nav li.nav-back a:hover {
-    background: #111213
+    background: var(--light-gray-bg-color);
 }
 
 .hc-offcanvas-nav li.nav-close:not(:first-child) a,
@@ -472,8 +474,8 @@ body.hc-nav-open {
     width: 6px;
     height: 6px;
     margin-top: -3px;
-    border-top: 2px solid #fff;
-    border-left: 2px solid #fff
+    border-top: 2px solid var(--dark-color);
+    border-left: 2px solid var(--dark-color)
 }
 
 .hc-offcanvas-nav .nav-close-button span::before {
@@ -488,8 +490,8 @@ body.hc-nav-open {
 .hc-offcanvas-nav .nav-content>.nav-close a {
     height: 44px;
     font-size: 15px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0);
+    color: var(--dark-color);
+    background: rgba(255, 255, 255, 0);
     border-radius: 5px;
     z-index: 1;
     text-decoration: none;
@@ -501,7 +503,7 @@ body.hc-nav-open {
 }
 
 .hc-offcanvas-nav .nav-content>.nav-close a:hover {
-    background: #25272a
+    background: var(--light-gray-bg-color);
 }
 
 .hc-offcanvas-nav .nav-content>.nav-close:first-child {
@@ -584,7 +586,7 @@ body.hc-nav-open {
     height: 25px;
     left: -7px;
     top: 9px;
-    background: #4d4d4d;
+    background: var(--light-gray-bg-color);
     border-radius: 2px
 }
 
@@ -598,8 +600,8 @@ body.hc-nav-open {
     height: 8px;
     margin-left: -2px;
     box-sizing: border-box;
-    border-top: 2px solid #fff;
-    border-left: 2px solid #fff;
+    border-top: 2px solid var(--dark-color);
+    border-left: 2px solid var(--dark-color);
     transform-origin: center
 }
 
@@ -621,11 +623,11 @@ body.hc-nav-open {
 }
 
 .hc-offcanvas-nav.nav-position-left.nav-open.nav-levels-overlap .nav-wrapper {
-    box-shadow: 1px 0 2px rgba(0, 0, 0, 0.2)
+    box-shadow: 1px 0 2px rgba(255, 255, 255, 0.2)
 }
 
 .hc-offcanvas-nav.nav-position-right.nav-open.nav-levels-overlap .nav-wrapper {
-    box-shadow: -1px 0 2px rgba(0, 0, 0, 0.2)
+    box-shadow: -1px 0 2px rgba(255, 255, 255, 0.2)
 }
 
 .hc-offcanvas-nav.nav-position-right .nav-next span::before {
@@ -639,7 +641,7 @@ body.hc-nav-open {
 }
 
 .hc-offcanvas-nav.nav-position-top.nav-open .nav-wrapper {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2)
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2)
 }
 
 .hc-offcanvas-nav.nav-position-top .nav-next span::before {
@@ -655,7 +657,7 @@ body.hc-nav-open {
 }
 
 .hc-offcanvas-nav.nav-position-bottom.nav-open .nav-wrapper {
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2)
+    box-shadow: 0 -1px 2px rgba(255, 255, 255, 0.2)
 }
 
 .hc-offcanvas-nav.nav-position-bottom .nav-next span::before {
@@ -702,7 +704,7 @@ body.hc-nav-open {
     left: -7px;
     top: 5px;
     bottom: 5px;
-    background: #4d4d4d;
+    background: var(--light-gray-bg-color);
     border-radius: 2px
 }
 

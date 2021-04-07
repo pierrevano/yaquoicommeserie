@@ -5,6 +5,7 @@
     --dark-gray-border-color: #565656;
     --dark-gray-color: #333333;
     --dark-rgba-color: 24, 24, 24;
+    --gray-rgba-color: 200, 200, 200;
     --gray-disabled-button-color: #696969;
     --green-color: #28A745;
     --green-rgba-color: 40, 167, 69;
@@ -54,7 +55,7 @@ li a:visited {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--dark-bg-color);
+    background-color: var(--white-color);
     z-index: 2;
     text-align: center;
 }
@@ -112,9 +113,13 @@ iframe {
 
 .second-slide div {
     width: 180px;
-    border: 1px solid var(--white-color);
+    border: 1px solid var(--dark-color);
     border-radius: 7px;
     margin-bottom: 10px;
+}
+
+.second-slide div:hover {
+    background: rgba(var(--green-rgba-color), .25);
 }
 
 .second-slide img {
@@ -130,12 +135,30 @@ iframe {
     text-align: left;
 }
 
-.period-options:hover {
-    background-color: unset !important;
-}
-
 .gridContainer {
     margin-bottom: 24px;
+}
+
+@font-face {
+    font-family: 'Glyphter';
+    src: url('./fonts/Glyphter.eot');
+    src: url('./fonts/Glyphter.eot?#iefix') format('embedded-opentype'),
+        url('./fonts/Glyphter.woff') format('woff'),
+        url('./fonts/Glyphter.ttf') format('truetype'),
+        url('./fonts/Glyphter.svg#Glyphter') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icon-betaseries:before {
+    display: inline-block;
+    font-family: 'Glyphter';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: '\0041';
 }
 
 #inputToggle,
@@ -144,7 +167,8 @@ iframe {
 .nationalityButton input,
 .durationButton input,
 .usersAllocine input,
-.usersImdb input {
+.usersImdb input,
+.usersBetaseries input {
     display: none;
 }
 
@@ -154,7 +178,8 @@ iframe {
 .nationalityButton input+label:before,
 .durationButton input+label:before,
 .usersAllocine input+label:before,
-.usersImdb input+label:before {
+.usersImdb input+label:before,
+.usersBetaseries input+label:before {
     font-family: FontAwesome;
     font-size: 14px;
     display: inline-block;
@@ -168,7 +193,8 @@ iframe {
 .nationalityButton input:checked+label:before,
 .durationButton input:checked+label:before,
 .usersAllocine input:checked+label:before,
-.usersImdb input:checked+label:before {
+.usersImdb input:checked+label:before,
+.usersBetaseries input:checked+label:before {
     content: "\f046";
 }
 
@@ -206,8 +232,8 @@ iframe {
 }
 
 .overlayInfos {
-    background-color: rgba(var(--dark-rgba-color), .85);
-    color: var(--white-color);
+    background-color: rgba(var(--gray-rgba-color), .95);
+    color: var(--dark-color);
     font-size: 1rem;
     text-align: center;
     padding-top: 15%;
@@ -233,7 +259,7 @@ iframe {
 }
 
 .overlayMoreInfos {
-    background-color: var(--dark-bg-color);
+    background-color: var(--light-gray-bg-color);
 }
 
 .overlayMoreInfos .read-more {
@@ -241,7 +267,7 @@ iframe {
     padding: 0.5em 1em;
     font-size: 0.8em;
     text-decoration: none;
-    color: var(--white-color);
+    color: var(--dark-color);
     display: inline-block;
     position: absolute;
     top: 50%;
@@ -251,7 +277,15 @@ iframe {
 
 .overlayMoreInfos .read-more:hover {
     background-color: rgba(var(--green-rgba-color), .25);
-    color: var(--white-color);
+    color: var(--dark-color);
+}
+
+.swal2-popup {
+    background: var(--white-color) !important;
+}
+
+.swal2-title {
+    color: var(--dark-color) !important;
 }
 
 .networkPreferences.nav-parent,
@@ -287,8 +321,8 @@ li.networkButtonTitle a:hover {
     font-size: 1.25em;
     margin: 0 5px 5px 0;
     border: 1px solid var(--green-color);
-    color: var(--white-color);
-    background-color: var(--dark-color);
+    color: var(--dark-color);
+    background-color: var(--white-color);
 }
 
 @media (-moz-touch-enabled:0),
@@ -296,32 +330,32 @@ li.networkButtonTitle a:hover {
 
     .tns-controls button:hover,
     #overlay>button:hover {
-        color: var(--white-color);
-        background-color: var(--green-color)
+        background-color: rgba(var(--green-rgba-color), .25)
     }
 }
 
 .tns-controls button:focus,
 #overlay>button:focus {
-    box-shadow: 0;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(var(--green-rgba-color), .25);
 }
 
-.tns-controls button.active,
+.tns-controls button:active,
 #overlay>button:active {
     box-shadow: 0;
-    color: var(--white-color);
-    background-color: var(--green-color)
+    background-color: rgba(var(--green-rgba-color), .25)
 }
 
 .tns-controls button:focus.active,
 #overlay>button:focus.active {
-    box-shadow: 0;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(var(--green-rgba-color), .25);
 }
 
 .tns-controls button:disabled,
 #overlay>button:disabled {
     color: var(--gray-disabled-button-color);
-    background-color: var(--dark-bg-color);
+    background-color: var(--white-color);
     border: 1px solid var(--dark-gray-border-color);
     cursor: not-allowed !important;
 }
@@ -340,10 +374,6 @@ li.networkButtonTitle a:hover {
 .fa-thumbs-up,
 .fa-thumbs-down {
     margin-right: 5px;
-}
-
-.bottom-nav li a:hover {
-    background: var(--dark-color) !important;
 }
 
 .textfield {
@@ -386,7 +416,7 @@ li.networkButtonTitle a:hover {
 @media (-moz-touch-enabled:0),
 (pointer:fine) {
     .btn:hover {
-        color: var(--white-color);
+        color: var(--dark-color);
         text-decoration: none;
         background-color: rgba(var(--green-rgba-color), .25);
     }
@@ -817,4 +847,157 @@ strong {
 .darkmode--activated .btn--primary:disabled {
     color: var(--white-color);
     background-color: var(--dark-gray-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-container,
+.darkmode--activated .hc-offcanvas-nav .nav-wrapper,
+.darkmode--activated .hc-offcanvas-nav ul {
+    background: var(--dark-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-content>h2,
+.darkmode--activated .hc-offcanvas-nav .nav-content>h3,
+.darkmode--activated .hc-offcanvas-nav .nav-content>h4,
+.darkmode--activated .hc-offcanvas-nav .nav-content>h5,
+.darkmode--activated .hc-offcanvas-nav .nav-content>h6 {
+    color: var(--white-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-item-link,
+.darkmode--activated .hc-offcanvas-nav li.nav-close a,
+.darkmode--activated .hc-offcanvas-nav .nav-back a {
+    color: var(--white-color);
+    background: rgba(0, 0, 0, 0);
+}
+
+.darkmode--activated .hc-offcanvas-nav li {
+    color: var(--white-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-close-button span::before,
+.darkmode--activated .hc-offcanvas-nav .nav-close-button span::after {
+    border-top: 2px solid var(--white-color);
+    border-left: 2px solid var(--white-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-content>.nav-close a {
+    color: var(--white-color);
+    background: rgba(0, 0, 0, 0);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-next span::before,
+.darkmode--activated .hc-offcanvas-nav .nav-back span::before {
+    border-top: 2px solid var(--white-color);
+    border-left: 2px solid var(--white-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav:not(.touch-device) li:not(.nav-item-custom) a:not([disabled]):hover,
+.darkmode--activated .hc-offcanvas-nav:not(.touch-device) li:not(.nav-item-custom) span.nav-item-link:hover {
+    background: var(--dark-gray-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-highlight>.nav-item-wrapper .nav-item-link {
+    background: var(--dark-gray-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-item-link[disabled],
+.darkmode--activated .hc-offcanvas-nav li.nav-close a[disabled],
+.darkmode--activated .hc-offcanvas-nav .nav-back a[disabled] {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-content>h2:not(.nav-title):not(.level-title),
+.darkmode--activated .hc-offcanvas-nav .nav-content>h3:not(.nav-title):not(.level-title),
+.darkmode--activated .hc-offcanvas-nav .nav-content>h4:not(.nav-title):not(.level-title),
+.darkmode--activated .hc-offcanvas-nav .nav-content>h5:not(.nav-title):not(.level-title),
+.darkmode--activated .hc-offcanvas-nav .nav-content>h6:not(.nav-title):not(.level-title) {
+    color: var(--light-gray-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav li.nav-close a:hover,
+.darkmode--activated .hc-offcanvas-nav li.nav-back a:hover {
+    background: var(--dark-gray-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav .nav-content>.nav-close a:hover {
+    background: var(--dark-gray-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav a.nav-next:before {
+    background: var(--dark-gray-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav.nav-levels-expand li.level-open>.nav-wrapper::before,
+.darkmode--activated .hc-offcanvas-nav.nav-levels-none li .nav-wrapper::before {
+    background: var(--dark-gray-color);
+}
+
+.darkmode--activated .hc-offcanvas-nav::after,
+.darkmode--activated .hc-offcanvas-nav .nav-wrapper::after {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.darkmode--activated .hc-offcanvas-nav.nav-position-left.nav-open.nav-levels-overlap .nav-wrapper {
+    box-shadow: 1px 0 2px rgba(0, 0, 0, 0.2)
+}
+
+.darkmode--activated .hc-offcanvas-nav.nav-position-right.nav-open.nav-levels-overlap .nav-wrapper {
+    box-shadow: -1px 0 2px rgba(0, 0, 0, 0.2)
+}
+
+.darkmode--activated .hc-offcanvas-nav.nav-position-top.nav-open .nav-wrapper {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2)
+}
+
+.darkmode--activated .hc-offcanvas-nav.nav-position-bottom.nav-open .nav-wrapper {
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2)
+}
+
+.darkmode--activated .overlayMoreInfos {
+    background-color: var(--dark-color);
+}
+
+.darkmode--activated .overlayMoreInfos .read-more {
+    color: var(--white-color);
+}
+
+.darkmode--activated .overlayMoreInfos .read-more:hover {
+    color: var(--white-color);
+}
+
+.darkmode--activated .tns-controls button,
+.darkmode--activated #overlay>button {
+    color: var(--white-color);
+    background-color: var(--dark-color);
+}
+
+.darkmode--activated .tns-controls button:hover,
+.darkmode--activated #overlay>button:hover {
+    background-color: rgba(var(--green-rgba-color), .25);
+}
+
+.darkmode--activated .tns-controls button:disabled,
+#overlay>button:disabled {
+    background-color: var(--dark-bg-color);
+}
+
+.darkmode--activated #overlay {
+    background-color: var(--dark-bg-color);
+}
+
+.darkmode--activated .overlayInfos {
+    background-color: rgba(var(--dark-rgba-color), .95);
+    color: var(--white-color);
+}
+
+.darkmode--activated .second-slide div {
+    border: 1px solid var(--white-color);
+}
+
+.darkmode--activated .swal2-popup {
+    background: var(--dark-bg-color) !important;
+}
+
+.darkmode--activated .swal2-title {
+    color: var(--white-color) !important;
 }
