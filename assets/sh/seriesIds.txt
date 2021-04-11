@@ -179,3 +179,11 @@
 /series/ficheserie_gen_cserie=12091.html,tt2805096,chicago-pd
 /series/ficheserie_gen_cserie=8210.html,tt1567432,teen-wolf-2011
 /series/ficheserie_gen_cserie=7663.html,tt1856010,house-of-cards-2012
+/series/ficheserie_gen_cserie=55.html,tt0200276,thewestwing
+/series/ficheserie_gen_cserie=28547.html,tt10540276,snabba-cash
+/series/ficheserie_gen_cserie=24626.html,tt8270592,miss-scarlet-and-the-duke
+/series/ficheserie_gen_cserie=22574.html,tt8421350,manifest
+/series/ficheserie_gen_cserie=25424.html,tt10680614,a-teacher
+/series/ficheserie_gen_cserie=12192.html,tt3636060,poldark-2015
+/series/ficheserie_gen_cserie=19900.html,tt2580046,miraculous
+/series/ficheserie_gen_cserie=23845.html,tt8697870,the-nevers

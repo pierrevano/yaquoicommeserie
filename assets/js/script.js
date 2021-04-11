@@ -307,32 +307,24 @@ var DOMLoaded = function() {
         var today = new Date();
         var todayNewTemp = String(today);
         var todayNew = splitDate(todayNewTemp);
-        today.setDate(today.getDate() - 7);
-        var last7Days = ((today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear());
-        var isDateIncludedlast7Days = dateCheck(last7Days, todayNew, dateFormatted);
+        today.setDate(today.getDate() - 30);
+        var last30Days = ((today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear());
+        var isDateIncludedlast30Days = dateCheck(last30Days, todayNew, dateFormatted);
 
         var today2 = new Date();
         var todayNewTemp2 = String(today2);
         var todayNew2 = splitDate(todayNewTemp2);
-        today2.setDate(today2.getDate() - 14);
-        var last14Days = ((today2.getMonth() + 1) + '/' + today2.getDate() + '/' + today2.getFullYear());
-        var isDateIncludedlast14Days = dateCheck(last14Days, todayNew2, dateFormatted);
-
-        var today3 = new Date();
-        var todayNewTemp3 = String(today3);
-        var todayNew3 = splitDate(todayNewTemp3);
-        today3.setDate(today3.getDate() - 21);
-        var last21Days = ((today3.getMonth() + 1) + '/' + today3.getDate() + '/' + today3.getFullYear());
-        var isDateIncludedlast21Days = dateCheck(last21Days, todayNew3, dateFormatted);
+        today2.setDate(today2.getDate() - 182);
+        var last6Months = ((today2.getMonth() + 1) + '/' + today2.getDate() + '/' + today2.getFullYear());
+        var isDateIncludedlast6Months = dateCheck(last6Months, todayNew2, dateFormatted);
 
         var isDateIncluded2019 = dateCheck('01/01/2019', '12/31/2019', dateFormatted);
         var isDateIncluded2020 = dateCheck('01/01/2020', '12/31/2020', dateFormatted);
         var isDateIncluded2021 = dateCheck('01/01/2021', '12/31/2021', dateFormatted);
 
         dateFormattedFilter = statusFilter(
-            isDateIncludedlast7Days,
-            isDateIncludedlast14Days,
-            isDateIncludedlast21Days,
+            isDateIncludedlast30Days,
+            isDateIncludedlast6Months,
             isDateIncluded2019,
             isDateIncluded2020,
             isDateIncluded2021,
@@ -642,9 +634,8 @@ var DOMLoaded = function() {
 
     // Return status for filtering
     function statusFilter(
-        isDateIncludedlast7Days,
-        isDateIncludedlast14Days,
-        isDateIncludedlast21Days,
+        isDateIncludedlast30Days,
+        isDateIncludedlast6Months,
         isDateIncluded2019,
         isDateIncluded2020,
         isDateIncluded2021,
@@ -653,12 +644,10 @@ var DOMLoaded = function() {
             text2 = '',
             text3 = '';
 
-        if (isDateIncludedlast7Days) {
-            text = 'Les 7 derniers jours,Les 2 dernières semaines,Les 3 dernières semaines';
-        } else if (isDateIncludedlast14Days) {
-            text = 'Les 7 derniers jours,Les 2 dernières semaines';
-        } else if (isDateIncludedlast21Days) {
-            text = 'Les 3 dernières semaines';
+        if (isDateIncludedlast30Days) {
+            text = 'Les 30 derniers jours,Les 6 derniers mois';
+        } else if (isDateIncludedlast6Months) {
+            text = 'Les 6 derniers mois';
         } else {
             text = '';
         }
@@ -976,12 +965,10 @@ var DOMLoaded = function() {
     function addPeriodFilter() {
         var activePeriod = normalizeStr(paramsURL('diffusion'));
 
-        if (activePeriod == 'les_7_derniers_jours') {
-            activePeriod = 'Les 7 derniers jours';
-        } else if (activePeriod == 'les_2_dernieres_semaines') {
-            activePeriod = 'Les 2 dernières semaines';
-        } else if (activePeriod == 'les_3_dernieres_semaines') {
-            activePeriod = 'Les 3 dernières semaines';
+        if (activePeriod == 'les_30_derniers_jours') {
+            activePeriod = 'Les 30 derniers jours';
+        } else if (activePeriod == 'les_6_derniers_mois') {
+            activePeriod = 'Les 6 derniers mois';
         } else if (activePeriod == 'en_2021' || activePeriod == '2021') {
             activePeriod = 'En 2021';
         } else if (activePeriod == 'en_2020' || activePeriod == '2020') {
@@ -1011,7 +998,7 @@ var DOMLoaded = function() {
     function handleOptionChange() {
         filters.periodArray = getCurrentOptionFilters();
 
-        if (filters.periodArray == 'Default') filters.periodArray = [];
+        if (filters.periodArray == 'NoFilter') filters.periodArray = [];
 
         filter();
     }
