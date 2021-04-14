@@ -65,7 +65,7 @@
 /series/ficheserie_gen_cserie=18145.html,tt4052886,lucifer
 /series/ficheserie_gen_cserie=17157.html,tt3205802,how-to-get-away-with-murder
 /series/ficheserie_gen_cserie=25107.html,tt10279176,coyote-2020
-/series/ficheserie_gen_cserie=24725.html,tt7181728,noBetaseriesId
+/series/ficheserie_gen_cserie=24725.html,tt7181728,your-honor
 /series/ficheserie_gen_cserie=18897.html,tt7335184,you
 /series/ficheserie_gen_cserie=133.html,tt0364845,ncis
 /series/ficheserie_gen_cserie=11042.html,tt2802850,fargo
@@ -187,3 +187,16 @@
 /series/ficheserie_gen_cserie=12192.html,tt3636060,poldark-2015
 /series/ficheserie_gen_cserie=19900.html,tt2580046,miraculous
 /series/ficheserie_gen_cserie=23845.html,tt8697870,the-nevers
+/series/ficheserie_gen_cserie=27414.html,tt14315926,noBetaseriesId
+/series/ficheserie_gen_cserie=22453.html,tt13138972,wir-kinder-vom-bahnhof-zoo
+/series/ficheserie_gen_cserie=17357.html,tt2843368,mongeville
+/series/ficheserie_gen_cserie=23925.html,tt9064858,them-covenant
+/series/ficheserie_gen_cserie=17835.html,tt4209256,colony
+/series/ficheserie_gen_cserie=25163.html,tt10383046,veneno
+/series/ficheserie_gen_cserie=26372.html,tt10293938,outer-banks
+/series/ficheserie_gen_cserie=26132.html,tt9642982,belgravia
+/series/ficheserie_gen_cserie=26083.html,tt11640020,debris
+/series/ficheserie_gen_cserie=24267.html,tt7475590,kung-fu-2021
+/series/ficheserie_gen_cserie=24967.html,tt11950864,astrid-et-raphaelle
+/series/ficheserie_gen_cserie=22123.html,tt7235466,9-1-1
+/series/ficheserie_gen_cserie=9244.html,tt1738562,les-mysteres-de-lamour

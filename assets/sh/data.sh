@@ -435,37 +435,80 @@ do
       echo "--------------------"
       echo "Betaseries id OK"
 
-      if [[ $betaseriesFound -ne 2 ]]; then
-        # Get serie network
-        networkNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
-        if [[ $networkNumber -gt 0 ]]; then
+      # Get serie network
+      networkNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
+      if [[ $networkNumber -gt 0 ]]; then
+        echo "\"network\":{" >> ./assets/js/data.json
+
+        for networkNumberIndex in $( eval echo {1..$networkNumber} )
+        do
+          networkName=$(cat temp9 | grep -A1 "https://www.betaseries.com/link" | grep "alt" | cut -d'"' -f4 | head -$networkNumberIndex | tail -1)
+          if [[ -z $networkName ]]; then
+            networkName=$(cat temp9 | grep "https://www.betaseries.com/link" | cut -d'>' -f2 | cut -d'<' -f1 | head -$networkNumberIndex | tail -1)
+            echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp2.txt
+          else
+            echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp.txt
+          fi
+          echo "\"id$networkNumberIndex\": \"$networkName\"," >> ./assets/js/data.json
+        done
+
+        echo "}," >> ./assets/js/data.json
+      else
+        networkNumber=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
+        if [[ $networkNumber -eq 0 ]]; then
+          curl -s https://www.allocine.fr/series/ficheserie-$serieId/diffusion-tv/ > temp9
+          networkNumber=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6 | wc -l | awk '{print $1}')
+          if [[ $networkNumber -gt 0 ]]; then
+            networkName=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6)
+
+            echo "\"network\":{" >> ./assets/js/data.json
+
+            echo "\"id1\": \"$networkName\"," >> ./assets/js/data.json
+            echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp2.txt
+
+            echo "}," >> ./assets/js/data.json
+          fi
+        elif [[ $networkNumber -gt 0 ]]; then
           echo "\"network\":{" >> ./assets/js/data.json
 
-          for networkNumberIndex in $( eval echo {1..$networkNumber} )
-          do
-            networkName=$(cat temp9 | grep -A1 "https://www.betaseries.com/link" | grep "alt" | cut -d'"' -f4 | head -$networkNumberIndex | tail -1)
-            if [[ -z $networkName ]]; then
-              networkName=$(cat temp9 | grep "https://www.betaseries.com/link" | cut -d'>' -f2 | cut -d'<' -f1 | head -$networkNumberIndex | tail -1)
-              echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp2.txt
-            else
-              echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp.txt
-            fi
-            echo "\"id$networkNumberIndex\": \"$networkName\"," >> ./assets/js/data.json
-          done
+          networkName=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | head -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+          echo "\"id1\": \"$networkName\"," >> ./assets/js/data.json
+          echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp.txt
 
           echo "}," >> ./assets/js/data.json
         fi
+      fi
 
-        # Get serie network url
-        networkUrlNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
-        if [[ $networkUrlNumber -gt 0 ]]; then
+      # Get serie network url
+      networkUrlNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
+      if [[ $networkUrlNumber -gt 0 ]]; then
+        echo "\"networkUrl\":{" >> ./assets/js/data.json
+
+        for networkUrlNumberIndex in $( eval echo {1..$networkUrlNumber} )
+        do
+          networkUrl=$(cat temp9 | grep "https://www.betaseries.com/link" | cut -d'"' -f2 | head -$networkUrlNumberIndex | tail -1)
+          echo "\"id$networkUrlNumberIndex\": \"$networkUrl\"," >> ./assets/js/data.json
+        done
+
+        echo "}," >> ./assets/js/data.json
+      else
+        networkNumber=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
+        if [[ $networkNumber -eq 0 ]]; then
+          curl -s https://www.allocine.fr/series/ficheserie-$serieId/diffusion-tv/ > temp9
+          networkNumber=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6 | wc -l | awk '{print $1}')
+          if [[ $networkNumber -gt 0 ]]; then
+            echo "\"networkUrl\":{" >> ./assets/js/data.json
+
+            networkUrl="https://www.allocine.fr/jump/#data-affiliation-type=svod&data-provider=$networkName&data-entity-type=Series&data-entity-id=$serieId"
+            echo "\"id1\": \"$networkUrl\"," >> ./assets/js/data.json
+
+            echo "}," >> ./assets/js/data.json
+          fi
+        elif [[ $networkNumber -gt 0 ]]; then
           echo "\"networkUrl\":{" >> ./assets/js/data.json
 
-          for networkUrlNumberIndex in $( eval echo {1..$networkUrlNumber} )
-          do
-            networkUrl=$(cat temp9 | grep "https://www.betaseries.com/link" | cut -d'"' -f2 | head -$networkUrlNumberIndex | tail -1)
-            echo "\"id$networkUrlNumberIndex\": \"$networkUrl\"," >> ./assets/js/data.json
-          done
+          networkUrl="https://www.allocine.fr/jump/#data-affiliation-type=svod&data-provider=$networkName&data-entity-type=Series&data-entity-id=$serieId"
+          echo "\"id1\": \"$networkUrl\"," >> ./assets/js/data.json
 
           echo "}," >> ./assets/js/data.json
         fi

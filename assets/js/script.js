@@ -8,6 +8,7 @@ var DOMLoaded = function() {
     var networkArray = Array.from(document.querySelectorAll('.nav-item.networkButton:not(.mainToggleNetwork)'));
     var nationalityArray = Array.from(document.querySelectorAll('.nav-item.nationalityButton:not(.mainToggleNationality)'));
     var durationArray = Array.from(document.querySelectorAll('.nav-item.durationButton:not(.mainToggleDuration)'));
+    var starsArray = Array.from(document.querySelectorAll('.nav-item.starsButton:not(.mainToggleStars)'));
 
     var gridContainerElement = document.querySelector('#grid');
 
@@ -15,11 +16,13 @@ var DOMLoaded = function() {
     var networkInput = document.querySelector('.nav-item.mainToggleNetwork');
     var nationalityInput = document.querySelector('.nav-item.mainToggleNationality');
     var durationInput = document.querySelector('.nav-item.mainToggleDuration');
+    var starsInput = document.querySelector('.nav-item.mainToggleStars');
 
     var criticToggle0 = document.querySelector('#criticToggle0').parentNode.parentNode;
     var networkButton0 = document.querySelector('#networkButton0').parentNode.parentNode;
     var nationalityButton0 = document.querySelector('#nationalityButton0').parentNode.parentNode;
     var durationButton0 = document.querySelector('#durationButton0').parentNode.parentNode;
+    var starsButton0 = document.querySelector('#starsButton0').parentNode.parentNode;
 
     var userRatingLi = document.querySelector('.nav-item.userRating');
     var imdbUserRatingLi = document.querySelector('.nav-item.imdbUserRating');
@@ -29,6 +32,7 @@ var DOMLoaded = function() {
     var networkLi = document.querySelector('.networkPreferences');
     var nationalityLi = document.querySelector('.nationalityPreferences');
     var durationLi = document.querySelector('.durationPreferences');
+    var starsLi = document.querySelector('.starsPreferences');
 
     var tglDarkmode = document.querySelector('.tgl-darkmode');
 
@@ -38,11 +42,13 @@ var DOMLoaded = function() {
     var networkNumberBool = false;
     var nationalityNumberBool = false;
     var durationNumberBool = false;
+    var starsNumberBool = false;
 
     var localbuttonCriticNameNumber = 0;
     var localbuttonNetworkNameNumber = 0;
     var localbuttonNationalityNameNumber = 0;
     var localbuttonDurationNameNumber = 0;
+    var localbuttonStarsNameNumber = 0;
 
     const options = {
         time: '0.5s',
@@ -79,7 +85,8 @@ var DOMLoaded = function() {
                 genreArray: [],
                 networkArray: ['No network'],
                 nationalityArray: ['No nationality'],
-                durationArray: ['No duration']
+                durationArray: ['No duration'],
+                starsArray: ['No stars']
             };
 
             var mode = localStorage.getItem('yqcs_mode.' + 'mode');
@@ -107,6 +114,7 @@ var DOMLoaded = function() {
             menuNetworkOnLoad();
             menuNationalityOnLoad();
             menuDurationOnLoad();
+            menuStarsOnLoad();
             ratingInfoDetails();
             reset();
             searchShortcut();
@@ -421,6 +429,7 @@ var DOMLoaded = function() {
 
         ratingTemp = ratingTemp || 0;
         ratingToFixed = ratingTemp.toFixed(2);
+        ratingToFixedOne = parseInt(ratingToFixed, 10);
         rating = ratingToFixed.replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') + '<span>/5</span>';
 
         if (titleTemp.length > 15) {
@@ -488,7 +497,7 @@ var DOMLoaded = function() {
 
         /* beautify ignore:start */
         return [
-            '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-network-url="' + networkUrl + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-critic="' + ratingToFixed + '" data-seasons-critic="' + seasonsCriticArray +  '" data-seasons-critic-details="' + seasonsCriticDetailsArray + '" data-popularity="' + serieId + '" data-creationdate="' + creationDate + '" data-serieTrailerId="' + serieTrailerId + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
+            '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-network-url="' + networkUrl + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-stars="' + ratingToFixedOne + '" data-critic="' + ratingToFixed + '" data-seasons-critic="' + seasonsCriticArray +  '" data-seasons-critic-details="' + seasonsCriticDetailsArray + '" data-popularity="' + serieId + '" data-creationdate="' + creationDate + '" data-serieTrailerId="' + serieTrailerId + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
                 '<div class="picture-item__inner">',
                     '<div class="aspect aspect--16x9">',
                         '<div class="aspect__inner">',
@@ -779,7 +788,8 @@ var DOMLoaded = function() {
         return string
             .replace(/\s+/g, '')
             .replace('\'', '')
-            .replace('?', '');
+            .replace('?', '')
+            .replace(',', '');
     }
 
     // Display retrieved data in grid div
@@ -1104,6 +1114,7 @@ var DOMLoaded = function() {
         var networkArray = filters.networkArray;
         var nationalityArray = filters.nationalityArray;
         var durationArray = filters.durationArray;
+        var starsArray = filters.starsArray;
         var option = element.getAttribute('data-date-formatted');
         var optionNew = option.split(',');
         var button = element.getAttribute('data-genre');
@@ -1114,6 +1125,8 @@ var DOMLoaded = function() {
         var nationalityNew = nationality.split(',');
         var duration = element.getAttribute('data-duration');
         var durationNew = duration.split(',');
+        var stars = element.getAttribute('data-stars');
+        var starsNew = stars.split(',');
 
         if (periodArray.length > 0 && !periodArray.some(r => optionNew.includes(r))) {
             return false;
@@ -1132,6 +1145,10 @@ var DOMLoaded = function() {
         }
 
         if (durationArray.length > 0 && !durationArray.some(r => durationNew.includes(r))) {
+            return false;
+        }
+
+        if (starsArray.length > 0 && !starsArray.some(r => starsNew.includes(r))) {
             return false;
         }
 
@@ -1415,6 +1432,7 @@ var DOMLoaded = function() {
         var tglNetworkArray = Array.from(document.querySelectorAll('.nav-item.mainToggleNetwork'));
         var tglNationalityArray = Array.from(document.querySelectorAll('.nav-item.mainToggleNationality'));
         var tglDurationArray = Array.from(document.querySelectorAll('.nav-item.mainToggleDuration'));
+        var tglStarsArray = Array.from(document.querySelectorAll('.nav-item.mainToggleStars'));
 
         tglCriticArray.forEach(function(toggle) {
             toggle.children[0].children[0].addEventListener('click', toggleLocalData.bind(this), false);
@@ -1431,12 +1449,18 @@ var DOMLoaded = function() {
         tglDurationArray.forEach(function(toggle) {
             toggle.children[0].children[0].addEventListener('click', toggleLocalData.bind(this), false);
         });
+
+        tglStarsArray.forEach(function(toggle) {
+            toggle.children[0].children[0].addEventListener('click', toggleLocalData.bind(this), false);
+        });
     }
 
     // Set yqcs_localStorage toggles
     function toggleLocalData(item) {
         var classListName = item.currentTarget.parentNode.parentNode.classList[1];
         var classListNameActive = localStorage.getItem('yqcs_critic.' + classListName);
+        var getItemType = classListName.replace('mainToggle', '').toLowerCase();
+        var classListNameActive2 = localStorage.getItem('yqcs_' + getItemType + '.' + classListName);
 
         if (classListName == 'criticAllocine' ||
             classListName == 'usersAllocine' ||
@@ -1445,42 +1469,86 @@ var DOMLoaded = function() {
             localStorage.setItem('yqcs_menu.' + 'menuBool', true);
         }
 
-        if (classListNameActive == 'true') {
-            if (classListName == 'criticAllocine') {
+        if (classListName == 'criticAllocine') {
+            if (classListNameActive == 'true') {
                 item.currentTarget.innerHTML = 'Tout sélectionner<span><input id="criticToggle0" type="checkbox"><label for="criticToggle0"></label></span>';
-            } else if (classListName == 'mainToggleNetwork') {
-                item.currentTarget.innerHTML = 'Tout sélectionner<span><input id="networkButton0" type="checkbox"><label for="networkButton0"></label></span>';
-            } else if (classListName == 'mainToggleNationality') {
-                item.currentTarget.innerHTML = 'Tout sélectionner<span><input id="nationalityButton0" type="checkbox"><label for="nationalityButton0"></label></span>';
-            } else if (classListName == 'mainToggleDuration') {
-                item.currentTarget.innerHTML = 'Tout sélectionner<span><input id="durationButton0" type="checkbox"><label for="durationButton0"></label></span>';
-            } else if (classListName == 'usersAllocine') {
-                userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber criticNumberZero">0</span>';
-            } else if (classListName == 'usersImdb') {
-                imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber criticNumberZero">0</span>';
-            } else if (classListName == 'usersBetaseries') {
-                betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber criticNumberZero">0</span>';
-            }
-            item.currentTarget.children[0].children[0].removeAttribute('checked');
-            localStorage.setItem('yqcs_critic.' + classListName, 'false');
-        } else {
-            if (classListName == 'criticAllocine') {
+                item.currentTarget.children[0].children[0].removeAttribute('checked');
+                localStorage.setItem('yqcs_critic.' + classListName, 'false');
+            } else {
                 item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="criticToggle0" type="checkbox"><label for="criticToggle0"></label></span>';
-            } else if (classListName == 'mainToggleNetwork') {
-                item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="networkButton0" type="checkbox"><label for="networkButton0"></label></span>';
-            } else if (classListName == 'mainToggleNationality') {
-                item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="nationalityButton0" type="checkbox"><label for="nationalityButton0"></label></span>';
-            } else if (classListName == 'mainToggleDuration') {
-                item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="durationButton0" type="checkbox"><label for="durationButton0"></label></span>';
-            } else if (classListName == 'usersAllocine') {
-                userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber">1</span>';
-            } else if (classListName == 'usersImdb') {
-                imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
-            } else if (classListName == 'usersBetaseries') {
-                betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber">1</span>';
+                item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
+                localStorage.setItem('yqcs_critic.' + classListName, 'true')
             }
-            item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-            localStorage.setItem('yqcs_critic.' + classListName, 'true');
+        } else if (classListName == 'usersAllocine') {
+            if (classListNameActive == 'true') {
+                userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber criticNumberZero">0</span>';
+                item.currentTarget.children[0].children[0].removeAttribute('checked');
+                localStorage.setItem('yqcs_critic.' + classListName, 'false');
+            } else {
+                userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber">1</span>';
+                item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
+                localStorage.setItem('yqcs_critic.' + classListName, 'true')
+            }
+        } else if (classListName == 'usersImdb') {
+            if (classListNameActive == 'true') {
+                imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber criticNumberZero">0</span>';
+                item.currentTarget.children[0].children[0].removeAttribute('checked');
+                localStorage.setItem('yqcs_critic.' + classListName, 'false');
+            } else {
+                imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
+                item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
+                localStorage.setItem('yqcs_critic.' + classListName, 'true')
+            }
+        } else if (classListName == 'usersBetaseries') {
+            if (classListNameActive == 'true') {
+                betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber criticNumberZero">0</span>';
+                item.currentTarget.children[0].children[0].removeAttribute('checked');
+                localStorage.setItem('yqcs_critic.' + classListName, 'false');
+            } else {
+                betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber">1</span>';
+                item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
+                localStorage.setItem('yqcs_critic.' + classListName, 'true')
+            }
+        } else if (classListName == 'mainToggleNetwork') {
+            if (classListNameActive2 == 'true') {
+                item.currentTarget.innerHTML = 'Tout sélectionner<span><input id="networkButton0" type="checkbox"><label for="networkButton0"></label></span>';
+                item.currentTarget.children[0].children[0].removeAttribute('checked');
+                localStorage.setItem('yqcs_' + getItemType + '.' + classListName, 'false');
+            } else {
+                item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="networkButton0" type="checkbox"><label for="networkButton0"></label></span>';
+                item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
+                localStorage.setItem('yqcs_' + getItemType + '.' + classListName, 'true');
+            }
+        } else if (classListName == 'mainToggleNationality') {
+            if (classListNameActive2 == 'true') {
+                item.currentTarget.innerHTML = 'Tout sélectionner<span><input id="nationalityButton0" type="checkbox"><label for="nationalityButton0"></label></span>';
+                item.currentTarget.children[0].children[0].removeAttribute('checked');
+                localStorage.setItem('yqcs_' + getItemType + '.' + classListName, 'false');
+            } else {
+                item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="nationalityButton0" type="checkbox"><label for="nationalityButton0"></label></span>';
+                item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
+                localStorage.setItem('yqcs_' + getItemType + '.' + classListName, 'true');
+            }
+        } else if (classListName == 'mainToggleDuration') {
+            if (classListNameActive2 == 'true') {
+                item.currentTarget.innerHTML = 'Tout sélectionner<span><input id="durationButton0" type="checkbox"><label for="durationButton0"></label></span>';
+                item.currentTarget.children[0].children[0].removeAttribute('checked');
+                localStorage.setItem('yqcs_' + getItemType + '.' + classListName, 'false');
+            } else {
+                item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="durationButton0" type="checkbox"><label for="durationButton0"></label></span>';
+                item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
+                localStorage.setItem('yqcs_' + getItemType + '.' + classListName, 'true');
+            }
+        } else if (classListName == 'mainToggleStars') {
+            if (classListNameActive2 == 'true') {
+                item.currentTarget.innerHTML = 'Tout sélectionner<span><input id="starsButton0" type="checkbox"><label for="starsButton0"></label></span>';
+                item.currentTarget.children[0].children[0].removeAttribute('checked');
+                localStorage.setItem('yqcs_' + getItemType + '.' + classListName, 'false');
+            } else {
+                item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="starsButton0" type="checkbox"><label for="starsButton0"></label></span>';
+                item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
+                localStorage.setItem('yqcs_' + getItemType + '.' + classListName, 'true');
+            }
         }
     }
 
@@ -1704,6 +1772,70 @@ var DOMLoaded = function() {
         }
     }
 
+    // Set or unset active ratings on load
+    function menuStarsOnLoad() {
+        starsArray.forEach(function(stars) {
+            stars.children[0].children[0].addEventListener('click', setLocalStorageStars.bind(this), false);
+
+            var buttonStarsName = stars.children[0].children[0].parentNode.parentNode.classList[2].replace('datanumber', '');
+            var localbuttonStarsName = localStorage.getItem('yqcs_stars.' + buttonStarsName);
+
+            if (localbuttonStarsName == 'true' || localbuttonStarsName == null) {
+                starsNumberBool = true;
+                localbuttonStarsNameNumber++;
+                if (localbuttonStarsName == null) {
+                    localStorage.setItem('yqcs_stars.' + buttonStarsName, 'true');
+                }
+
+                filters.starsArray.push(buttonStarsName);
+
+                filter();
+            } else if (localbuttonStarsName == 'false') {
+                stars.children[0].children[0].children[5].children[0].removeAttribute('checked');
+            }
+        });
+
+        if (localbuttonStarsNameNumber > 0) {
+            starsLi.children[1].children[0].innerHTML = '<i class="fas fa-star fa-lg"></i> Notes<span class="criticNumber">' + localbuttonStarsNameNumber + '</span>';
+        } else {
+            starsLi.children[1].children[0].innerHTML = '<i class="fas fa-star fa-lg"></i> Notes<span class="criticNumber criticNumberZero">0</span>';
+        }
+
+        if (starsNumberBool) {
+            localStorage.setItem('yqcs_stars.' + 'mainToggleStars', 'true');
+            starsInput.children[0].children[0].innerHTML = 'Tout désélectionner<span><input id="starsButton0" type="checkbox" checked="checked"><label for="starsButton0"></label></span>';
+        } else {
+            localStorage.setItem('yqcs_stars.' + 'mainToggleStars', 'false');
+            starsInput.children[0].children[0].innerHTML = 'Tout sélectionner<span><input id="starsButton0" type="checkbox"><label for="starsButton0"></label></span>';
+        }
+    }
+
+    // Set yqcs_localStorage for each ratings button
+    function setLocalStorageStars(evt) {
+        var buttonStarsName = evt.currentTarget.parentNode.parentNode.classList[2].replace('datanumber', '');
+        var isActive = evt.currentTarget.children[5].children[0].getAttribute('checked');
+
+        if (isActive == 'checked') {
+            filters.starsArray.splice(filters.starsArray.indexOf(buttonStarsName), 1);
+            evt.currentTarget.children[5].children[0].removeAttribute('checked');
+            localStorage.setItem('yqcs_stars.' + buttonStarsName, 'false');
+            localbuttonStarsNameNumber--;
+        } else {
+            filters.starsArray.push(buttonStarsName);
+            evt.currentTarget.children[5].children[0].setAttribute('checked', 'checked');
+            localStorage.setItem('yqcs_stars.' + buttonStarsName, 'true');
+            localbuttonStarsNameNumber++;
+        }
+
+        filter();
+
+        if (localbuttonStarsNameNumber > 0) {
+            starsLi.children[1].children[0].innerHTML = '<i class="fas fa-star fa-lg"></i> Notes<span class="criticNumber">' + localbuttonStarsNameNumber + '</span>';
+        } else {
+            starsLi.children[1].children[0].innerHTML = '<i class="fas fa-star fa-lg"></i> Notes<span class="criticNumber criticNumberZero">0</span>';
+        }
+    }
+
     // Return params values
     function paramsURL(param) {
         return params.get(param);
@@ -1796,6 +1928,7 @@ var DOMLoaded = function() {
         var networkNumber = document.querySelectorAll('.nav-item.networkButton:not(.mainToggleNetwork)').length;
         var nationalityNumber = document.querySelectorAll('.nav-item.nationalityButton:not(.mainToggleNationality)').length;
         var durationNumber = document.querySelectorAll('.nav-item.durationButton:not(.mainToggleDuration)').length;
+        var starsNumber = document.querySelectorAll('.nav-item.starsButton:not(.mainToggleStars)').length;
 
         criticToggle0.addEventListener('click', function() {
             localStorage.setItem('yqcs_menu.' + 'menuBool', true);
@@ -1904,6 +2037,34 @@ var DOMLoaded = function() {
                 durationNumberBool = false;
             } else {
                 durationNumberBool = true;
+            }
+        }, false);
+
+        starsButton0.addEventListener('click', function() {
+            starsArray.forEach(function(stars) {
+                var starsButtonName = stars.classList[2].replace('datanumber', '');
+
+                if (starsNumberBool) {
+                    stars.children[0].children[0].children[5].children[0].removeAttribute('checked');
+                    localStorage.setItem('yqcs_stars.' + starsButtonName, 'false');
+                    localbuttonStarsNameNumber = 0;
+                    starsLi.children[1].children[0].innerHTML = '<i class="fas fa-star fa-lg"></i> Notes<span class="criticNumber criticNumberZero">0</span>';
+                    filters.starsArray = ['No stars'];
+                } else {
+                    stars.children[0].children[0].children[5].children[0].setAttribute('checked', 'checked');
+                    localStorage.setItem('yqcs_stars.' + starsButtonName, 'true');
+                    localbuttonStarsNameNumber = starsNumber;
+                    starsLi.children[1].children[0].innerHTML = '<i class="fas fa-star fa-lg"></i> Notes<span class="criticNumber">' + localbuttonStarsNameNumber + '</span>';
+                    filters.starsArray.push(starsButtonName);
+                }
+            });
+
+            filter();
+
+            if (starsNumberBool) {
+                starsNumberBool = false;
+            } else {
+                starsNumberBool = true;
             }
         }, false);
     }
