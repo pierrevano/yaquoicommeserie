@@ -421,7 +421,7 @@ body.hc-nav-open {
 }
 
 .hc-offcanvas-nav .nav-wrapper-0>.nav-content>ul:not(:last-child) {
-    margin-bottom: 18px
+    margin-bottom: 43px
 }
 
 .hc-offcanvas-nav li {
@@ -458,6 +458,10 @@ body.hc-nav-open {
     cursor: pointer;
     border-radius: 5px;
     transition: background .2s ease
+}
+
+.hc-offcanvas-nav .nav-close {
+    position: relative;
 }
 
 .hc-offcanvas-nav .nav-close-button {
@@ -546,7 +550,7 @@ body.hc-nav-open {
     width: 40px;
     height: 40px;
     line-height: 40px;
-    top: 25px;
+    top: -72px;
     right: 15px
 }
 

@@ -76,17 +76,17 @@ li a:visited {
     font-size: 1.7em;
 }
 
-.first-slide p {
+.slide-trailer p {
     margin: 0.6em 0;
 }
 
-.first-slide p.slide-unavailable,
-.second-slide p.second-slide-unavailable,
-.third-slide p.slide-unavailable {
+.slide-trailer p.slide-unavailable,
+.slide-network-links p.slide-network-links-unavailable,
+.slide-seasons-critic p.slide-unavailable {
     margin: 0.6em 22%;
 }
 
-.first-slide div {
+.slide-trailer div {
     position: relative;
     margin: -10px auto 20px;
     padding-top: 41.1%;
@@ -111,23 +111,54 @@ iframe {
     vertical-align: middle !important;
 }
 
-.second-slide div {
+.slide-network-links div {
     width: 180px;
     border: 1px solid var(--dark-color);
     border-radius: 7px;
     margin-bottom: 10px;
 }
 
-.second-slide div:hover {
+.slide-network-links div:hover {
     background: rgba(var(--green-rgba-color), .25);
 }
 
-.second-slide img {
+.slide-network-links img {
     height: 45px;
     padding: 10px;
 }
 
+.slide-critics-recap div {
+    text-align: center;
+}
+
+.slide-critics-recap p {
+    margin-bottom: 15px;
+    font-size: 1.5em !important;
+}
+
+.slide-critics-recap ul {
+    display: inline-block;
+    text-align: left;
+    list-style: none;
+    margin-bottom: 30px;
+    margin-left: 30px;
+}
+
+.slide-critics-recap li {
+    display: block;
+}
+
+.slide-critics-recap .far,
+.slide-critics-recap .fas {
+    color: var(--green-color);
+}
+
 .tns-controls:focus {
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(var(--green-rgba-color), 0);
+}
+
+.tns-controls button:focus {
     outline: 0;
     box-shadow: 0 0 0 3px rgba(var(--green-rgba-color), .25);
 }
@@ -294,6 +325,10 @@ iframe {
 }
 
 .swal2-title {
+    color: var(--dark-color) !important;
+}
+
+.swal2-content {
     color: var(--dark-color) !important;
 }
 
@@ -572,7 +607,7 @@ strong {
 }
 
 @media screen and (orientation: portrait) and (max-width: 1013.97px) {
-    .first-slide div {
+    .slide-trailer div {
         padding-top: 56.3%;
         width: 100%;
     }
@@ -1005,7 +1040,7 @@ strong {
     color: var(--white-color);
 }
 
-.darkmode--activated .second-slide div {
+.darkmode--activated .slide-network-links div {
     border: 1px solid var(--white-color);
 }
 
@@ -1014,5 +1049,9 @@ strong {
 }
 
 .darkmode--activated .swal2-title {
+    color: var(--white-color) !important;
+}
+
+.darkmode--activated .swal2-content {
     color: var(--white-color) !important;
 }

@@ -51,9 +51,9 @@ var DOMLoaded = function() {
     var localbuttonStarsNameNumber = 0;
 
     const options = {
-        time: '0.5s',
         mixColor: '#FFFFFF',
-        backgroundColor: '#EDEDED'
+        backgroundColor: '#EDEDED',
+        autoMatchOsTheme: false
     };
 
     const darkmode = new Darkmode(options);
@@ -208,6 +208,34 @@ var DOMLoaded = function() {
             imdbRating = dataForSingleItem.imdbData.imdbRating,
             divisionNumber = 0,
             genre, title, rating;
+
+        var floatCriticNames = Object.keys(criticNames).reduce(function(obj, key) {
+            var value = criticNames[key];
+            obj[key] = isNumeric(value) ? Number(value) : value;
+
+            return obj;
+        }, {});
+        var criticNamesNew = Object.fromEntries(
+            Object.entries(floatCriticNames).sort(([, a], [, b]) => b - a)
+        );
+        var criticNamesKeysTemp = '';
+        var criticNamesValuesTemp = '';
+        for (var key in criticNamesNew) criticNamesKeysTemp += key + ',';
+        for (key in criticNamesNew) criticNamesValuesTemp += criticNamesNew[key] + ',';
+        if (user != '') {
+            criticNamesKeysTemp += 'Note AlloCiné,';
+            criticNamesValuesTemp += user + ',';
+        }
+        if (betaseriesRatingTemp != '') {
+            criticNamesKeysTemp += 'Note BetaSeries,';
+            criticNamesValuesTemp += betaseriesRatingTemp.replace(',', '.') + ',';
+        }
+        if (imdbRating != '') {
+            criticNamesKeysTemp += 'Note IMDb,';
+            criticNamesValuesTemp += imdbRating + ',';
+        }
+        var criticNamesKeys = criticNamesKeysTemp.replace(/,\s*$/, '');
+        var criticNamesValues = criticNamesValuesTemp.replace(/,\s*$/, '');
 
         var seasonsCriticValue = '';
         var seasonsCriticDetails = '';
@@ -497,7 +525,7 @@ var DOMLoaded = function() {
 
         /* beautify ignore:start */
         return [
-            '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-network-url="' + networkUrl + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-stars="' + ratingToFixedOne + '" data-critic="' + ratingToFixed + '" data-seasons-critic="' + seasonsCriticArray +  '" data-seasons-critic-details="' + seasonsCriticDetailsArray + '" data-popularity="' + serieId + '" data-creationdate="' + creationDate + '" data-serieTrailerId="' + serieTrailerId + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
+            '<figure class="col-3@xs col-4@sm col-3@md picture-item shuffle-item shuffle-item--visible" data-genre="' + genre + '" data-network="' + network + '" data-network-url="' + networkUrl + '" data-nationality="' + nationality + '" data-duration="' + duration + '" data-date-formatted="' + dateFormattedFilter + '" data-stars="' + ratingToFixedOne + '" data-critic="' + ratingToFixed + '" data-seasons-critic="' + seasonsCriticArray +  '" data-seasons-critic-details="' + seasonsCriticDetailsArray + '" data-critic-keys="' + criticNamesKeys + '" data-critic-values="' + criticNamesValues + '" data-popularity="' + serieId + '" data-creationdate="' + creationDate + '" data-serieTrailerId="' + serieTrailerId + '" style="position: absolute; top: 0px; left: 0px; visibility: visible; will-change: transform; opacity: 1; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-property: transform, opacity;">',
                 '<div class="picture-item__inner">',
                     '<div class="aspect aspect--16x9">',
                         '<div class="aspect__inner">',
@@ -528,6 +556,11 @@ var DOMLoaded = function() {
             '</figure>'
         ].join('');
         /* beautify ignore:end */
+    }
+
+    // Check if number and parse to float
+    function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
     // Return seasons critic values
@@ -1174,6 +1207,11 @@ var DOMLoaded = function() {
 
     // Add click listener
     function darkmodePref() {
+        var darkmodeActive = localStorage.getItem('darkmode');
+        if (darkmodeActive == null) {
+            darkmode.toggle();
+        }
+
         tglDarkmode.addEventListener('click', toggleDarkmode, false);
     }
 
@@ -1211,8 +1249,8 @@ var DOMLoaded = function() {
                 var seasonsCriticAttr = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-seasons-critic');
                 var seasonsCriticDetailsAttr = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-seasons-critic-details');
                 if (seasonsCriticAttr != '') {
-                    document.querySelector('.third-slide .slide-unavailable').style.display = 'none';
-                    document.querySelector('.third-slide .slide-available').style.display = 'block';
+                    document.querySelector('.slide-seasons-critic .slide-unavailable').style.display = 'none';
+                    document.querySelector('.slide-seasons-critic .slide-available').style.display = 'block';
 
                     var seasonsCriticData = seasonsCriticAttr.split(',');
                     var seasonsCriticDataDetails = seasonsCriticDetailsAttr.split(',');
@@ -1227,8 +1265,8 @@ var DOMLoaded = function() {
                     }
                     chartJSGraph(seasonsCriticData, seasonsCriticDataDetails, seasonsCriticLabels);
                 } else {
-                    document.querySelector('.third-slide .slide-unavailable').style.display = 'block';
-                    document.querySelector('.third-slide .slide-available').style.display = 'none';
+                    document.querySelector('.slide-seasons-critic .slide-unavailable').style.display = 'block';
+                    document.querySelector('.slide-seasons-critic .slide-available').style.display = 'none';
                 }
 
                 var serietrailerid = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-serietrailerid');
@@ -1236,6 +1274,10 @@ var DOMLoaded = function() {
                 var networkNew = network.split(',');
                 var networkUrl = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-network-url');
                 var networkUrlNew = networkUrl.split(',');
+                var criticKeys = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-critic-keys');
+                var criticKeysNew = criticKeys.split(',');
+                var criticValues = link.parentNode.parentNode.parentNode.parentNode.getAttribute('data-critic-values');
+                var criticValuesNew = criticValues.split(',');
 
                 document.querySelector('iframe').src = 'https://player.allocine.fr/' + serietrailerid + '.html';
 
@@ -1254,19 +1296,57 @@ var DOMLoaded = function() {
                     htmlTag = '<p>Disponible sur</p>';
                     for (var htmlTagIndex = 0; htmlTagIndex < networkNew.length; htmlTagIndex++) {
                         if (networkUrlNew[htmlTagIndex] == 'Non renseignée') {
-                            document.querySelector('.second-slide').style.display = '';
-                            htmlTag = '<p class="second-slide-unavailable">Plateforme non renseignée <i>(pour l\'instant)</i></p>';
+                            document.querySelector('.slide-network-links').style.display = '';
+                            htmlTag = '<p class="slide-network-links-unavailable">Plateforme non renseignée <i>(pour l\'instant)</i></p>';
                         } else {
-                            document.querySelector('.second-slide').style.display = 'inline-grid';
+                            document.querySelector('.slide-network-links').style.display = 'inline-grid';
                             htmlTag += '<div><a href="' + networkUrlNew[htmlTagIndex] + '" target="_blank"><img src="assets/logo/' + normalizeStr(networkNew[htmlTagIndex]) + '.png" alt="' + normalizeStr(networkNew[htmlTagIndex]) + '"></a></div>';
                         }
                     }
                 } else {
-                    document.querySelector('.second-slide').style.display = '';
-                    htmlTag = '<p class="second-slide-unavailable">Plateforme non renseignée <i>(pour l\'instant)</i></p>';
+                    document.querySelector('.slide-network-links').style.display = '';
+                    htmlTag = '<p class="slide-network-links-unavailable">Plateforme non renseignée <i>(pour l\'instant)</i></p>';
                 }
 
-                document.querySelector('.second-slide').innerHTML = htmlTag;
+                document.querySelector('.slide-network-links').innerHTML = htmlTag;
+
+                var htmlTagCriticRecap = '<ul>';
+
+                if (criticKeysNew != '' &&
+                    criticKeysNew[0] != 'Note AlloCiné' &&
+                    criticKeysNew[0] != 'Note BetaSeries' &&
+                    criticKeysNew[0] != 'Note IMDb') {
+                    htmlTagCriticRecap += '<p>Notes de la presse : </p>';
+                    for (var htmlTagCriticRecapIndex = 0; htmlTagCriticRecapIndex < criticKeysNew.length; htmlTagCriticRecapIndex++) {
+                        if (criticKeysNew[htmlTagCriticRecapIndex] != 'Note AlloCiné' &&
+                            criticKeysNew[htmlTagCriticRecapIndex] != 'Note BetaSeries' &&
+                            criticKeysNew[htmlTagCriticRecapIndex] != 'Note IMDb') {
+                            htmlTagCriticRecap += '<li>' + convertNumberToStars(parseFloat(criticValuesNew[htmlTagCriticRecapIndex])) + ' ' + criticKeysNew[htmlTagCriticRecapIndex] + '</li>';
+                        }
+                    }
+                }
+
+                if (criticKeysNew.includes('Note AlloCiné') ||
+                    criticKeysNew.includes('Note BetaSeries') ||
+                    criticKeysNew.includes('Note IMDb')) {
+                    htmlTagCriticRecap += '<p>Notes des utilisateurs : </p>';
+                }
+
+                if (criticKeysNew.includes('Note AlloCiné')) {
+                    htmlTagCriticRecap += '<li>' + convertNumberToStars(parseFloat(criticValuesNew[criticKeysNew.indexOf('Note AlloCiné')])) + ' (' + criticValuesNew[criticKeysNew.indexOf('Note AlloCiné')] + '/5) AlloCiné</li>';
+                }
+
+                if (criticKeysNew.includes('Note BetaSeries')) {
+                    htmlTagCriticRecap += '<li>' + convertNumberToStars(parseFloat(criticValuesNew[criticKeysNew.indexOf('Note BetaSeries')])) + ' (' + criticValuesNew[criticKeysNew.indexOf('Note BetaSeries')] + '/5) BetaSeries</li>';
+                }
+
+                if (criticKeysNew.includes('Note IMDb')) {
+                    htmlTagCriticRecap += '<li>' + convertNumberToStars(parseFloat(criticValuesNew[criticKeysNew.indexOf('Note IMDb')]) / 2) + ' (' + criticValuesNew[criticKeysNew.indexOf('Note IMDb')] + '/10) IMDb</li>';
+                }
+
+                htmlTagCriticRecap += '</ul>';
+
+                document.querySelector('.slide-critics-recap').innerHTML = htmlTagCriticRecap;
             }, false);
         });
 
@@ -1279,6 +1359,27 @@ var DOMLoaded = function() {
                 document.body.style.overflow = 'scroll';
             }
         });
+    }
+
+    // Convert rating number to font awesome stars
+    function convertNumberToStars(ratingTemp) {
+        if (ratingTemp % 1 != 0.5 && ratingTemp % 1 != 0) {
+            rating = Math.round(ratingTemp);
+        } else {
+            rating = ratingTemp;
+        }
+
+        var output = [];
+        for (let index = 1; index <= rating; index++) {
+            output.push('<i class="fas fa-star"></i>');
+        }
+        if (!Number.isInteger(rating)) {
+            output.push('<i class="fas fa-star-half-alt"></i>');
+        }
+        for (let index = 1; index <= (5 - rating); index++) {
+            output.push('<i class="far fa-star"></i>');
+        }
+        return output.join('');
     }
 
     // Draw seasons critic graph
