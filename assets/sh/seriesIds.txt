@@ -276,3 +276,4 @@
 /series/ficheserie_gen_cserie=10846.html,tt2188671,bates-motel
 /series/ficheserie_gen_cserie=23231.html,tt7879820,on-my-block
 /series/ficheserie_gen_cserie=22221.html,tt7008682,homecoming
+/series/ficheserie_gen_cserie=24677.html,tt9307990,lincoln-2019

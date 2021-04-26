@@ -930,7 +930,7 @@ var DOMLoaded = function() {
                     by: sortByPopularity,
                 };
 
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="popularity"> Popularité <i class="fas fa-arrow-up"></i>';
+                evt.target.parentNode.innerHTML = '<input id="defaultInputpopularity" type="radio" name="sort-value" value="popularity"> Popularité <i class="fas fa-arrow-up"></i>';
                 localStorage.setItem('yqcs_sort.' + 'popularity', 'false');
                 localStorage.removeItem('yqcs_sort.' + 'creationdate');
                 localStorage.removeItem('yqcs_sort.' + 'critic');
@@ -941,7 +941,7 @@ var DOMLoaded = function() {
                     by: sortByPopularity,
                 };
 
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="popularity"> Popularité <i class="fas fa-arrow-down"></i>';
+                evt.target.parentNode.innerHTML = '<input id="defaultInputpopularity" type="radio" name="sort-value" value="popularity"> Popularité <i class="fas fa-arrow-down"></i>';
                 localStorage.setItem('yqcs_sort.' + 'popularity', 'true');
                 localStorage.removeItem('yqcs_sort.' + 'creationdate');
                 localStorage.removeItem('yqcs_sort.' + 'critic');
@@ -956,7 +956,7 @@ var DOMLoaded = function() {
                     by: sortByCreationDate,
                 };
 
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="creationdate"> Date de création <i class="fas fa-arrow-up"></i>';
+                evt.target.parentNode.innerHTML = '<input id="defaultInputcreationdate" type="radio" name="sort-value" value="creationdate"> Date de création <i class="fas fa-arrow-up"></i>';
                 localStorage.setItem('yqcs_sort.' + 'creationdate', 'false');
                 localStorage.removeItem('yqcs_sort.' + 'popularity');
                 localStorage.removeItem('yqcs_sort.' + 'critic');
@@ -967,7 +967,7 @@ var DOMLoaded = function() {
                     by: sortByCreationDate,
                 };
 
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="creationdate"> Date de création <i class="fas fa-arrow-down"></i>';
+                evt.target.parentNode.innerHTML = '<input id="defaultInputcreationdate" type="radio" name="sort-value" value="creationdate"> Date de création <i class="fas fa-arrow-down"></i>';
                 localStorage.setItem('yqcs_sort.' + 'creationdate', 'true');
                 localStorage.removeItem('yqcs_sort.' + 'popularity');
                 localStorage.removeItem('yqcs_sort.' + 'critic');
@@ -982,7 +982,7 @@ var DOMLoaded = function() {
                     by: sortCritic,
                 };
 
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="critic"> Note <i class="fas fa-arrow-up"></i>';
+                evt.target.parentNode.innerHTML = '<input id="defaultInputcritic" type="radio" name="sort-value" value="critic"> Note <i class="fas fa-arrow-up"></i>';
                 localStorage.setItem('yqcs_sort.' + 'critic', 'false');
                 localStorage.removeItem('yqcs_sort.' + 'popularity');
                 localStorage.removeItem('yqcs_sort.' + 'creationdate');
@@ -993,7 +993,7 @@ var DOMLoaded = function() {
                     by: sortCritic,
                 };
 
-                evt.target.parentNode.innerHTML = '<input type="radio" name="sort-value" value="critic"> Note <i class="fas fa-arrow-down"></i>';
+                evt.target.parentNode.innerHTML = '<input id="defaultInputcritic" type="radio" name="sort-value" value="critic"> Note <i class="fas fa-arrow-down"></i>';
                 localStorage.setItem('yqcs_sort.' + 'critic', 'true');
                 localStorage.removeItem('yqcs_sort.' + 'popularity');
                 localStorage.removeItem('yqcs_sort.' + 'creationdate');
