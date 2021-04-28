@@ -144,6 +144,7 @@ do
 
       # Get serie title
       title=$(cat temp2 | grep -m1 "<meta property=\"og:title\" content=\"" | cut -d'"' -f4 | sed 's/&#039;/'"'"'/' | sed 's/[[:blank:]]*$//')
+      senscritiqueTitle=$title
       echo "\"title\": \"$title\"," >> ./assets/js/data.json
 
       # Get original title for IMDb
@@ -523,6 +524,52 @@ do
         betaseriesStatus=$(cat temp2 | grep "full label-status" | cut -d'>' -f2 | cut -d'<' -f1)
       fi
       echo "\"betaseriesStatus\": \"$betaseriesStatus\"," >> ./assets/js/data.json
+
+      # Add ending bracket
+      echo "}," >> ./assets/js/data.json
+
+      # Add Senscritique object
+      echo "\"senscritiqueData\":{" >> ./assets/js/data.json
+
+      senscritiqueFile="./assets/sh/seriesIds.txt"
+      while IFS= read -r senscritiqueLine <&3; do
+        allocineLineUrl=$(echo $senscritiqueLine | cut -d',' -f1)
+
+        if [[ $url == $allocineLineUrl ]]; then
+          senscritiqueId=$(echo $senscritiqueLine | cut -d',' -f4)
+          echo $senscritiqueId
+          if [[ $senscritiqueId == 'noSenscritiqueId' ]]; then
+            curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
+            echo "--------------------"
+            echo "senscritiqueId: $senscritiqueId"
+            senscritiqueFound=2
+            break
+          fi
+          curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
+          senscritiqueFound=1
+          break
+        else
+          senscritiqueFound=0
+        fi
+      done 3<$senscritiqueFile
+
+      echo $senscritiqueFound
+      if [[ $senscritiqueFound -eq 0 ]]; then
+        senscritiqueTitleURLEncoded=$(echo $senscritiqueTitle | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/url_escape.sed)
+        senscritiqueId=$(curl -s "https://www.senscritique.com/sc2/search/autocomplete.json?query=$senscritiqueTitleURLEncoded" \
+        -H 'x-requested-with: XMLHttpRequest' | jq '.json | .[].url' | grep -m1 "/serie/" | sed 's/https:\/\/www.senscritique.com\/serie\///' | sed 's/\"//g')
+
+        curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
+        senscritiqueYear=$(cat temp11 | grep "pvi-product-year" | cut -d '(' -f2 | cut -d ')' -f1)
+
+        if [[ $creationDate != $senscritiqueYear ]]; then
+          abord_script
+        fi
+      fi
+
+      # Get SensCritique rating number
+      senscritiqueRating=$(cat temp11 | grep "pvi-scrating-value" | cut -d'>' -f2 | cut -d'<' -f1)
+      echo "\"senscritiqueRating\": \"$senscritiqueRating\"," >> ./assets/js/data.json
 
       # Add ending bracket
       echo "}," >> ./assets/js/data.json
