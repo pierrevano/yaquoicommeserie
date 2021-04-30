@@ -5,3 +5,4 @@ deploytogithub.sh
 deploytogitlab2.sh
 package*.json
 commit.sh
+screenshot.js
