@@ -167,7 +167,7 @@ echo "]" >> ./assets/js/dataAPI.json
 cat ./assets/js/dataAPI.json \
 | tr '\n' ' ' \
 | sed 's/, },/},/g' \
-| sed 's/, } }] }/} }] }/g' \
+| sed 's/, } } }/} } }/g' \
 | sed 's/} } }, ]/} } } ]/g '> temp
 cat temp > ./assets/js/dataAPI.json
 
