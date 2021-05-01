@@ -537,11 +537,8 @@ do
 
         if [[ $url == $allocineLineUrl ]]; then
           senscritiqueId=$(echo $senscritiqueLine | cut -d',' -f4)
-          echo $senscritiqueId
           if [[ $senscritiqueId == 'noSenscritiqueId' ]]; then
             curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
-            echo "--------------------"
-            echo "senscritiqueId: $senscritiqueId"
             senscritiqueFound=2
             break
           fi
@@ -553,7 +550,6 @@ do
         fi
       done 3<$senscritiqueFile
 
-      echo $senscritiqueFound
       if [[ $senscritiqueFound -eq 0 ]]; then
         senscritiqueTitleURLEncoded=$(echo $senscritiqueTitle | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/url_escape.sed)
         senscritiqueId=$(curl -s "https://www.senscritique.com/sc2/search/autocomplete.json?query=$senscritiqueTitleURLEncoded" \
@@ -566,6 +562,10 @@ do
           abord_script
         fi
       fi
+
+      echo "--------------------"
+      echo "senscritiqueId: $senscritiqueId"
+      echo "Senscritique id OK"
 
       # Get SensCritique rating number
       senscritiqueRating=$(cat temp11 | grep "pvi-scrating-value" | cut -d'>' -f2 | cut -d'<' -f1)
@@ -797,7 +797,7 @@ do
           abord_script
         fi
 
-        echo "$url,$imdbId,$betaseriesId" >> assets/sh/seriesIds.txt
+        echo "$url,$imdbId,$betaseriesId,$senscritiqueId" >> assets/sh/seriesIds.txt
       fi
 
       echo "--------------------"
