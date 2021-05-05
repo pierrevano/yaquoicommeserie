@@ -419,7 +419,7 @@ do
                         echo "Betaseries id KO"
                         echo $id / "https://www.allocine.fr$url" ❌
 
-                        abord_script
+                        betaseriesId="noBetaseriesId"
                       fi
                     fi
                   fi
@@ -430,7 +430,9 @@ do
         fi
 
         # Get Betaseries url id
-        betaseriesId=$(cat temp9 | grep "og:url" | cut -d'/' -f5 | cut -d'"' -f1)
+        if [[ $betaseriesId != "noBetaseriesId" ]]; then
+          betaseriesId=$(cat temp9 | grep "og:url" | cut -d'/' -f5 | cut -d'"' -f1)
+        fi
       fi
 
       echo "--------------------"
@@ -559,7 +561,7 @@ do
         senscritiqueYear=$(cat temp11 | grep "pvi-product-year" | cut -d '(' -f2 | cut -d ')' -f1)
 
         if [[ $creationDate != $senscritiqueYear ]]; then
-          abord_script
+          senscritiqueId="noSenscritiqueId"
         fi
       fi
 
@@ -794,7 +796,7 @@ do
           echo "IMDb id KO"
           echo $id / "https://www.allocine.fr$url" ❌
 
-          abord_script
+          imdbId="noImdbId"
         fi
 
         echo "$url,$imdbId,$betaseriesId,$senscritiqueId" >> assets/sh/seriesIds.txt
