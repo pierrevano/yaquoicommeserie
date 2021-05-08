@@ -42,7 +42,7 @@
 /series/ficheserie_gen_cserie=24293.html,tt11537880,valide,Valide/37881383
 /series/ficheserie_gen_cserie=19475.html,tt6483832,the-resident,The_Resident/28720822
 /series/ficheserie_gen_cserie=7157.html,tt0944947,gameofthrones,Game_of_Thrones/225391
-/series/ficheserie_gen_cserie=4131.html,tt0473570,noBetaseriesId,noSenscritiqueId
+/series/ficheserie_gen_cserie=4131.html,tt0473570,film/21310-ange-de-feu,film/Ange_de_Feu/16838774
 /series/ficheserie_gen_cserie=23331.html,tt8883922,un-si-grand-soleil,Un_si_grand_soleil/36120884
 /series/ficheserie_gen_cserie=26156.html,tt12083014,zero-chill,Jamais_froid_aux_yeux/42202448
 /series/ficheserie_gen_cserie=21058.html,tt6111130,swat-2017,S_W_A_T/24746599
@@ -90,7 +90,7 @@
 /series/ficheserie_gen_cserie=23295.html,tt7817340,new-amsterdam-2018,New_Amsterdam/32954701
 /series/ficheserie_gen_cserie=28425.html,tt14057360,the-lost-pirate-kingdom,Dans_le_sillage_des_pirates/44331249
 /series/ficheserie_gen_cserie=10855.html,tt2085059,black-mirror,Black_Mirror/438579
-/series/ficheserie_gen_cserie=26774.html,tt12694468,noBetaseriesId,Carrement_craignos/44513627
+/series/ficheserie_gen_cserie=26774.html,tt12694468,craignos,Carrement_craignos/44513627
 /series/ficheserie_gen_cserie=22419.html,tt8682948,the-act,The_Act/30529870
 /series/ficheserie_gen_cserie=24721.html,tt1831804,the-stand-2020,Le_Fleau/38924941
 /series/ficheserie_gen_cserie=4318.html,tt1442449,spartacus,Spartacus/153651
@@ -369,3 +369,16 @@
 /series/ficheserie_gen_cserie=20141.html,tt5651032,ride-upon-the-storm,Au_nom_du_pere/25187869
 /series/ficheserie_gen_cserie=3905.html,tt1196946,thementalist,Mentalist/275206
 /series/ficheserie_gen_cserie=21083.html,tt6128300,dynasty-2017,Dynastie/28184559
+/series/ficheserie_gen_cserie=27798.html,tt13696152,lol-qui-rit-sort,LOL_Qui_rit_sort/44544323
+/series/ficheserie_gen_cserie=23853.html,tt5774002,jupiters-legacy,Jupiter_s_Legacy/35862734
+/series/ficheserie_gen_cserie=26101.html,tt13039896,plan-b-fr,Plan_B/44747705
+/series/ficheserie_gen_cserie=24172.html,tt9140554,marvels-loki,Loki/37416367
+/series/ficheserie_gen_cserie=24480.html,tt12809988,sweet-tooth,Sweet_Tooth/38765572
+/series/ficheserie_gen_cserie=24458.html,tt9319668,1899,1899/38765525
+/series/ficheserie_gen_cserie=22940.html,tt7631058,the-lord-of-the-rings,The_Lord_of_the_Rings/28468372
+/series/ficheserie_gen_cserie=21909.html,tt7562112,pose,Pose/32114878
+/series/ficheserie_gen_cserie=24631.html,tt9569546,halston,Halston/38842681
+/series/ficheserie_gen_cserie=18752.html,tt4370528,the-five,The_Five/19991493
+/series/ficheserie_gen_cserie=22663.html,tt8548922,keplers,Kepler_s/32058071
+/series/ficheserie_gen_cserie=778.html,tt0481984,film/60549-la-voie-de-laura,film/La_Voie_de_Laura/40582040
+/series/ficheserie_gen_cserie=28951.html,tt13156316,the-sons-of-sam-a-descent-into-darkness,Les_Fils_de_Sam_l_horreur_sans_fin/44692001

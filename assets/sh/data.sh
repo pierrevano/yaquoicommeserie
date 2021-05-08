@@ -337,13 +337,6 @@ do
 
         if [[ $url == $allocineLineUrl ]]; then
           betaseriesTitle=$(echo $seriesIdsLine | cut -d',' -f3)
-          if [[ $betaseriesTitle == 'noBetaseriesId' ]]; then
-            curl -s https://www.betaseries.com/serie/$betaseriesTitle > temp9
-            echo "--------------------"
-            echo "betaseriesTitle: $betaseriesTitle"
-            betaseriesFound=2
-            break
-          fi
           echo "\"betaseriesId\": \"$betaseriesTitle\"," >> ./assets/js/data.json
           curl -s https://www.betaseries.com/serie/$betaseriesTitle > temp9
           betaseriesFound=1
@@ -361,32 +354,40 @@ do
         echo "--------------------"
         echo "betaseriesTitle: $betaseriesTitle"
 
+        allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+        betaseriesShowrunner=$(cat temp9 | grep -A2 "Showrunner" | tail -1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
         betaseriesDate=$(cat temp9 | grep -Eo "[0-9]+</time>" | cut -d'<' -f1)
-        if [[ $creationDate != $betaseriesDate ]]; then
+        if [[ $creationDate != $betaseriesDate ]] && [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
           betaseriesTitleFormatted=$(echo $betaseriesTitle | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/betaseries_escape.sed)
           curl -s https://www.betaseries.com/serie/$betaseriesTitleFormatted > temp9
 
           echo "--------------------"
           echo "betaseriesTitleFormatted: $betaseriesTitleFormatted"
 
+          allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+          betaseriesShowrunner=$(cat temp9 | grep -A2 "Showrunner" | tail -1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
           betaseriesDate=$(cat temp9 | grep -Eo "[0-9]+</time>" | cut -d'<' -f1)
-          if [[ $creationDate != $betaseriesDate ]]; then
+          if [[ $creationDate != $betaseriesDate ]] && [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
             betaseriesTitleDash=$(echo $betaseriesTitle | sed 's/-//g')
             curl -s https://www.betaseries.com/serie/$betaseriesTitleDash > temp9
 
             echo "--------------------"
             echo "betaseriesTitleDash: $betaseriesTitleDash"
 
+            allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+            betaseriesShowrunner=$(cat temp9 | grep -A2 "Showrunner" | tail -1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
             betaseriesDate=$(cat temp9 | grep -Eo "[0-9]+</time>" | cut -d'<' -f1)
-            if [[ $creationDate != $betaseriesDate ]]; then
+            if [[ $creationDate != $betaseriesDate ]] && [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
               betaseriesTitleMarvel=$(echo $betaseriesTitle | sed 's/^/marvels-/g' | sed 's/-and-/-/g' | sed 's/-the-/-/g')
               curl -s https://www.betaseries.com/serie/$betaseriesTitleMarvel > temp9
 
               echo "--------------------"
               echo "betaseriesTitleMarvel: $betaseriesTitleMarvel"
 
+              allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+              betaseriesShowrunner=$(cat temp9 | grep -A2 "Showrunner" | tail -1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
               betaseriesDate=$(cat temp9 | grep -Eo "[0-9]+</time>" | cut -d'<' -f1)
-              if [[ $creationDate != $betaseriesDate ]]; then
+              if [[ $creationDate != $betaseriesDate ]] && [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
                 titleNotOriginal=$(cat temp2 | grep -m1 "<meta property=\"og:title\" content=\"" | cut -d'"' -f4 | sed 's/&#039;/'"'"'/' | sed 's/[[:blank:]]*$//')
                 betaseriesTitleNotOriginal=$(echo $titleNotOriginal | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/betaseries_escape.sed)
                 curl -s https://www.betaseries.com/serie/$betaseriesTitleNotOriginal > temp9
@@ -394,21 +395,29 @@ do
                 echo "--------------------"
                 echo "betaseriesTitleNotOriginal: $betaseriesTitleNotOriginal"
 
+                allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+                betaseriesShowrunner=$(cat temp9 | grep -A2 "Showrunner" | tail -1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
                 betaseriesDate=$(cat temp9 | grep -Eo "[0-9]+</time>" | cut -d'<' -f1)
-                if [[ $creationDate != $betaseriesDate ]]; then
+                if [[ $creationDate != $betaseriesDate ]] && [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
                   curl -s https://www.betaseries.com/serie/$betaseriesTitle-$creationDate > temp9
 
+                  allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+                  betaseriesShowrunner=$(cat temp9 | grep -A2 "Showrunner" | tail -1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
                   betaseriesDate=$(cat temp9 | grep -Eo "[0-9]+</time>" | cut -d'<' -f1)
-                  if [[ $creationDate != $betaseriesDate ]]; then
+                  if [[ $creationDate != $betaseriesDate ]] && [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
                     creationDatePrevious=$(($creationDate-1))
                     curl -s https://www.betaseries.com/serie/$betaseriesTitle-$creationDatePrevious > temp9
 
+                    allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+                    betaseriesShowrunner=$(cat temp9 | grep -A2 "Showrunner" | tail -1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
                     betaseriesDate=$(cat temp9 | grep -Eo "[0-9]+</time>" | cut -d'<' -f1)
-                    if [[ $creationDate != $betaseriesDate ]]; then
+                    if [[ $creationDate != $betaseriesDate ]] && [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
                       curl -s https://www.betaseries.com/serie/$betaseriesTitleNotOriginal-$creationDate > temp9
 
+                      allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+                      betaseriesShowrunner=$(cat temp9 | grep -A2 "Showrunner" | tail -1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
                       betaseriesDate=$(cat temp9 | grep -Eo "[0-9]+</time>" | cut -d'<' -f1)
-                      if [[ $creationDate != $betaseriesDate ]]; then
+                      if [[ $creationDate != $betaseriesDate ]] && [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
                         echo "--------------------"
                         echo "creationDate: $creationDate"
                         echo "betaseriesDate: $betaseriesDate"
@@ -539,11 +548,6 @@ do
 
         if [[ $url == $allocineLineUrl ]]; then
           senscritiqueId=$(echo $senscritiqueLine | cut -d',' -f4)
-          if [[ $senscritiqueId == 'noSenscritiqueId' ]]; then
-            curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
-            senscritiqueFound=2
-            break
-          fi
           curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
           senscritiqueFound=1
           break
