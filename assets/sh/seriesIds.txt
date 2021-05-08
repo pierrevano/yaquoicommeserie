@@ -382,3 +382,15 @@
 /series/ficheserie_gen_cserie=22663.html,tt8548922,keplers,Kepler_s/32058071
 /series/ficheserie_gen_cserie=778.html,tt0481984,film/60549-la-voie-de-laura,film/La_Voie_de_Laura/40582040
 /series/ficheserie_gen_cserie=28951.html,tt13156316,the-sons-of-sam-a-descent-into-darkness,Les_Fils_de_Sam_l_horreur_sans_fin/44692001
+/series/ficheserie_gen_cserie=24462.html,tt11695720,amour-fou,Amour_fou/38765513
+/series/ficheserie_gen_cserie=25633.html,tt11198330,house-of-the-dragon,House_of_the_Dragon/40572227
+/series/ficheserie_gen_cserie=20705.html,tt6190050,lart-du-crime,L_Art_du_crime/28339223
+/series/ficheserie_gen_cserie=21719.html,tt6517102,castlevania,Castlevania/24775194
+/series/ficheserie_gen_cserie=25130.html,tt10883660,antidisturbios,Antidisturbios/42487582
+/series/ficheserie_gen_cserie=21505.html,tt6704972,the-underground-railroad,The_Underground_Railroad/25098029
+/series/ficheserie_gen_cserie=20483.html,tt6116060,the-bold-type,The_Bold_Type/24668202
+/series/ficheserie_gen_cserie=668.html,tt0115088,alarm-for-cobra-11,Alerte_Cobra/33946
+/series/ficheserie_gen_cserie=4117.html,tt1288631,un-village-francais,noSenscritiqueId
+/series/ficheserie_gen_cserie=18870.html,tt4419214,queen-sugar,Queen_Sugar/22607656
+/series/ficheserie_gen_cserie=9814.html,tt1526318,borgen,Borgen_une_femme_au_pouvoir/389848
+/series/ficheserie_gen_cserie=23478.html,tt8210856,cursed-2020,Cursed_La_rebelle/37545909
