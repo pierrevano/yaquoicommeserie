@@ -1317,7 +1317,11 @@ var DOMLoaded = function() {
                     criticKeysNew[0] != 'Note BetaSeries' &&
                     criticKeysNew[0] != 'Note IMDb') {
                     htmlTagCriticRecap += '<p>Notes de la presse : </p>';
-                    for (var htmlTagCriticRecapIndex = 0; htmlTagCriticRecapIndex < criticKeysNew.length; htmlTagCriticRecapIndex++) {
+                    criticKeysNewLength = criticKeysNew.length;
+                    if (criticKeysNew.length > 10) {
+                        criticKeysNewLength = 10;
+                    }
+                    for (var htmlTagCriticRecapIndex = 0; htmlTagCriticRecapIndex < criticKeysNewLength; htmlTagCriticRecapIndex++) {
                         if (criticKeysNew[htmlTagCriticRecapIndex] != 'Note AlloCiné' &&
                             criticKeysNew[htmlTagCriticRecapIndex] != 'Note BetaSeries' &&
                             criticKeysNew[htmlTagCriticRecapIndex] != 'Note IMDb') {

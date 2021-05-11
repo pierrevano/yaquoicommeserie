@@ -394,3 +394,4 @@
 /series/ficheserie_gen_cserie=18870.html,tt4419214,queen-sugar,Queen_Sugar/22607656
 /series/ficheserie_gen_cserie=9814.html,tt1526318,borgen,Borgen_une_femme_au_pouvoir/389848
 /series/ficheserie_gen_cserie=23478.html,tt8210856,cursed-2020,Cursed_La_rebelle/37545909
+/series/ficheserie_gen_cserie=21463.html,tt5808318,the-halcyon,The_Halcyon/23983975

@@ -134,6 +134,7 @@ Ouirock.com,de Ouirock.com,Ou
 Paris Match,de Paris Match Contre,PM2
 Paris Match,de Paris Match,PM
 People Weekly,de People Weekly,PW
+Philadelphia Daily News,de Philadelphia Daily News,PD
 Philadelphia Inquirer,du Philadelphia Inquirer,PI
 Pittsburg Post-Gazette,du Pittsburg Post-Gazette Contre,PP2
 Pittsburg Post-Gazette,du Pittsburg Post-Gazette,PP
