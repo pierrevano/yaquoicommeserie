@@ -355,13 +355,11 @@ do
 
         if [[ $creationDate != $senscritiqueYear ]]; then
           senscritiqueId="noSenscritiqueId"
-          abord_script
         fi
       fi
 
       echo "--------------------"
       echo "senscritiqueId: $senscritiqueId"
-      echo "Senscritique id OK"
 
       # Get SensCritique rating number
       senscritiqueRating=$(cat temp11 | grep "pvi-scrating-value" | cut -d'>' -f2 | cut -d'<' -f1)
@@ -392,6 +390,10 @@ do
       done 3<$seriesIdsFile
 
       if [[ $betaseriesFound -eq 0 ]]; then
+        if [[ -z $testing ]]; then
+          abord_script
+        fi
+
         # Get betaseries serie page
         allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
         betaseriesTitle=$(echo $title | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/url_escape.sed)
@@ -431,6 +433,7 @@ do
               echo $id / "https://www.allocine.fr$url" ❌
 
               betaseriesId="noBetaseriesId"
+              echo $betaseriesId
               abord_script
             fi
           fi

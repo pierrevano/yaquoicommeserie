@@ -395,3 +395,6 @@
 /series/ficheserie_gen_cserie=9814.html,tt1526318,borgen,Borgen_une_femme_au_pouvoir/389848
 /series/ficheserie_gen_cserie=23478.html,tt8210856,cursed-2020,Cursed_La_rebelle/37545909
 /series/ficheserie_gen_cserie=21463.html,tt5808318,the-halcyon,The_Halcyon/23983975
+/series/ficheserie_gen_cserie=25860.html,tt9114976,le-monstre,Le_Monstre/39265387
+/series/ficheserie_gen_cserie=19500.html,tt3561180,trapped-2015,Trapped/17449119
+/series/ficheserie_gen_cserie=11635.html,tt2563130,chambre-327,Chambre_327/24282462
