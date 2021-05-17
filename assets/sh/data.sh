@@ -19,6 +19,9 @@ abord_script () {
 
   remove_files
 
+  echo "--------------------"
+  echo "abord script"
+
   # Exit script
   exit 1
 }
@@ -394,60 +397,24 @@ do
           abord_script
         fi
 
-        # Get betaseries serie page
-        allocineShowrunner=$(cat temp2 | grep -A2 "<span class=\"light\">De</span>" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr '[:upper:]' '[:lower:]' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
-        betaseriesTitle=$(echo $title | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/url_escape.sed)
-        betaseriesShowrunner=$(curl -s https://api.betaseries.com/shows/search\?key\=7f7fef35706f\&title\=$betaseriesTitle | jq '.shows[0].showrunner.name' | sed 's/"//g' | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/betaseries_escape.sed | sed -f ./assets/sed/betaseries_director.sed)
-        betaseriesDate=$(curl -s https://api.betaseries.com/shows/search\?key\=7f7fef35706f\&title\=$betaseriesTitle | jq '.shows[0].creation' | grep -Eo "[0-9][0-9][0-9][0-9]")
-
-        echo "--------------------"
-        echo "creationDate: $creationDate"
-        echo "allocineShowrunner: $allocineShowrunner"
-        echo "betaseriesTitle: $betaseriesTitle"
-        echo "betaseriesShowrunner: $betaseriesShowrunner"
-        echo "betaseriesDate: $betaseriesDate"
-        if [[ $creationDate != $betaseriesDate ]] || [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
-          creationDateNew=$[$creationDate+1]
-          betaseriesTitle=$(echo $senscritiqueTitle | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/url_escape.sed)
-          betaseriesShowrunner=$(curl -s https://api.betaseries.com/shows/search\?key\=7f7fef35706f\&title\=$betaseriesTitle | jq '.shows[0].showrunner.name' | sed 's/"//g' | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/betaseries_escape.sed | sed -f ./assets/sed/betaseries_director.sed)
-          betaseriesDate=$(curl -s https://api.betaseries.com/shows/search\?key\=7f7fef35706f\&title\=$betaseriesTitle | jq '.shows[0].creation' | grep -Eo "[0-9][0-9][0-9][0-9]")
-
-          echo "--------------------"
-          echo "creationDate: $creationDate"
-          echo "allocineShowrunner: $allocineShowrunner"
-          echo "betaseriesTitle: $betaseriesTitle"
-          echo "betaseriesShowrunner: $betaseriesShowrunner"
-          echo "betaseriesDate: $betaseriesDate"
-          if [[ $creationDate != $betaseriesDate ]] || [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
-            echo "--------------------"
-            echo "creationDateNew: $creationDateNew"
-            echo "allocineShowrunner: $allocineShowrunner"
-            echo "betaseriesTitle: $betaseriesTitle"
-            echo "betaseriesShowrunner: $betaseriesShowrunner"
-            echo "betaseriesDate: $betaseriesDate"
-            if [[ $creationDateNew != $betaseriesDate ]] || [[ $allocineShowrunner != $betaseriesShowrunner ]]; then
-              echo "--------------------"
-              echo "page number $pagesNumberIndex / $pagesNumber"
-              echo "Serie $seriesNumberIndex / $seriesNumber"
-              echo "Betaseries id KO"
-              echo $id / "https://www.allocine.fr$url" ❌
-
-              betaseriesId="noBetaseriesId"
-              echo $betaseriesId
-              abord_script
-            fi
-          fi
-        fi
+        wikiUrl=$(curl -s https://query.wikidata.org/sparql\?query\=SELECT%20%3Fitem%20%3FitemLabel%20WHERE%20%7B%0A%20%20%3Fitem%20wdt%3AP1267%20%22$serieId%22.%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%7D | grep "uri" | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/http/https/' | sed 's/entity/wiki/')
+        echo "wikiUrl: $wikiUrl"
+        imdbId=$(curl -s $wikiUrl | grep "https://wikidata-externalid-url.toolforge.org/?p=345" | grep -Eo "tt[0-9]+" | tail -1)
+        echo "imdbId: $imdbId"
 
         # Get Betaseries url id
-        if [[ $betaseriesId != "noBetaseriesId" ]]; then
-          betaseriesId=$(curl -s https://api.betaseries.com/shows/search\?key\=7f7fef35706f\&title\=$betaseriesTitle | jq '.shows[0].resource_url' | cut -d'/' -f5 | sed 's/"//g')
-          betaseriesResourceUrl=$(curl -s https://api.betaseries.com/shows/search\?key\=7f7fef35706f\&title\=$betaseriesTitle | jq '.shows[0].resource_url' | sed 's/"//g')
-          curl -s $betaseriesResourceUrl > temp9
+        betaseriesId=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.resource_url' | cut -d'/' -f5 | sed 's/"//g')
+        betaseriesResourceUrl=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.resource_url' | sed 's/"//g')
+        curl -s $betaseriesResourceUrl > temp9
 
-          imdbId=$(curl -s https://api.betaseries.com/shows/search\?key\=7f7fef35706f\&title\=$betaseriesTitle | jq '.shows[0].imdb_id' | sed 's/"//g')
-          curl -s https://www.imdb.com/title/$imdbId/ > temp6
+        imdbIdCheck=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&url\=$betaseriesId | jq '.show.imdb_id' | sed 's/"//g')
+        if [[ $imdbId != $imdbIdCheck ]]; then
+          echo "--------------------"
+          echo "imdbId: $imdbId"
+          echo "imdbIdCheck: $imdbIdCheck"
+          abord_script
         fi
+        curl -s https://www.imdb.com/title/$imdbId/ > temp6
 
         echo "$url,$imdbId,$betaseriesId,$senscritiqueId" >> assets/sh/seriesIds.txt
       fi

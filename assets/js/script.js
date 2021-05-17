@@ -1311,6 +1311,7 @@ var DOMLoaded = function() {
                 document.querySelector('.slide-network-links').innerHTML = htmlTag;
 
                 var htmlTagCriticRecap = '<ul>';
+                var criticKeysNewLength = 0;
 
                 if (criticKeysNew != '' &&
                     criticKeysNew[0] != 'Note AlloCiné' &&
@@ -1318,9 +1319,6 @@ var DOMLoaded = function() {
                     criticKeysNew[0] != 'Note IMDb') {
                     htmlTagCriticRecap += '<p>Notes de la presse : </p>';
                     criticKeysNewLength = criticKeysNew.length;
-                    if (criticKeysNew.length > 10) {
-                        criticKeysNewLength = 10;
-                    }
                     for (var htmlTagCriticRecapIndex = 0; htmlTagCriticRecapIndex < criticKeysNewLength; htmlTagCriticRecapIndex++) {
                         if (criticKeysNew[htmlTagCriticRecapIndex] != 'Note AlloCiné' &&
                             criticKeysNew[htmlTagCriticRecapIndex] != 'Note BetaSeries' &&
@@ -1351,6 +1349,12 @@ var DOMLoaded = function() {
                 htmlTagCriticRecap += '</ul>';
 
                 document.querySelector('.slide-critics-recap').innerHTML = htmlTagCriticRecap;
+
+                if (criticKeysNewLength > 13) {
+                    document.querySelector('.slide-critics-recap ul').style.height = '80vh';
+                } else {
+                    document.querySelector('.slide-critics-recap ul').style.height = '';
+                }
             }, false);
         });
 
@@ -1582,7 +1586,7 @@ var DOMLoaded = function() {
             } else {
                 item.currentTarget.innerHTML = 'Tout désélectionner<span><input id="criticToggle0" type="checkbox"><label for="criticToggle0"></label></span>';
                 item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-                localStorage.setItem('yqcs_critic.' + classListName, 'true')
+                localStorage.setItem('yqcs_critic.' + classListName, 'true');
             }
         } else if (classListName == 'usersAllocine') {
             if (classListNameActive == 'true') {
@@ -1592,7 +1596,7 @@ var DOMLoaded = function() {
             } else {
                 userRatingLi.children[1].children[0].innerHTML = '<i class="fas fa-users fa-lg"></i> Spectateurs AlloCiné<span class="criticNumber">1</span>';
                 item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-                localStorage.setItem('yqcs_critic.' + classListName, 'true')
+                localStorage.setItem('yqcs_critic.' + classListName, 'true');
             }
         } else if (classListName == 'usersImdb') {
             if (classListNameActive == 'true') {
@@ -1602,7 +1606,7 @@ var DOMLoaded = function() {
             } else {
                 imdbUserRatingLi.children[1].children[0].innerHTML = '<i class="fab fa-imdb fa-lg"></i> Spectateurs IMDb<span class="criticNumber">1</span>';
                 item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-                localStorage.setItem('yqcs_critic.' + classListName, 'true')
+                localStorage.setItem('yqcs_critic.' + classListName, 'true');
             }
         } else if (classListName == 'usersBetaseries') {
             if (classListNameActive == 'true') {
@@ -1612,7 +1616,7 @@ var DOMLoaded = function() {
             } else {
                 betaseriesUserRatingLi.children[1].children[0].innerHTML = '<i class="icon-betaseries"></i> Spectateurs Betaseries<span class="criticNumber">1</span>';
                 item.currentTarget.children[0].children[0].setAttribute('checked', 'checked');
-                localStorage.setItem('yqcs_critic.' + classListName, 'true')
+                localStorage.setItem('yqcs_critic.' + classListName, 'true');
             }
         } else if (classListName == 'mainToggleNetwork') {
             if (classListNameActive2 == 'true') {
