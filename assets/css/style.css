@@ -330,7 +330,7 @@ iframe {
     color: var(--dark-color) !important;
 }
 
-.swal2-content {
+.swal2-html-container {
     color: var(--dark-color) !important;
 }
 
@@ -1054,6 +1054,6 @@ strong {
     color: var(--white-color) !important;
 }
 
-.darkmode--activated .swal2-content {
+.darkmode--activated .swal2-html-container {
     color: var(--white-color) !important;
 }

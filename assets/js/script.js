@@ -520,7 +520,7 @@ var DOMLoaded = function() {
         if (betaseriesDetails == '/') {
             betaseriesDetailsUrl = '<a href="javascript:void(0)"><i class="icon-betaseries"></i>' + betaseriesDetails + '</a>';
         } else {
-            betaseriesDetailsUrl = '<a href="https://www.betaseries.com/serie/' + betaseriesId + '/" target="_blank"><i class="icon-betaseries"></i>' + betaseriesDetails + '</a>';
+            betaseriesDetailsUrl = '<a href="https://www.betaseries.com/serie/' + betaseriesId + '" target="_blank"><i class="icon-betaseries"></i>' + betaseriesDetails + '</a>';
         }
 
         /* beautify ignore:start */

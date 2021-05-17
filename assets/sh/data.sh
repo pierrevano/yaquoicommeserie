@@ -358,11 +358,11 @@ do
 
         if [[ $creationDate != $senscritiqueYear ]]; then
           senscritiqueId="noSenscritiqueId"
+
+          echo "--------------------"
+          echo "senscritiqueId: $senscritiqueId"
         fi
       fi
-
-      echo "--------------------"
-      echo "senscritiqueId: $senscritiqueId"
 
       # Get SensCritique rating number
       senscritiqueRating=$(cat temp11 | grep "pvi-scrating-value" | cut -d'>' -f2 | cut -d'<' -f1)
@@ -419,10 +419,8 @@ do
         echo "$url,$imdbId,$betaseriesId,$senscritiqueId" >> assets/sh/seriesIds.txt
       fi
 
-      echo "--------------------"
-      echo "page number $pagesNumberIndex / $pagesNumber"
-      echo "Serie $seriesNumberIndex / $seriesNumber"
-      echo "$id $title ✅"
+      echo "------------------------------------------------------------"
+      echo "page : $pagesNumberIndex/$pagesNumber - film : $seriesNumberIndex/$seriesNumber - titre : $title ✅"
 
       # Get serie network
       networkNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
