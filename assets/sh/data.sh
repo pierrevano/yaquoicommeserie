@@ -10,6 +10,7 @@ remove_files () {
   rm -f ./assets/sh/criticNameNationalityButtonsTemp.txt
   rm -f ./assets/sh/criticNameTemp.txt
   rm -f ./assets/sh/urlTemp.txt
+  rm -f log
 }
 
 # Abord script function
@@ -19,7 +20,7 @@ abord_script () {
 
   remove_files
 
-  echo "--------------------"
+  echo "----------------------------------------------------------------------------------------------------"
   echo "abord script"
 
   # Exit script
@@ -29,18 +30,26 @@ abord_script () {
 remove_files
 
 # Main variables
-baseUrl=https://www.allocine.fr/series/top/
+testing=$1
+baseUrl=$2
+if [[ -z $baseUrl ]]; then
+  baseUrl=https://www.allocine.fr/series/top/
+else
+  baseUrl=https://www.allocine.fr/series-tv/
+fi
 seriesNumberIndexFirst=1
 pagesNumberMin=1
-pagesNumberMax=10
+pagesNumberMax=$3
+if [[ -z $pagesNumberMax ]]; then
+  pagesNumberMax=15
+else
+  pagesNumberMax=$3
+fi
 seriesNumberMax=15
-imdbResultNumberMax=5
-serieCreatorNumber=2
-allocineStarNumber=9
+checkMissingShows=$4
 SECONDS=0
 
 # Check before starting script
-testing=$1
 curl -s $baseUrl > temp
 curl -s https://yaquoicommeserie.fr/assets/sh/checkingFile.txt > ./assets/sh/checkingFile.txt
 firstSerie=$(cat temp | grep "/series/ficheserie_gen_cserie" | head -1 | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
@@ -65,6 +74,9 @@ else
   echo "Data is the same, script will exit now"
   exit 0
 fi
+
+# Remove lines with no data
+sed -i '' "/noImdbId,noBetaseriesId,noSenscritiqueId/d" ./assets/sh/seriesIds.txt
 
 # Add criticName first list
 cat ./assets/sh/criticName.txt | cut -d',' -f1 | sort | uniq >> ./assets/sh/criticNameTemp.txt
@@ -128,362 +140,459 @@ do
     # Get AlloCiné serie url
     url=$(cat temp | grep -m$seriesNumberIndex "<a class=\"meta-title-link\" href=\"/series/ficheserie_gen_cserie=" | tail -1 | head -1 | cut -d'"' -f4)
 
-    urlFile="./assets/sh/urlTemp.txt"
-    while IFS= read -r urlTemp <&3; do
-      if [[ $url == $urlTemp ]]; then
-        duplicate=1
+    # Check if missing shows
+    seriesIdsFile="./assets/sh/seriesIds.txt"
+    while IFS= read -r seriesIdsLine <&3; do
+      allocineLineUrl=$(echo $seriesIdsLine | cut -d',' -f1)
+
+      if [[ $url == $allocineLineUrl ]]; then
+        found=1
         break
       else
-        duplicate=0
+        found=0
       fi
-    done 3<$urlFile
+    done 3<$seriesIdsFile
 
-    echo $url >> ./assets/sh/urlTemp.txt
-
-    if [[ $duplicate -eq 0 ]]; then
-      curl -s https://www.allocine.fr$url > temp2
-      completeUrl=https://www.allocine.fr$url
-      echo "\"url\": \"$completeUrl\"," >> ./assets/js/data.json
-
-      # Get serie title
-      title=$(cat temp2 | grep -m1 "<meta property=\"og:title\" content=\"" | cut -d'"' -f4 | sed 's/&#039;/'"'"'/' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
-      senscritiqueTitle=$title
-      echo "\"title\": \"$title\"," >> ./assets/js/data.json
-
-      # Get original title for IMDb
-      originalTitle=$(cat temp2 | grep -A1 "Titre original" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/&#039;/'"'"'/' | sed 's/\&amp;/\&/g' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
-      originalTitleNumber=$(cat temp2 | grep -A1 "Titre original" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
-      if [[ $originalTitleNumber -gt 0 ]]; then
-        title=$originalTitle
+    if [[ $found -eq 0 ]]; then
+      if [[ -z $testing ]]; then
+        abord_script
       fi
+    fi
 
-      # Get serie creation date
-      creationDate=$(cat temp2 | grep -A6 "meta-body-item meta-body-info" | grep -Eo "[0-9][0-9][0-9][0-9]" | head -1 | tail -1)
-      echo "\"creationDate\": \"$creationDate\"," >> ./assets/js/data.json
-
-      # Get serie duration
-      duration=$(cat temp2 | grep -Eo "[0-9]+min" | grep -Eo "[0-9]+")
-      echo "\"duration\": \"$duration\"," >> ./assets/js/data.json
-
-      # Get serie picture
-      picture=$(cat temp2 | grep -m1 "<meta property=\"og:image\" content=\"" | cut -d'"' -f4)
-      echo "\"picture\": \"$picture\"," >> ./assets/js/data.json
-
-      # Get serie id
-      serieId=$(cat temp | grep -m$seriesNumberIndex "<a class=\"meta-title-link\" href=\"/series/ficheserie_gen_cserie=" | tail -1 | head -1 | cut -d'"' -f4 | cut -d'=' -f2 | cut -d'.' -f1)
-      curl -s https://www.allocine.fr/series/ficheserie-$serieId/critiques/presse/ > temp3
-      curl -s https://www.allocine.fr/series/ficheserie-$serieId/videos/ > temp4
-
-      # Get serie trailer id
-      serieTrailerId=$(cat temp4 | grep -m1 "<a class=\"meta-title-link\" href=\"/video/player_gen_cmedia=" | cut -d'=' -f4 | cut -d'&' -f1)
-      echo "\"serieTrailerId\": \"$serieTrailerId\"," >> ./assets/js/data.json
-
-      # Get all serie genres
-      genreNumber=$(cat temp2 | grep -m3 "<span class=\"ACrL3NACrlcmllcy10di9n" | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
-      if [[ $genreNumber -gt 0 ]]; then
-        echo "\"genre\":{" >> ./assets/js/data.json
-
-        for genreNumberIndex in $( eval echo {1..$genreNumber} )
-        do
-          genreName=$(cat temp2 | grep -m3 "<span class=\"ACrL3NACrlcmllcy10di9n" | cut -d'>' -f2 | cut -d'<' -f1 | head -$genreNumberIndex | tail -1)
-          echo "\"id$genreNumberIndex\": \"$genreName\"," >> ./assets/js/data.json
-          echo $genreName >> ./assets/sh/criticNameGenreButtonsTemp.txt
-        done
-
-        echo "}," >> ./assets/js/data.json
-      fi
-
-      # Get all serie nationalities
-      nationalityNumber=$(cat temp2 | grep " nationality" | wc -l | awk '{print $1}')
-      if [[ $nationalityNumber -gt 0 ]]; then
-        echo "\"nationality\":{" >> ./assets/js/data.json
-
-        for nationalityNumberIndex in $( eval echo {1..$nationalityNumber} )
-        do
-          nationalityName=$(cat temp2 | grep " nationality" | head -$nationalityNumberIndex | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
-          echo "\"id$nationalityNumberIndex\": \"$nationalityName\"," >> ./assets/js/data.json
-          echo $nationalityName >> ./assets/sh/criticNameNationalityButtonsTemp.txt
-        done
-
-        echo "}," >> ./assets/js/data.json
-      fi
-
-      # Get all critic ratings
-      echo "\"criticNames\":{" >> ./assets/js/data.json
-
-      criticNumber=0
-      dataFile="./assets/sh/criticName.txt"
-      while IFS= read -r criticName <&3; do
-        criticName=$(echo $criticName | cut -d',' -f1)
-        criticNameFirst=$(echo $criticName | cut -d',' -f1)
-        criticRatingNumber=$(cat temp3 | grep "js-anchor-link\">$criticName<" | cut -d'"' -f6 | wc -l | awk '{print $1}')
-
-        if [[ $criticNameFirst != $criticNameTemp ]]; then
-          if [[ $criticRatingNumber -gt 0 ]]; then
-            for criticRatingNumberIndex in $( eval echo {1..$criticRatingNumber} )
-            do
-              criticRating=$(cat temp3 | grep -m$criticRatingNumberIndex "js-anchor-link\">$criticName<" | tail -1 | head -1 | cut -d'"' -f6)
-
-              if [[ $criticRatingNumberIndex -gt 1 ]]; then
-                criticNameTemp="$criticName"
-                criticName="$criticName$criticRatingNumberIndex"
-              fi
-
-              if [[ $criticName == "Pop Matters" ]]; then
-                criticName="PopMatters"
-              fi
-
-              echo $criticName >> ./assets/sh/criticNameTemp.txt
-
-              case $criticRating in
-                "Chef-d&#039;oeuvre")
-                  echo "\"$criticName\": \"5\"," >> ./assets/js/data.json
-                  ;;
-                "Excellent")
-                  echo "\"$criticName\": \"4.5\"," >> ./assets/js/data.json
-                  ;;
-                "Tr&egrave;s bien")
-                  echo "\"$criticName\": \"4\"," >> ./assets/js/data.json
-                  ;;
-                "Bien")
-                  echo "\"$criticName\": \"3.5\"," >> ./assets/js/data.json
-                  ;;
-                "Pas mal")
-                  echo "\"$criticName\": \"3\"," >> ./assets/js/data.json
-                  ;;
-                "Moyen")
-                  echo "\"$criticName\": \"2.5\"," >> ./assets/js/data.json
-                  ;;
-                "Pas terrible")
-                  echo "\"$criticName\": \"2\"," >> ./assets/js/data.json
-                  ;;
-                "Mauvais")
-                  echo "\"$criticName\": \"1.5\"," >> ./assets/js/data.json
-                  ;;
-                "Tr&egrave;s mauvais")
-                  echo "\"$criticName\": \"1\"," >> ./assets/js/data.json
-                  ;;
-                "Nul")
-                  echo "\"$criticName\": \"0.5\"," >> ./assets/js/data.json
-                  ;;
-                *)
-                  echo "\"$criticName\": \"\"," >> ./assets/js/data.json
-                  ;;
-              esac
-
-              if [[ $criticRatingNumberIndex -gt 1 ]]; then
-                criticName="$criticNameTemp"
-              fi
-
-              criticNumber=$[$criticNumber+1]
-            done
-          fi
-        fi
-
-        criticNameTemp=$criticNameFirst
-      done 3<$dataFile
-
-      echo "}," >> ./assets/js/data.json
-
-      # Get critic number
-      echo "\"criticNumber\": \"$criticNumber\"," >> ./assets/js/data.json
-
-      # Get critic rating front page
-      criticFrontPage=$(cat temp2 | grep -Eo "<span class=\"stareval-note\">[0-9],[0-9]</span><span class=\"stareval-review light\"> [0-9]+ critique*" | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/,/./')
-      echo "\"criticFrontPage\": \"$criticFrontPage\"," >> ./assets/js/data.json
-
-      # Get critic rating back page
-      critic=$(cat temp3 | grep -m1 -Eo "</div><span class=\"stareval-note\">[0-9],[0-9]</span></div>" | cut -d'>' -f3 | cut -d'<' -f1 | sed 's/,/./')
-      criticZero=$(cat temp3 | grep -m1 -Eo "[0-9] titre de presse")
-      if [[ $criticZero == "0 titre de presse" ]]; then
-        critic=$criticFrontPage
-      fi
-      echo "\"critic\": \"$critic\"," >> ./assets/js/data.json
-
-      # Get user rating number
-      user=$(cat temp2 | grep -Eo "<span class=\"stareval-note\">[0-9],[0-9]</span><span class=\"stareval-review light\"> [0-9]+ note*" | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/,/./')
-      echo "\"user\": \"$user\"," >> ./assets/js/data.json
-
-      curl -s https://www.allocine.fr/series/ficheserie-$serieId/saisons/ > temp10
-      seasonsCriticNumber=$(cat temp10 | grep -A70 "/\">Saison " | grep -Eo "\"stareval-note\">[0-9],[0-9]" | cut -d'>' -f2 | sed 's/,/./g' | wc -l | awk '{print $1}')
-      if [[ $seasonsCriticNumber -gt 1 ]]; then
-        echo "\"seasonsCritic\":{" >> ./assets/js/data.json
-
-        echo "\"seasonsCriticValue\":{" >> ./assets/js/data.json
-        for seasonsCriticNumberIndex in $( eval echo {1..$seasonsCriticNumber} )
-        do
-          seasonsCritic=$(cat temp10 | grep -A70 "/\">Saison " | grep -Eo "\"stareval-note\">[0-9],[0-9]" | cut -d'>' -f2 | sed 's/,/./g' | tail -$seasonsCriticNumberIndex | head -1)
-          echo "\"id$seasonsCriticNumberIndex\": \"$seasonsCritic\"," >> ./assets/js/data.json
-        done
-        echo "}," >> ./assets/js/data.json
-
-        echo "\"seasonsCriticDetails\":{" >> ./assets/js/data.json
-        for seasonsCriticNumberIndex in $( eval echo {1..$seasonsCriticNumber} )
-        do
-          seasonsCriticDetails=$(cat temp10 | grep -A70 "/\">Saison " | grep "\"stareval-review light\"" | sed 's/.*"stareval-review light">\(.*\)<\/span><\/div>/\1/' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//' | tail -$seasonsCriticNumberIndex | head -1)
-          echo "\"id$seasonsCriticNumberIndex\": \"$seasonsCriticDetails\"," >> ./assets/js/data.json
-        done
-        echo "}," >> ./assets/js/data.json
-
-        echo "}," >> ./assets/js/data.json
-      fi
-
-      # Add ending bracket
-      echo "}," >> ./assets/js/data.json
-
-      # Add Senscritique object
-      echo "\"senscritiqueData\":{" >> ./assets/js/data.json
-
-      senscritiqueFile="./assets/sh/seriesIds.txt"
-      while IFS= read -r senscritiqueLine <&3; do
-        allocineLineUrl=$(echo $senscritiqueLine | cut -d',' -f1)
-
-        if [[ $url == $allocineLineUrl ]]; then
-          senscritiqueId=$(echo $senscritiqueLine | cut -d',' -f4)
-          curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
-          senscritiqueFound=1
+    if [[ -z $checkMissingShows ]] || [[ $found -eq 0 ]]; then
+      urlFile="./assets/sh/urlTemp.txt"
+      while IFS= read -r urlTemp <&3; do
+        if [[ $url == $urlTemp ]]; then
+          duplicate=1
           break
         else
-          senscritiqueFound=0
+          duplicate=0
         fi
-      done 3<$senscritiqueFile
+      done 3<$urlFile
 
-      if [[ $senscritiqueFound -eq 0 ]]; then
-        senscritiqueTitleURLEncoded=$(echo $senscritiqueTitle | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/url_escape.sed)
-        senscritiqueId=$(curl -s "https://www.senscritique.com/sc2/search/autocomplete.json?query=$senscritiqueTitleURLEncoded" \
-        -H 'x-requested-with: XMLHttpRequest' | jq '.json | .[].url' | grep -m1 "/serie/" | sed 's/https:\/\/www.senscritique.com\/serie\///' | sed 's/\"//g')
+      echo $url >> ./assets/sh/urlTemp.txt
 
-        curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
-        senscritiqueYear=$(cat temp11 | grep "pvi-product-year" | cut -d '(' -f2 | cut -d ')' -f1)
+      if [[ $duplicate -eq 0 ]]; then
+        curl -s https://www.allocine.fr$url > temp2
+        completeUrl=https://www.allocine.fr$url
+        echo "\"url\": \"$completeUrl\"," >> ./assets/js/data.json
 
-        if [[ $creationDate != $senscritiqueYear ]]; then
-          senscritiqueId="noSenscritiqueId"
+        # Get serie title
+        title=$(cat temp2 | grep -m1 "<meta property=\"og:title\" content=\"" | cut -d'"' -f4 | sed 's/&#039;/'"'"'/' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+        senscritiqueTitle=$title
+        echo "\"title\": \"$title\"," >> ./assets/js/data.json
 
-          echo "--------------------"
-          echo "senscritiqueId: $senscritiqueId"
-        fi
-      fi
-
-      # Get SensCritique rating number
-      senscritiqueRating=$(cat temp11 | grep "pvi-scrating-value" | cut -d'>' -f2 | cut -d'<' -f1)
-      echo "\"senscritiqueRating\": \"$senscritiqueRating\"," >> ./assets/js/data.json
-
-      # Add ending bracket
-      echo "}," >> ./assets/js/data.json
-
-      # Add Betaseries object
-      echo "\"betaseriesData\":{" >> ./assets/js/data.json
-
-      seriesIdsFile="./assets/sh/seriesIds.txt"
-      while IFS= read -r seriesIdsLine <&3; do
-        allocineLineUrl=$(echo $seriesIdsLine | cut -d',' -f1)
-
-        if [[ $url == $allocineLineUrl ]]; then
-          imdbId=$(echo $seriesIdsLine | cut -d',' -f2)
-          curl -s https://www.imdb.com/title/$imdbId/ > temp6
-
-          betaseriesTitle=$(echo $seriesIdsLine | cut -d',' -f3)
-          echo "\"betaseriesId\": \"$betaseriesTitle\"," >> ./assets/js/data.json
-          curl -s https://www.betaseries.com/serie/$betaseriesTitle > temp9
-          betaseriesFound=1
-          break
-        else
-          betaseriesFound=0
-        fi
-      done 3<$seriesIdsFile
-
-      if [[ $betaseriesFound -eq 0 ]]; then
-        if [[ -z $testing ]]; then
-          abord_script
+        # Get original title for IMDb
+        originalTitle=$(cat temp2 | grep -A1 "Titre original" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/&#039;/'"'"'/' | sed 's/\&amp;/\&/g' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+        originalTitleNumber=$(cat temp2 | grep -A1 "Titre original" | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
+        if [[ $originalTitleNumber -gt 0 ]]; then
+          title=$originalTitle
         fi
 
-        wikiUrl=$(curl -s https://query.wikidata.org/sparql\?query\=SELECT%20%3Fitem%20%3FitemLabel%20WHERE%20%7B%0A%20%20%3Fitem%20wdt%3AP1267%20%22$serieId%22.%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%7D | grep "uri" | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/http/https/' | sed 's/entity/wiki/')
-        echo "wikiUrl: $wikiUrl"
-        imdbId=$(curl -s $wikiUrl | grep "https://wikidata-externalid-url.toolforge.org/?p=345" | grep -Eo "tt[0-9]+" | tail -1)
-        echo "imdbId: $imdbId"
+        # Get serie creation date
+        creationDate=$(cat temp2 | grep -A6 "meta-body-item meta-body-info" | grep -Eo "[0-9][0-9][0-9][0-9]" | head -1 | tail -1)
+        echo "\"creationDate\": \"$creationDate\"," >> ./assets/js/data.json
 
-        # Get Betaseries url id
-        betaseriesId=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.resource_url' | cut -d'/' -f5 | sed 's/"//g')
-        betaseriesResourceUrl=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.resource_url' | sed 's/"//g')
-        curl -s $betaseriesResourceUrl > temp9
+        # Get serie duration
+        duration=$(cat temp2 | grep -Eo "[0-9]+min" | grep -Eo "[0-9]+")
+        echo "\"duration\": \"$duration\"," >> ./assets/js/data.json
 
-        imdbIdCheck=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&url\=$betaseriesId | jq '.show.imdb_id' | sed 's/"//g')
-        if [[ $imdbId != $imdbIdCheck ]]; then
-          echo "--------------------"
-          echo "imdbId: $imdbId"
-          echo "imdbIdCheck: $imdbIdCheck"
-          abord_script
-        fi
-        curl -s https://www.imdb.com/title/$imdbId/ > temp6
+        # Get serie picture
+        picture=$(cat temp2 | grep -m1 "<meta property=\"og:image\" content=\"" | cut -d'"' -f4)
+        echo "\"picture\": \"$picture\"," >> ./assets/js/data.json
 
-        echo "$url,$imdbId,$betaseriesId,$senscritiqueId" >> assets/sh/seriesIds.txt
-      fi
+        # Get serie id
+        serieId=$(cat temp | grep -m$seriesNumberIndex "<a class=\"meta-title-link\" href=\"/series/ficheserie_gen_cserie=" | tail -1 | head -1 | cut -d'"' -f4 | cut -d'=' -f2 | cut -d'.' -f1)
+        curl -s https://www.allocine.fr/series/ficheserie-$serieId/critiques/presse/ > temp3
+        curl -s https://www.allocine.fr/series/ficheserie-$serieId/videos/ > temp4
 
-      echo "------------------------------------------------------------"
-      echo "page : $pagesNumberIndex/$pagesNumber - film : $seriesNumberIndex/$seriesNumber - titre : $title ✅"
+        # Get serie trailer id
+        serieTrailerId=$(cat temp4 | grep -m1 "<a class=\"meta-title-link\" href=\"/video/player_gen_cmedia=" | cut -d'=' -f4 | cut -d'&' -f1)
+        echo "\"serieTrailerId\": \"$serieTrailerId\"," >> ./assets/js/data.json
 
-      # Get serie network
-      networkNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
-      if [[ $networkNumber -gt 0 ]]; then
-        echo "\"network\":{" >> ./assets/js/data.json
+        # Get all serie genres
+        genreNumber=$(cat temp2 | grep -m3 "<span class=\"ACrL3NACrlcmllcy10di9n" | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
+        if [[ $genreNumber -gt 0 ]]; then
+          echo "\"genre\":{" >> ./assets/js/data.json
 
-        for networkNumberIndex in $( eval echo {1..$networkNumber} )
-        do
-          networkName=$(cat temp9 | grep -A1 "https://www.betaseries.com/link" | grep "alt" | cut -d'"' -f4 | head -$networkNumberIndex | tail -1)
-          if [[ -z $networkName ]]; then
-            networkName=$(cat temp9 | grep "https://www.betaseries.com/link" | cut -d'>' -f2 | cut -d'<' -f1 | head -$networkNumberIndex | tail -1)
-            echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp2.txt
-          else
-            echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp.txt
-          fi
-          echo "\"id$networkNumberIndex\": \"$networkName\"," >> ./assets/js/data.json
-        done
-
-        echo "}," >> ./assets/js/data.json
-      else
-        networkNumber=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
-        if [[ $networkNumber -eq 0 ]]; then
-          curl -s https://www.allocine.fr/series/ficheserie-$serieId/diffusion-tv/ > temp9
-          networkNumber=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6 | wc -l | awk '{print $1}')
-          if [[ $networkNumber -gt 0 ]]; then
-            networkName=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6)
-
-            echo "\"network\":{" >> ./assets/js/data.json
-
-            echo "\"id1\": \"$networkName\"," >> ./assets/js/data.json
-            echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp2.txt
-
-            echo "}," >> ./assets/js/data.json
-          fi
-        elif [[ $networkNumber -gt 0 ]]; then
-          echo "\"network\":{" >> ./assets/js/data.json
-
-          networkName=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | head -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
-          echo "\"id1\": \"$networkName\"," >> ./assets/js/data.json
-          echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp.txt
+          for genreNumberIndex in $( eval echo {1..$genreNumber} )
+          do
+            genreName=$(cat temp2 | grep -m3 "<span class=\"ACrL3NACrlcmllcy10di9n" | cut -d'>' -f2 | cut -d'<' -f1 | head -$genreNumberIndex | tail -1)
+            echo "\"id$genreNumberIndex\": \"$genreName\"," >> ./assets/js/data.json
+            echo $genreName >> ./assets/sh/criticNameGenreButtonsTemp.txt
+          done
 
           echo "}," >> ./assets/js/data.json
         fi
-      fi
 
-      # Get serie network url
-      networkUrlNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
-      if [[ $networkUrlNumber -gt 0 ]]; then
-        echo "\"networkUrl\":{" >> ./assets/js/data.json
+        # Get all serie nationalities
+        nationalityNumber=$(cat temp2 | grep " nationality" | wc -l | awk '{print $1}')
+        if [[ $nationalityNumber -gt 0 ]]; then
+          echo "\"nationality\":{" >> ./assets/js/data.json
 
-        for networkUrlNumberIndex in $( eval echo {1..$networkUrlNumber} )
-        do
-          networkUrl=$(cat temp9 | grep "https://www.betaseries.com/link" | cut -d'"' -f2 | head -$networkUrlNumberIndex | tail -1)
-          echo "\"id$networkUrlNumberIndex\": \"$networkUrl\"," >> ./assets/js/data.json
-        done
+          for nationalityNumberIndex in $( eval echo {1..$nationalityNumber} )
+          do
+            nationalityName=$(cat temp2 | grep " nationality" | head -$nationalityNumberIndex | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+            echo "\"id$nationalityNumberIndex\": \"$nationalityName\"," >> ./assets/js/data.json
+            echo $nationalityName >> ./assets/sh/criticNameNationalityButtonsTemp.txt
+          done
+
+          echo "}," >> ./assets/js/data.json
+        fi
+
+        # Get all critic ratings
+        echo "\"criticNames\":{" >> ./assets/js/data.json
+
+        criticNumber=0
+        dataFile="./assets/sh/criticName.txt"
+        while IFS= read -r criticName <&3; do
+          criticName=$(echo $criticName | cut -d',' -f1)
+          criticNameFirst=$(echo $criticName | cut -d',' -f1)
+          criticRatingNumber=$(cat temp3 | grep "js-anchor-link\">$criticName<" | cut -d'"' -f6 | wc -l | awk '{print $1}')
+
+          if [[ $criticNameFirst != $criticNameTemp ]]; then
+            if [[ $criticRatingNumber -gt 0 ]]; then
+              for criticRatingNumberIndex in $( eval echo {1..$criticRatingNumber} )
+              do
+                criticRating=$(cat temp3 | grep -m$criticRatingNumberIndex "js-anchor-link\">$criticName<" | tail -1 | head -1 | cut -d'"' -f6)
+
+                if [[ $criticRatingNumberIndex -gt 1 ]]; then
+                  criticNameTemp="$criticName"
+                  criticName="$criticName$criticRatingNumberIndex"
+                fi
+
+                if [[ $criticName == "Pop Matters" ]]; then
+                  criticName="PopMatters"
+                fi
+
+                echo $criticName >> ./assets/sh/criticNameTemp.txt
+
+                case $criticRating in
+                  "Chef-d&#039;oeuvre")
+                    echo "\"$criticName\": \"5\"," >> ./assets/js/data.json
+                    ;;
+                  "Excellent")
+                    echo "\"$criticName\": \"4.5\"," >> ./assets/js/data.json
+                    ;;
+                  "Tr&egrave;s bien")
+                    echo "\"$criticName\": \"4\"," >> ./assets/js/data.json
+                    ;;
+                  "Bien")
+                    echo "\"$criticName\": \"3.5\"," >> ./assets/js/data.json
+                    ;;
+                  "Pas mal")
+                    echo "\"$criticName\": \"3\"," >> ./assets/js/data.json
+                    ;;
+                  "Moyen")
+                    echo "\"$criticName\": \"2.5\"," >> ./assets/js/data.json
+                    ;;
+                  "Pas terrible")
+                    echo "\"$criticName\": \"2\"," >> ./assets/js/data.json
+                    ;;
+                  "Mauvais")
+                    echo "\"$criticName\": \"1.5\"," >> ./assets/js/data.json
+                    ;;
+                  "Tr&egrave;s mauvais")
+                    echo "\"$criticName\": \"1\"," >> ./assets/js/data.json
+                    ;;
+                  "Nul")
+                    echo "\"$criticName\": \"0.5\"," >> ./assets/js/data.json
+                    ;;
+                  *)
+                    echo "\"$criticName\": \"\"," >> ./assets/js/data.json
+                    ;;
+                esac
+
+                if [[ $criticRatingNumberIndex -gt 1 ]]; then
+                  criticName="$criticNameTemp"
+                fi
+
+                criticNumber=$[$criticNumber+1]
+              done
+            fi
+          fi
+
+          criticNameTemp=$criticNameFirst
+        done 3<$dataFile
 
         echo "}," >> ./assets/js/data.json
-      else
-        networkNumber=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
-        if [[ $networkNumber -eq 0 ]]; then
-          curl -s https://www.allocine.fr/series/ficheserie-$serieId/diffusion-tv/ > temp9
-          networkNumber=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6 | wc -l | awk '{print $1}')
-          if [[ $networkNumber -gt 0 ]]; then
+
+        # Get critic number
+        echo "\"criticNumber\": \"$criticNumber\"," >> ./assets/js/data.json
+
+        # Get critic rating front page
+        criticFrontPage=$(cat temp2 | grep -Eo "<span class=\"stareval-note\">[0-9],[0-9]</span><span class=\"stareval-review light\"> [0-9]+ critique*" | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/,/./')
+        echo "\"criticFrontPage\": \"$criticFrontPage\"," >> ./assets/js/data.json
+
+        # Get critic rating back page
+        critic=$(cat temp3 | grep -m1 -Eo "</div><span class=\"stareval-note\">[0-9],[0-9]</span></div>" | cut -d'>' -f3 | cut -d'<' -f1 | sed 's/,/./')
+        criticZero=$(cat temp3 | grep -m1 -Eo "[0-9] titre de presse")
+        if [[ $criticZero == "0 titre de presse" ]]; then
+          critic=$criticFrontPage
+        fi
+        echo "\"critic\": \"$critic\"," >> ./assets/js/data.json
+
+        # Get user rating number
+        user=$(cat temp2 | grep -Eo "<span class=\"stareval-note\">[0-9],[0-9]</span><span class=\"stareval-review light\"> [0-9]+ note*" | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/,/./')
+        echo "\"user\": \"$user\"," >> ./assets/js/data.json
+
+        curl -s https://www.allocine.fr/series/ficheserie-$serieId/saisons/ > temp10
+        seasonsCriticNumber=$(cat temp10 | grep -A70 "/\">Saison " | grep -Eo "\"stareval-note\">[0-9],[0-9]" | cut -d'>' -f2 | sed 's/,/./g' | wc -l | awk '{print $1}')
+        if [[ $seasonsCriticNumber -gt 1 ]]; then
+          echo "\"seasonsCritic\":{" >> ./assets/js/data.json
+
+          echo "\"seasonsCriticValue\":{" >> ./assets/js/data.json
+          for seasonsCriticNumberIndex in $( eval echo {1..$seasonsCriticNumber} )
+          do
+            seasonsCritic=$(cat temp10 | grep -A70 "/\">Saison " | grep -Eo "\"stareval-note\">[0-9],[0-9]" | cut -d'>' -f2 | sed 's/,/./g' | tail -$seasonsCriticNumberIndex | head -1)
+            echo "\"id$seasonsCriticNumberIndex\": \"$seasonsCritic\"," >> ./assets/js/data.json
+          done
+          echo "}," >> ./assets/js/data.json
+
+          echo "\"seasonsCriticDetails\":{" >> ./assets/js/data.json
+          for seasonsCriticNumberIndex in $( eval echo {1..$seasonsCriticNumber} )
+          do
+            seasonsCriticDetails=$(cat temp10 | grep -A70 "/\">Saison " | grep "\"stareval-review light\"" | sed 's/.*"stareval-review light">\(.*\)<\/span><\/div>/\1/' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//' | tail -$seasonsCriticNumberIndex | head -1)
+            echo "\"id$seasonsCriticNumberIndex\": \"$seasonsCriticDetails\"," >> ./assets/js/data.json
+          done
+          echo "}," >> ./assets/js/data.json
+
+          echo "}," >> ./assets/js/data.json
+        fi
+
+        # Add ending bracket
+        echo "}," >> ./assets/js/data.json
+
+        # Add Senscritique object
+        echo "\"senscritiqueData\":{" >> ./assets/js/data.json
+
+        senscritiqueFile="./assets/sh/seriesIds.txt"
+        while IFS= read -r senscritiqueLine <&3; do
+          allocineLineUrl=$(echo $senscritiqueLine | cut -d',' -f1)
+
+          if [[ $url == $allocineLineUrl ]]; then
+            senscritiqueId=$(echo $senscritiqueLine | cut -d',' -f4)
+            curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
+            senscritiqueFound=1
+            break
+          else
+            senscritiqueFound=0
+          fi
+        done 3<$senscritiqueFile
+
+        if [[ $senscritiqueFound -eq 0 ]]; then
+          senscritiqueTitleURLEncoded=$(echo $senscritiqueTitle | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/url_escape.sed)
+          senscritiqueId=$(curl -s "https://www.senscritique.com/sc2/search/autocomplete.json?query=$senscritiqueTitleURLEncoded" \
+          -H 'x-requested-with: XMLHttpRequest' | jq '.json | .[].url' | grep -m1 "/serie/" | sed 's/https:\/\/www.senscritique.com\/serie\///' | sed 's/\"//g')
+
+          curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
+          senscritiqueYear=$(cat temp11 | grep "pvi-product-year" | cut -d '(' -f2 | cut -d ')' -f1)
+
+          if [[ $creationDate != $senscritiqueYear ]]; then
+            senscritiqueId="noSenscritiqueId"
+
+            echo "----------------------------------------------------------------------------------------------------"
+            echo "senscritiqueId: $senscritiqueId"
+          fi
+        fi
+
+        # Get SensCritique rating number
+        senscritiqueRating=$(cat temp11 | grep "pvi-scrating-value" | cut -d'>' -f2 | cut -d'<' -f1)
+        echo "\"senscritiqueRating\": \"$senscritiqueRating\"," >> ./assets/js/data.json
+
+        # Add ending bracket
+        echo "}," >> ./assets/js/data.json
+
+        # Add Betaseries object
+        echo "\"betaseriesData\":{" >> ./assets/js/data.json
+
+        seriesIdsFile="./assets/sh/seriesIds.txt"
+        while IFS= read -r seriesIdsLine <&3; do
+          allocineLineUrl=$(echo $seriesIdsLine | cut -d',' -f1)
+
+          if [[ $url == $allocineLineUrl ]]; then
+            imdbId=$(echo $seriesIdsLine | cut -d',' -f2)
+            curl -s https://www.imdb.com/title/$imdbId/ > temp6
+
+            betaseriesTitle=$(echo $seriesIdsLine | cut -d',' -f3)
+            echo "\"betaseriesId\": \"$betaseriesTitle\"," >> ./assets/js/data.json
+            curl -s https://www.betaseries.com/serie/$betaseriesTitle > temp9
+            betaseriesFound=1
+            break
+          else
+            betaseriesFound=0
+          fi
+        done 3<$seriesIdsFile
+
+        if [[ $betaseriesFound -eq 0 ]]; then
+          echo "----------------------------------------------------------------------------------------------------"
+          echo "serieId: $serieId"
+          wikiData=0
+          wikiUrl=$(curl -s https://query.wikidata.org/sparql\?query\=SELECT%20%3Fitem%20%3FitemLabel%20WHERE%20%7B%0A%20%20%3Fitem%20wdt%3AP1267%20%22$serieId%22.%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%7D | grep "uri" | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/http/https/' | sed 's/entity/wiki/')
+          if [[ -z $wikiUrl ]]; then
+            echo "wikiUrl: noWikiUrl"
+            echo "senscritiqueTitleURLEncoded: $senscritiqueTitleURLEncoded"
+            imdbId=$(curl -s https://www.imdb.com/find\?q\=$senscritiqueTitleURLEncoded\&s\=tt\&ttype\=tv | grep -m1 "<td class=\"primary_photo\">" | grep -Eo "tt[0-9]+" | head -1)
+            echo "imdbId: $imdbId"
+          else
+            echo "wikiUrl: $wikiUrl"
+            imdbId=$(curl -s $wikiUrl | grep "https://wikidata-externalid-url.toolforge.org/?p=345" | grep -Eo "tt[0-9]+" | head -1)
+            echo "imdbId: $imdbId"
+            wikiData=1
+          fi
+
+          if [[ -z $imdbId ]]; then
+            echo "imdbId: noImdbId"
+            imdbId="noImdbId"
+          fi
+
+          echo "wikiData: $wikiData"
+          if [[ $wikiData -eq 0 ]]; then
+            BetaseriesOriginalTitle=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.original_title' | tr '[:upper:]' '[:lower:]' | sed 's/"//g')
+            BetaseriesOriginalTitleYear=$(echo $BetaseriesOriginalTitle | grep " ([0-9][0-9][0-9][0-9])" | grep -Eo "[0-9]+")
+            BetaseriesOriginalTitleLang=$(echo $BetaseriesOriginalTitle | grep " (fr)" | grep -Eo "fr")
+            if [[ ! -z $BetaseriesOriginalTitleYear ]] || [[ ! -z $BetaseriesOriginalTitleLang ]]; then
+              if [[ -z $BetaseriesOriginalTitleYear ]]; then
+                BetaseriesOriginalTitleYear=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.creation' | sed 's/"//g')
+              fi
+              echo "----------------------------------------------------------------------------------------------------"
+              echo "BetaseriesOriginalTitleYear: $BetaseriesOriginalTitleYear"
+              echo "BetaseriesOriginalTitleYear: $BetaseriesOriginalTitleYear" >> log
+              if [[ ! -z $BetaseriesOriginalTitleLang ]]; then
+                echo "BetaseriesOriginalTitleLang: $BetaseriesOriginalTitleLang"
+                echo "BetaseriesOriginalTitleLang: $BetaseriesOriginalTitleLang" >> log
+              fi
+              if [[ $BetaseriesOriginalTitleYear != $creationDate ]]; then
+                imdbId=$(curl -s https://www.imdb.com/find\?q\=$senscritiqueTitleURLEncoded\&s\=tt\&ttype\=tv | grep -m1 "<td class=\"primary_photo\">" | grep -Eo "tt[0-9]+" | head -3 | tail -1)
+                BetaseriesOriginalTitle=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.original_title' | tr '[:upper:]' '[:lower:]' | sed 's/"//g')
+                BetaseriesOriginalTitleYear=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.creation' | sed 's/"//g')
+                echo "BetaseriesOriginalTitleYear: $BetaseriesOriginalTitleYear"
+                echo "BetaseriesOriginalTitleYear: $BetaseriesOriginalTitleYear" >> log
+                if [[ $BetaseriesOriginalTitleYear != $creationDate ]]; then
+                  echo "creationDate: $creationDate"
+                  echo "creationDate: $creationDate" >> log
+                  imdbId="noImdbId"
+                fi
+              fi
+              BetaseriesOriginalTitleNew=$(echo $BetaseriesOriginalTitle | sed 's/ ([0-9][0-9][0-9][0-9])//' | sed 's/ (fr)//')
+              titleLower=$(echo $title | tr '[:upper:]' '[:lower:]' | sed 's/ ([0-9][0-9][0-9][0-9])//' | sed 's/ (fr)//')
+              echo "BetaseriesOriginalTitleNew: $BetaseriesOriginalTitleNew"
+              echo "titleLower: $titleLower"
+              echo "BetaseriesOriginalTitleNew: $BetaseriesOriginalTitleNew" >> log
+              echo "titleLower: $titleLower" >> log
+            else
+              BetaseriesOriginalTitleNew=$BetaseriesOriginalTitle
+              titleLower=$(echo $title | tr '[:upper:]' '[:lower:]')
+              echo "BetaseriesOriginalTitleNew: $BetaseriesOriginalTitleNew"
+              echo "titleLower: $titleLower"
+              echo "BetaseriesOriginalTitleNew: $BetaseriesOriginalTitleNew" >> log
+              echo "titleLower: $titleLower" >> log
+            fi
+
+            if [[ $BetaseriesOriginalTitleNew != $titleLower ]]; then
+              echo "BetaseriesOriginalTitleNew: $BetaseriesOriginalTitleNew"
+              echo "titleLower: $titleLower"
+              echo "BetaseriesOriginalTitleNew: $BetaseriesOriginalTitleNew" >> log
+              echo "titleLower: $titleLower" >> log
+              imdbId="noImdbId"
+            fi
+          fi
+
+          betaseriesId="noBetaseriesId"
+          betaseriesResourceUrl="noBetaseriesURL"
+          if [[ $imdbId != "noImdbId" ]]; then
+            betaseriesId=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.resource_url' | cut -d'/' -f5 | sed 's/"//g')
+            betaseriesResourceUrl=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbId | jq '.show.resource_url' | sed 's/"//g')
+            imdbIdCheck=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&url\=$betaseriesId | jq '.show.imdb_id' | sed 's/"//g')
+            if [[ $imdbId != $imdbIdCheck ]]; then
+              echo "----------------------------------------------------------------------------------------------------"
+              echo "imdbId: $imdbId"
+              echo "imdbIdCheck: $imdbIdCheck"
+              imdbId="noImdbId"
+              betaseriesId="noBetaseriesId"
+              betaseriesResourceUrl="noBetaseriesURL"
+            fi
+          fi
+
+          curl -s https://www.imdb.com/title/$imdbId/ > temp6
+          curl -s $betaseriesResourceUrl > temp9
+
+          echo "$url,$imdbId,$betaseriesId,$senscritiqueId" >> assets/sh/seriesIds.txt
+        fi
+
+        echo "----------------------------------------------------------------------------------------------------"
+        echo "page: $pagesNumberIndex/$pagesNumber - show: $seriesNumberIndex/$seriesNumber - title: $title - serieId: $serieId ✅"
+
+        # Get serie network
+        networkNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
+        if [[ $networkNumber -gt 0 ]]; then
+          echo "\"network\":{" >> ./assets/js/data.json
+
+          for networkNumberIndex in $( eval echo {1..$networkNumber} )
+          do
+            networkName=$(cat temp9 | grep -A1 "https://www.betaseries.com/link" | grep "alt" | cut -d'"' -f4 | head -$networkNumberIndex | tail -1)
+            if [[ -z $networkName ]]; then
+              networkName=$(cat temp9 | grep "https://www.betaseries.com/link" | cut -d'>' -f2 | cut -d'<' -f1 | head -$networkNumberIndex | tail -1)
+              echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp2.txt
+            else
+              echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp.txt
+            fi
+            echo "\"id$networkNumberIndex\": \"$networkName\"," >> ./assets/js/data.json
+          done
+
+          echo "}," >> ./assets/js/data.json
+        else
+          networkNumber=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
+          if [[ $networkNumber -eq 0 ]]; then
+            curl -s https://www.allocine.fr/series/ficheserie-$serieId/diffusion-tv/ > temp9
+            networkNumber=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6 | wc -l | awk '{print $1}')
+            if [[ $networkNumber -gt 0 ]]; then
+              networkName=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6)
+
+              echo "\"network\":{" >> ./assets/js/data.json
+
+              echo "\"id1\": \"$networkName\"," >> ./assets/js/data.json
+              echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp2.txt
+
+              echo "}," >> ./assets/js/data.json
+            fi
+          elif [[ $networkNumber -gt 0 ]]; then
+            echo "\"network\":{" >> ./assets/js/data.json
+
+            networkName=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | head -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//')
+            echo "\"id1\": \"$networkName\"," >> ./assets/js/data.json
+            echo $networkName >> ./assets/sh/criticNameNetworkButtonsTemp.txt
+
+            echo "}," >> ./assets/js/data.json
+          fi
+        fi
+
+        # Get serie network url
+        networkUrlNumber=$(cat temp9 | grep "https://www.betaseries.com/link" | wc -l | awk '{print $1}')
+        if [[ $networkUrlNumber -gt 0 ]]; then
+          echo "\"networkUrl\":{" >> ./assets/js/data.json
+
+          for networkUrlNumberIndex in $( eval echo {1..$networkUrlNumber} )
+          do
+            networkUrl=$(cat temp9 | grep "https://www.betaseries.com/link" | cut -d'"' -f2 | head -$networkUrlNumberIndex | tail -1)
+            echo "\"id$networkUrlNumberIndex\": \"$networkUrl\"," >> ./assets/js/data.json
+          done
+
+          echo "}," >> ./assets/js/data.json
+        else
+          networkNumber=$(cat temp2 | grep "<span class=\"info-holder-provider\">" | cut -d'>' -f2 | cut -d'<' -f1 | wc -l | awk '{print $1}')
+          if [[ $networkNumber -eq 0 ]]; then
+            curl -s https://www.allocine.fr/series/ficheserie-$serieId/diffusion-tv/ > temp9
+            networkNumber=$(cat temp9 | grep "channel-logo\"" | head -1 | cut -d'"' -f6 | wc -l | awk '{print $1}')
+            if [[ $networkNumber -gt 0 ]]; then
+              echo "\"networkUrl\":{" >> ./assets/js/data.json
+
+              networkUrl="https://www.allocine.fr/jump/#data-affiliation-type=svod&data-provider=$networkName&data-entity-type=Series&data-entity-id=$serieId"
+              echo "\"id1\": \"$networkUrl\"," >> ./assets/js/data.json
+
+              echo "}," >> ./assets/js/data.json
+            fi
+          elif [[ $networkNumber -gt 0 ]]; then
             echo "\"networkUrl\":{" >> ./assets/js/data.json
 
             networkUrl="https://www.allocine.fr/jump/#data-affiliation-type=svod&data-provider=$networkName&data-entity-type=Series&data-entity-id=$serieId"
@@ -491,50 +600,44 @@ do
 
             echo "}," >> ./assets/js/data.json
           fi
-        elif [[ $networkNumber -gt 0 ]]; then
-          echo "\"networkUrl\":{" >> ./assets/js/data.json
-
-          networkUrl="https://www.allocine.fr/jump/#data-affiliation-type=svod&data-provider=$networkName&data-entity-type=Series&data-entity-id=$serieId"
-          echo "\"id1\": \"$networkUrl\"," >> ./assets/js/data.json
-
-          echo "}," >> ./assets/js/data.json
         fi
-      fi
 
-      # Get Betaseries rating number
-      betaseriesRating=$(cat temp9 | grep "stars js-render-stars" | cut -d'"' -f4 | cut -d' ' -f1)
-      echo "\"betaseriesRating\": \"$betaseriesRating\"," >> ./assets/js/data.json
+        # Get Betaseries rating number
+        betaseriesRating=$(cat temp9 | grep "stars js-render-stars" | cut -d'"' -f4 | cut -d' ' -f1)
+        echo "\"betaseriesRating\": \"$betaseriesRating\"," >> ./assets/js/data.json
 
-      betaseriesStatus=$(cat temp9 | grep -A2 "<strong>Statut</strong>" | tail -1 | sed 's/[ \t]*//')
-      if [[ -z $betaseriesStatus ]]; then
-        betaseriesStatus=$(cat temp2 | grep "full label-status" | cut -d'>' -f2 | cut -d'<' -f1)
+        betaseriesStatus=$(cat temp9 | grep -A2 "<strong>Statut</strong>" | tail -1 | sed 's/[ \t]*//')
+        if [[ -z $betaseriesStatus ]]; then
+          betaseriesStatus=$(cat temp2 | grep "full label-status" | cut -d'>' -f2 | cut -d'<' -f1)
+        fi
+        echo "\"betaseriesStatus\": \"$betaseriesStatus\"," >> ./assets/js/data.json
+
+        # Add ending bracket
+        echo "}," >> ./assets/js/data.json
+
+        # Add IMDb object
+        echo "\"imdbData\":{" >> ./assets/js/data.json
+
+        # Get serie date
+        curl -s https://www.imdb.com/title/$imdbId/episodes/ > temp7
+        date=$(cat temp7 | grep -B20 "ipl-rating-star" | grep -A1 "airdate" | tail -1 | sed -e 's/^[ \t]*//')
+
+        # Get IMDb rating number
+        imdbRating=$(cat temp6 | grep -m1 "ratingValue" | cut -d'"' -f4)
+
+        # Add IMDb last episode date, ID and rating number
+        echo "\"date\": \"$date\"," >> ./assets/js/data.json
+        echo "\"imdbId\": \"$imdbId\"," >> ./assets/js/data.json
+        echo "\"imdbRating\": \"$imdbRating\"," >> ./assets/js/data.json
       fi
-      echo "\"betaseriesStatus\": \"$betaseriesStatus\"," >> ./assets/js/data.json
 
       # Add ending bracket
       echo "}," >> ./assets/js/data.json
 
-      # Add IMDb object
-      echo "\"imdbData\":{" >> ./assets/js/data.json
-
-      # Get serie date
-      curl -s https://www.imdb.com/title/$imdbId/episodes/ > temp7
-      date=$(cat temp7 | grep -B20 "ipl-rating-star" | grep -A1 "airdate" | tail -1 | sed -e 's/^[ \t]*//')
-
-      # Get IMDb rating number
-      imdbRating=$(cat temp6 | grep -m1 "ratingValue" | cut -d'"' -f4)
-
-      # Add IMDb last episode date, ID and rating number
-      echo "\"date\": \"$date\"," >> ./assets/js/data.json
-      echo "\"imdbId\": \"$imdbId\"," >> ./assets/js/data.json
-      echo "\"imdbRating\": \"$imdbRating\"," >> ./assets/js/data.json
+      # Add },{ after every keys
+      echo "},{" >> ./assets/js/data.json
     fi
 
-    # Add ending bracket
-    echo "}," >> ./assets/js/data.json
-
-    # Add },{ after every keys
-    echo "},{" >> ./assets/js/data.json
     seriesNumberIndex=$[$seriesNumberIndex+1] id=$[$id+1]
   done
 done

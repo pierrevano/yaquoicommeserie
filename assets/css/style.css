@@ -142,8 +142,7 @@ iframe {
     list-style: none;
     margin-bottom: 30px;
     margin-left: 30px;
-    overflow: scroll;
-    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .slide-critics-recap li {
@@ -245,7 +244,7 @@ iframe {
 }
 
 .swal2-title {
-    font-size: 27px !important;
+    font-size: 26px !important;
 }
 
 .first-nav i {

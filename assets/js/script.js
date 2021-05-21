@@ -220,7 +220,7 @@ var DOMLoaded = function() {
         );
         var criticNamesKeysTemp = '';
         var criticNamesValuesTemp = '';
-        for (var key in criticNamesNew) criticNamesKeysTemp += key + ',';
+        for (var key in criticNamesNew) criticNamesKeysTemp += key.replace(/2$/, ' Contre') + ',';
         for (key in criticNamesNew) criticNamesValuesTemp += criticNamesNew[key] + ',';
         if (user != '') {
             criticNamesKeysTemp += 'Note AlloCiné,';
@@ -1235,7 +1235,7 @@ var DOMLoaded = function() {
             'controlsPosition': 'bottom',
             'controlsText': ['Précédent', 'Suivant'],
             'nav': false,
-            'mouseDrag': true,
+            'mouseDrag': false,
             'arrowKeys': true
         });
 
