@@ -415,8 +415,13 @@ do
             curl -s https://www.imdb.com/title/$imdbId/ > temp6
 
             betaseriesTitle=$(echo $seriesIdsLine | cut -d',' -f3)
-            echo "\"betaseriesId\": \"$betaseriesTitle\"," >> ./assets/js/data.json
-            curl -s https://www.betaseries.com/serie/$betaseriesTitle > temp9
+            if [[ $betaseriesTitle == film* ]]; then
+              echo "\"betaseriesId\": \"$betaseriesTitle\"," >> ./assets/js/data.json
+              curl -s https://www.betaseries.com/$betaseriesTitle > temp9
+            else
+              echo "\"betaseriesId\": \"serie/$betaseriesTitle\"," >> ./assets/js/data.json
+              curl -s https://www.betaseries.com/serie/$betaseriesTitle > temp9
+            fi
             betaseriesFound=1
             break
           else
