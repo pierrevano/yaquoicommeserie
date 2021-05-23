@@ -1025,7 +1025,7 @@ var DOMLoaded = function() {
         } else {
             activePeriod = localStorage.getItem('yqcs_period.' + 'activePeriod');
             if (activePeriod == null) {
-                activePeriod = 'En 2021';
+                activePeriod = 'NoFilter';
             }
         }
 
