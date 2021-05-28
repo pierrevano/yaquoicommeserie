@@ -79,19 +79,50 @@ fi
 sed -i '' "/noImdbId,noBetaseriesId,noSenscritiqueId/d" ./assets/sh/seriesIds.txt
 
 echo "----------------------------------------------------------------------------------------------------"
-betaseriesIdNotFoundNumber=$(cat assets/sh/seriesIds.txt | grep "[0-9],noBetaseriesId" | wc -l | awk '{print $1}')
-echo "betaseriesIdNotFoundNumber: $betaseriesIdNotFoundNumber"
-if [[ $betaseriesIdNotFoundNumber -ne 0 ]]; then
-  for betaseriesIdNotFoundNumberIndex in $( eval echo {1..$betaseriesIdNotFoundNumber} )
+senscritiqueNotFoundNumber=$(cat assets/sh/seriesIds.txt | grep "noSenscritique" | wc -l | awk '{print $1}')
+echo "senscritiqueNotFoundNumber: $senscritiqueNotFoundNumber"
+if [[ $senscritiqueNotFoundNumber -ne 0 ]]; then
+  for senscritiqueNotFoundNumberIndex in $( eval echo {1..$senscritiqueNotFoundNumber} )
   do
-    imdbIdFound=$(cat assets/sh/seriesIds.txt | grep "[0-9],noBetaseriesId" | head -$betaseriesIdNotFoundNumberIndex | tail -1 | cut -d',' -f2)
-    echo "imdbIdFound: $imdbIdFound"
-    betaseriesCode=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&imdb_id\=$imdbIdFound | jq '.errors[0].code')
-    if [[ $betaseriesCode != "4001" ]]; then
+    allocineIdFile=$(cat assets/sh/seriesIds.txt | grep "noSenscritique" | head -$senscritiqueNotFoundNumberIndex | tail -1 | cut -d',' -f1)
+    echo "allocineIdFile: $allocineIdFile"
+    imdbIdFile=$(cat assets/sh/seriesIds.txt | grep "noSenscritique" | head -$senscritiqueNotFoundNumberIndex | tail -1 | cut -d',' -f2)
+    echo "imdbIdFile: $imdbIdFile"
+    betaseriesIdFile=$(cat assets/sh/seriesIds.txt | grep "noSenscritique" | head -$senscritiqueNotFoundNumberIndex | tail -1 | cut -d',' -f3)
+    echo "betaseriesIdFile: $betaseriesIdFile"
+    betaseriesIdFileEncoded=$(echo $betaseriesIdFile | sed 's/-/%20/g')
+    echo "betaseriesIdFileEncoded: $betaseriesIdFileEncoded"
+    senscritiqueIdFound=$(curl -s "https://www.senscritique.com/search?q=$betaseriesIdFileEncoded" | grep -Eo "ProductListItem__TextContainer.{1,100}https://www.senscritique.com/serie/.{1,100}" | cut -d'"' -f3 | sed 's/https:\/\/www.senscritique.com\/serie\///g' | head -1)
+    echo "senscritiqueIdFound: $senscritiqueIdFound"
+    senscritiqueCreator=$(curl -s https://www.senscritique.com/serie/$senscritiqueIdFound | grep "itemprop=\"creator\"" | cut -d'>' -f4 | cut -d'<' -f1)
+    echo "senscritiqueCreator: $senscritiqueCreator"
+    senscritiqueCreationYear=$(curl -s https://www.senscritique.com/serie/$senscritiqueIdFound | grep "pvi-product-year" | cut -d'(' -f2 | cut -d')' -f1)
+    echo "senscritiqueCreationYear: $senscritiqueCreationYear"
+    allocineCreator=$(curl -s https://www.allocine.fr$allocineIdFile | grep -Eo "/personne/fichepersonne_gen_cpersonne=[0-9]+.html\">$senscritiqueCreator" | cut -d'>' -f2)
+    echo "allocineCreator: $allocineCreator"
+    allocineCreationYear=$(curl -s https://www.allocine.fr$allocineIdFile | grep -Eo "Série TV [0-9]+ -" | grep -Eo "[0-9]+")
+    echo "allocineCreationYear: $allocineCreationYear"
+    if [[ $senscritiqueCreator == $allocineCreator ]] && \
+    [[ $senscritiqueCreationYear == $allocineCreationYear ]] && \
+    [[ ! -z $senscritiqueCreator ]] && [[ ! -z $allocineCreator ]] && \
+    [[ ! -z $senscritiqueCreationYear ]] && [[ ! -z $allocineCreationYear ]]; then
+      sed -i '' "s/$imdbIdFile,$betaseriesIdFile,noSenscritiqueId/$imdbIdFile,$betaseriesIdFile,${senscritiqueIdFound//\//\\/}/" assets/sh/seriesIds.txt
+    elif [[ ! -z $senscritiqueIdFound ]]; then
       echo "----------------------------------------------------------------------------------------------------"
-      echo "betaseriesCode: $betaseriesCode"
-      echo "imdbIdFound: $imdbIdFound"
-      exit 0
+      echo "$senscritiqueNotFoundNumberIndex/$senscritiqueNotFoundNumber"
+      open -a "/Applications/Brave Browser.app" https://www.senscritique.com/serie/$senscritiqueIdFound
+      echo "senscritiqueIdFound: $senscritiqueIdFound"
+      open -a "/Applications/Brave Browser.app" https://www.allocine.fr$allocineIdFile
+      echo "allocineIdFile: $allocineIdFile"
+      echo "Good match (y/n)?"
+      read answer
+      if [ "$answer" != "${answer#[Yy]}" ]; then
+        sed -i '' "s/$imdbIdFile,$betaseriesIdFile,noSenscritiqueId/$imdbIdFile,$betaseriesIdFile,${senscritiqueIdFound//\//\\/}/" assets/sh/seriesIds.txt
+      elif [ "$answer" != "${answer#[Nn]}" ]; then
+        echo "Please enter SensCritique ID"
+        read senscritiqueIdFound
+        sed -i '' "s/$imdbIdFile,$betaseriesIdFile,noSenscritiqueId/$imdbIdFile,$betaseriesIdFile,${senscritiqueIdFound//\//\\/}/" assets/sh/seriesIds.txt
+      fi
     fi
   done
 fi
@@ -102,23 +133,46 @@ echo "imdbIdNotFoundNumber: $imdbIdNotFoundNumber"
 if [[ $imdbIdNotFoundNumber -ne 0 ]]; then
   for imdbIdNotFoundNumberIndex in $( eval echo {1..$imdbIdNotFoundNumber} )
   do
-    betaseriesIdFound=$(cat assets/sh/seriesIds.txt | grep "noImdbId,[[:alnum:]]" | head -$imdbIdNotFoundNumberIndex | tail -1 | cut -d',' -f3)
-    echo "betaseriesIdFound: $betaseriesIdFound"
-    if [[ $betaseriesIdFound == film* ]]; then
-      betaseriesIdFoundNew=$(echo $betaseriesIdFound | grep -Eo "[0-9]+")
-      imdbRes=$(curl -s https://api.betaseries.com/movies/movie\?key\=7f7fef35706f\&id\=$betaseriesIdFoundNew | jq '.movie.imdb_id')
-    else
-      betaseriesIdFoundNew=$(echo $betaseriesIdFound | cut -d'/' -f2)
-      imdbRes=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&url\=$betaseriesIdFoundNew | jq '.show.imdb_id')
-    fi
-    if [[ $imdbRes != "\"\"" ]]; then
+    allocineIdFile=$(cat assets/sh/seriesIds.txt | grep "noImdbId,[[:alnum:]]" | head -$imdbIdNotFoundNumberIndex | tail -1 | cut -d',' -f1)
+    echo "allocineIdFile: $allocineIdFile"
+    senscritiqueIdMain=$(cat assets/sh/seriesIds.txt | grep "noImdbId,[[:alnum:]]" | head -$imdbIdNotFoundNumberIndex | tail -1 | cut -d',' -f4)
+    echo "senscritiqueIdMain: $senscritiqueIdMain"
+    senscritiqueIdFound=$(cat assets/sh/seriesIds.txt | grep "noImdbId,[[:alnum:]]" | head -$imdbIdNotFoundNumberIndex | tail -1 | cut -d',' -f4 | cut -d'/' -f1 | sed 's/_/%20/g')
+    echo "senscritiqueIdFound: $senscritiqueIdFound"
+    betaseriesIdAPI=$(curl -s https://api.betaseries.com/search/shows\?key\=7f7fef35706f\&text\=$senscritiqueIdFound | jq '.shows[0].id')
+    echo "betaseriesIdAPI: $betaseriesIdAPI"
+    imdbIdFile=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&id\=$betaseriesIdAPI | jq '.show.imdb_id' | sed 's/"//g' | sed 's/\///g')
+    echo "imdbIdFile: $imdbIdFile"
+    betaseriesIdFile=$(curl -s https://api.betaseries.com/shows/display\?key\=7f7fef35706f\&id\=$betaseriesIdAPI | jq '.show.resource_url' | cut -d'/' -f5 | sed 's/"//g')
+    echo "betaseriesIdFile: $betaseriesIdFile"
+    if [[ $imdbIdFile != null ]] && \
+      [[ $betaseriesIdFile != null ]] && \
+      [[ ! -z $imdbIdFile ]] && \
+      [[ ! -z $betaseriesIdFile ]] && \
+      [[ $betaseriesIdFile != "gameofthrones" ]]; then
       echo "----------------------------------------------------------------------------------------------------"
-      echo "imdbRes: $imdbRes"
-      echo "betaseriesIdFound: $betaseriesIdFound"
-      exit 0
+      echo "$imdbIdNotFoundNumberIndex/$imdbIdNotFoundNumber"
+      echo "senscritiqueIdFound: $senscritiqueIdFound"
+      open -a "/Applications/Brave Browser.app" https://www.imdb.com/title/$imdbIdFile/
+      echo "imdbIdFile: $imdbIdFile"
+      open -a "/Applications/Brave Browser.app" https://www.betaseries.com/serie/$betaseriesIdFile
+      echo "betaseriesIdFile: $betaseriesIdFile"
+      open -a "/Applications/Brave Browser.app" https://www.senscritique.com/serie/$senscritiqueIdMain
+      echo "senscritiqueIdMain: $senscritiqueIdMain"
+      open -a "/Applications/Brave Browser.app" https://www.allocine.fr$allocineIdFile
+      echo "allocineIdFile: $allocineIdFile"
+      echo "Good match (y/n)?"
+      read answer
+      if [ "$answer" != "${answer#[Yy]}" ] ;then
+        sed -i '' "s/noImdbId,noBetaseriesId,${senscritiqueIdMain//\//\\/}/$imdbIdFile,$betaseriesIdFile,${senscritiqueIdMain//\//\\/}/" assets/sh/seriesIds.txt
+      fi
     fi
   done
 fi
+
+# Remove lines with no data
+sed -i '' "/noSenscritiqueId/d" ./assets/sh/seriesIds.txt
+sed -i '' "/noImdbId,noBetaseriesId/d" ./assets/sh/seriesIds.txt
 
 # Add criticName first list
 cat ./assets/sh/criticName.txt | cut -d',' -f1 | sort | uniq >> ./assets/sh/criticNameTemp.txt
@@ -424,12 +478,10 @@ do
 
         if [[ $senscritiqueFound -eq 0 ]]; then
           senscritiqueTitleURLEncoded=$(echo $senscritiqueTitle | tr '[:upper:]' '[:lower:]' | sed -f ./assets/sed/url_escape.sed)
-          senscritiqueId=$(curl -s "https://www.senscritique.com/sc2/search/autocomplete.json?query=$senscritiqueTitleURLEncoded" \
-          -H 'x-requested-with: XMLHttpRequest' | jq '.json | .[].url' | grep -m1 "/serie/" | sed 's/https:\/\/www.senscritique.com\/serie\///' | sed 's/\"//g')
-
+          senscritiqueId=$(curl -s "https://www.senscritique.com/search?q=$senscritiqueTitleURLEncoded" | grep -Eo "ProductListItem__TextContainer.{1,100}https://www.senscritique.com/serie/.{1,100}" | cut -d'"' -f3 | sed 's/https:\/\/www.senscritique.com\/serie\///g' | head -1)
           curl -s "https://www.senscritique.com/serie/$senscritiqueId" > temp11
-          senscritiqueYear=$(cat temp11 | grep "pvi-product-year" | cut -d '(' -f2 | cut -d ')' -f1)
 
+          senscritiqueYear=$(cat temp11 | grep "pvi-product-year" | cut -d '(' -f2 | cut -d ')' -f1)
           if [[ $creationDate != $senscritiqueYear ]]; then
             senscritiqueId="noSenscritiqueId"
 
@@ -670,7 +722,7 @@ do
         date=$(cat temp7 | grep -B20 "ipl-rating-star" | grep -A1 "airdate" | tail -1 | sed -e 's/^[ \t]*//')
 
         # Get IMDb rating number
-        imdbRating=$(cat temp6 | grep -m1 "ratingValue" | cut -d'"' -f4)
+        imdbRating=$(cat temp6 | grep -Eo "AggregateRatingButton__RatingScore.{1,50}>" | cut -d'>' -f2 | cut -d'<' -f1)
 
         # Add IMDb last episode date, ID and rating number
         echo "\"date\": \"$date\"," >> ./assets/js/data.json
