@@ -174,6 +174,11 @@ fi
 sed -i '' "/noSenscritiqueId/d" ./assets/sh/seriesIds.txt
 sed -i '' "/noImdbId,noBetaseriesId/d" ./assets/sh/seriesIds.txt
 
+# Sort dataset file
+cat ./assets/sh/seriesIds.txt | sort -V > ./assets/sh/seriesIdsTemp.txt
+cat ./assets/sh/seriesIdsTemp.txt > ./assets/sh/seriesIds.txt
+rm -f ./assets/sh/seriesIdsTemp.txt
+
 # Add criticName first list
 cat ./assets/sh/criticName.txt | cut -d',' -f1 | sort | uniq >> ./assets/sh/criticNameTemp.txt
 
