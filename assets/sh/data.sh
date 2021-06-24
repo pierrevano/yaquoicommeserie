@@ -123,6 +123,15 @@ if [[ $senscritiqueNotFoundNumber -ne 0 ]]; then
         read senscritiqueIdFound
         sed -i '' "s/$imdbIdFile,$betaseriesIdFile,noSenscritiqueId/$imdbIdFile,$betaseriesIdFile,${senscritiqueIdFound//\//\\/}/" assets/sh/seriesIds.txt
       fi
+    else
+      open -a "/Applications/Brave Browser.app" https://www.allocine.fr$allocineIdFile
+      echo "allocineIdFile: $allocineIdFile"
+      senscritiqueTitleTemp=$(curl -s https://www.allocine.fr$allocineIdFile | grep -m1 "<meta property=\"og:title\" content=\"" | cut -d'"' -f4 | sed 's/&#039;/'"'"'/' | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//' | sed 's/ /%20/g')
+      senscritiqueTitleUrlTemp=$(echo "https://www.senscritique.com/search?q=$senscritiqueTitleTemp&categories[0][0]=S%C3%A9ries")
+      open -a "/Applications/Brave Browser.app" $senscritiqueTitleUrlTemp
+      echo "Please enter SensCritique ID"
+      read senscritiqueIdFound
+      sed -i '' "s/$imdbIdFile,$betaseriesIdFile,noSenscritiqueId/$imdbIdFile,$betaseriesIdFile,${senscritiqueIdFound//\//\\/}/" assets/sh/seriesIds.txt
     fi
   done
 fi
